@@ -1,10 +1,11 @@
 .DEFAULT_GOAL := build
 
-LIBFT_PATH ?=
-NAME       = 42_tester
-CC         = cc
-CFLAGS     = -Wall -Wextra -Werror -O0 -g -I"$(LIBFT_PATH)"
-LDFLAGS    = -L"$(LIBFT_PATH)" -lft
+LIBFT_PATH   ?=
+EXTRA_CFLAGS ?=
+NAME         = 42_tester
+CC           = cc
+CFLAGS       = -Wall -Wextra -Werror -O0 -g -Wno-unused-function -I"$(LIBFT_PATH)" $(EXTRA_CFLAGS)
+LDFLAGS      = -L"$(LIBFT_PATH)" -lft
 
 build: checkpath libft $(NAME)
 

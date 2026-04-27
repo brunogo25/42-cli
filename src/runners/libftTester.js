@@ -47,13 +47,38 @@ function spawnAsync(cmd, args, opts) {
   });
 }
 
+function stripCComments(text) {
+  return text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+}
+
+function detectImplemented(libftPath) {
+  let header = '';
+  try { header = stripCComments(fs.readFileSync(path.join(libftPath, 'libft.h'), 'utf8')); }
+  catch { return { present: [], missing: [...FUNCTIONS] }; }
+  const present = [];
+  const missing = [];
+  for (const fn of FUNCTIONS) {
+    const hasFile = fs.existsSync(path.join(libftPath, `ft_${fn}.c`));
+    const hasProto = new RegExp(`\\bft_${fn}\\s*\\(`).test(header);
+    if (hasFile && hasProto) present.push(fn);
+    else missing.push(fn);
+  }
+  return { present, missing };
+}
+
 async function build(libftPath) {
   const opts = {
     stdio: ['ignore', 'pipe', 'pipe'],
     streamStdout: false,
     streamStderr: false,
   };
-  return spawnAsync('make', ['-C', TESTER_DIR, `LIBFT_PATH=${libftPath}`, 'build'], opts);
+  const { present } = detectImplemented(libftPath);
+  const defines = present.map((fn) => `-DHAVE_FT_${fn}`).join(' ');
+  await spawnAsync('make', ['-C', TESTER_DIR, 'clean'], opts);
+  const args = ['-C', TESTER_DIR, `LIBFT_PATH=${libftPath}`];
+  if (defines) args.push(`EXTRA_CFLAGS=${defines}`);
+  args.push('build');
+  return spawnAsync('make', args, opts);
 }
 
 function findMainOffenders(libftPath) {
@@ -141,15 +166,9 @@ function summarize(result) {
     );
     return lines.join('\n');
   }
-  // run stage — the C tester already printed its own pretty summary.
-  // Just confirm with exit code (0 = PASS, 1 = FAIL, 2 = no match).
-  if (result.exitCode === 2) {
-    return (
-      `\n${c.bold('Result:')} ${c.yellow('no tests matched')}\n` +
-      c.yellow('  hint:') + ' check the function name (use ft_strlen or strlen).'
-    );
-  }
-  return ''; // tester output speaks for itself
+  // run stage — the C tester already printed its own pretty summary,
+  // including informative messages on exit 2 (no match / nothing ready).
+  return '';
 }
 
 module.exports = { runTester, summarize, FUNCTIONS, TESTER_DIR };

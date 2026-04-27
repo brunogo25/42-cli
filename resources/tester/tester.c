@@ -39,6 +39,7 @@ typedef struct s_test
 	int			fails;
 	char		first_msg[MSG_LEN];
 	int			crashed;
+	int			skipped;
 }	t_test;
 
 static sigjmp_buf		g_jmp;
@@ -85,6 +86,7 @@ static void	expect_(t_test *t, int cond, const char *fmt, ...)
 
 static void	test_isalpha(t_test *t)
 {
+#ifdef HAVE_FT_isalpha
 	for (int i = 0; i < 256; i++)
 	{
 		int exp = isalpha(i) ? 1 : 0;
@@ -93,10 +95,14 @@ static void	test_isalpha(t_test *t)
 			"isalpha(%d): subject requires strict %d, got %d", i, exp, got);
 		if (t->fails) return;
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_isdigit(t_test *t)
 {
+#ifdef HAVE_FT_isdigit
 	for (int i = 0; i < 256; i++)
 	{
 		int exp = isdigit(i) ? 1 : 0;
@@ -105,10 +111,14 @@ static void	test_isdigit(t_test *t)
 			"isdigit(%d): subject requires strict %d, got %d", i, exp, got);
 		if (t->fails) return;
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_isalnum(t_test *t)
 {
+#ifdef HAVE_FT_isalnum
 	for (int i = 0; i < 256; i++)
 	{
 		int exp = isalnum(i) ? 1 : 0;
@@ -117,10 +127,14 @@ static void	test_isalnum(t_test *t)
 			"isalnum(%d): subject requires strict %d, got %d", i, exp, got);
 		if (t->fails) return;
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_isascii(t_test *t)
 {
+#ifdef HAVE_FT_isascii
 	for (int i = -128; i < 256; i++)
 	{
 		int exp = isascii(i) ? 1 : 0;
@@ -129,10 +143,14 @@ static void	test_isascii(t_test *t)
 			"isascii(%d): subject requires strict %d, got %d", i, exp, got);
 		if (t->fails) return;
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_isprint(t_test *t)
 {
+#ifdef HAVE_FT_isprint
 	for (int i = 0; i < 256; i++)
 	{
 		int exp = isprint(i) ? 1 : 0;
@@ -141,41 +159,57 @@ static void	test_isprint(t_test *t)
 			"isprint(%d): subject requires strict %d, got %d", i, exp, got);
 		if (t->fails) return;
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_toupper(t_test *t)
 {
+#ifdef HAVE_FT_toupper
 	for (int i = 0; i < 256; i++)
 	{
 		EXPECT(ft_toupper(i) == toupper(i),
 			"toupper(%d): expected %d, got %d", i, toupper(i), ft_toupper(i));
 		if (t->fails) return;
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_tolower(t_test *t)
 {
+#ifdef HAVE_FT_tolower
 	for (int i = 0; i < 256; i++)
 	{
 		EXPECT(ft_tolower(i) == tolower(i),
 			"tolower(%d): expected %d, got %d", i, tolower(i), ft_tolower(i));
 		if (t->fails) return;
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 /* ──────────────────────────── strings (libc reference) ──────────────────────────── */
 
 static void	test_strlen(t_test *t)
 {
+#ifdef HAVE_FT_strlen
 	const char *cases[] = { "", "a", "hello", "with spaces and stuff", "0123456789" };
 	for (size_t i = 0; i < sizeof(cases)/sizeof(cases[0]); i++)
 		EXPECT(ft_strlen(cases[i]) == strlen(cases[i]),
 			"strlen(\"%s\"): expected %zu, got %zu",
 			cases[i], strlen(cases[i]), ft_strlen(cases[i]));
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_strchr(t_test *t)
 {
+#ifdef HAVE_FT_strchr
 	const char *s = "Hello, World!";
 	for (int c = 0; c < 128; c += 5)
 		EXPECT(ft_strchr(s, c) == strchr(s, c),
@@ -186,10 +220,14 @@ static void	test_strchr(t_test *t)
 		"strchr on empty string with no match must be NULL");
 	EXPECT(ft_strchr("", 0) != NULL,
 		"strchr on empty string for NUL must return the string");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_strrchr(t_test *t)
 {
+#ifdef HAVE_FT_strrchr
 	const char *s = "abcabc";
 	EXPECT(ft_strrchr(s, 'a') == strrchr(s, 'a'),
 		"strrchr finds last 'a'");
@@ -203,10 +241,14 @@ static void	test_strrchr(t_test *t)
 		"strrchr empty no-match");
 	EXPECT(ft_strrchr("", 0) != NULL,
 		"strrchr empty NUL");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_strncmp(t_test *t)
 {
+#ifdef HAVE_FT_strncmp
 	EXPECT(ft_strncmp("", "", 0) == 0, "strncmp(\"\",\"\",0) must be 0");
 	EXPECT(ft_strncmp("", "", 5) == 0, "strncmp(\"\",\"\",5) must be 0");
 	EXPECT(ft_strncmp("abc", "abc", 3) == 0, "strncmp equal");
@@ -217,10 +259,14 @@ static void	test_strncmp(t_test *t)
 	char a[2] = { (char)0xff, 0 }, b[2] = { (char)0x01, 0 };
 	EXPECT(ft_strncmp(a, b, 1) > 0,
 		"strncmp must compare bytes as unsigned char (0xff > 0x01)");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_strnstr(t_test *t)
 {
+#ifdef HAVE_FT_strnstr
 	char *r = ft_strnstr("hello world", "world", 11);
 	EXPECT(r != NULL && strncmp(r, "world", 5) == 0,
 		"strnstr basic must find 'world'");
@@ -233,10 +279,14 @@ static void	test_strnstr(t_test *t)
 	}
 	EXPECT(ft_strnstr("hello", "lo", 0) == NULL, "strnstr n=0 must be NULL");
 	EXPECT(ft_strnstr("aabaaabaa", "aaab", 9) != NULL, "strnstr backtracking");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_strdup(t_test *t)
 {
+#ifdef HAVE_FT_strdup
 	char *s = ft_strdup("hello");
 	EXPECT(s && strcmp(s, "hello") == 0,
 		"strdup(\"hello\") expected \"hello\", got \"%s\"", s ? s : "(null)");
@@ -244,12 +294,16 @@ static void	test_strdup(t_test *t)
 	s = ft_strdup("");
 	EXPECT(s && s[0] == 0, "strdup(\"\") expected empty");
 	free(s);
+#else
+	t->skipped = 1;
+#endif
 }
 
 /* ────────────────────────────── memory ────────────────────────────── */
 
 static void	test_memset(t_test *t)
 {
+#ifdef HAVE_FT_memset
 	char a[32], b[32];
 	memset(a, 'X', 32);
 	void *r = ft_memset(b, 'X', 32);
@@ -261,10 +315,14 @@ static void	test_memset(t_test *t)
 	memset(a, 0, 32);
 	ft_memset(b, 0, 32);
 	EXPECT(memcmp(a, b, 32) == 0, "memset zero-fill");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_bzero(t_test *t)
 {
+#ifdef HAVE_FT_bzero
 	char a[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 	ft_bzero(a, 8);
 	for (int i = 0; i < 8; i++)
@@ -275,10 +333,14 @@ static void	test_bzero(t_test *t)
 	char b[4] = { 1, 2, 3, 4 };
 	ft_bzero(b, 0);
 	EXPECT(b[0] == 1, "bzero n=0 must not write");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_memcpy(t_test *t)
 {
+#ifdef HAVE_FT_memcpy
 	char src[16] = "0123456789ABCDE", dst[16] = { 0 }, ref[16] = { 0 };
 	void *r = ft_memcpy(dst, src, 16);
 	memcpy(ref, src, 16);
@@ -287,10 +349,14 @@ static void	test_memcpy(t_test *t)
 	char d2[4] = { 9, 9, 9, 9 };
 	ft_memcpy(d2, "abc", 0);
 	EXPECT(d2[0] == 9, "memcpy n=0 must not write");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_memmove(t_test *t)
 {
+#ifdef HAVE_FT_memmove
 	char a[16] = "0123456789ABCDE";
 	char ref[16] = "0123456789ABCDE";
 	void *r = ft_memmove(a + 2, a, 5);
@@ -307,10 +373,14 @@ static void	test_memmove(t_test *t)
 	char a3[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 	ft_memmove(a3, a3 + 1, 0);
 	EXPECT(a3[0] == 1, "memmove n=0 must not write");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_memchr(t_test *t)
 {
+#ifdef HAVE_FT_memchr
 	const char *s = "Hello\0World";
 	EXPECT(ft_memchr(s, 'o', 11) == strchr(s, 'o'), "memchr basic");
 	EXPECT(ft_memchr(s, 'W', 6) == NULL, "memchr too-short n must be NULL");
@@ -318,10 +388,14 @@ static void	test_memchr(t_test *t)
 		"memchr must keep searching past embedded NULs");
 	EXPECT(ft_memchr(s, 0, 11) == s + 5, "memchr must find embedded NUL");
 	EXPECT(ft_memchr(s, 'x', 0) == NULL, "memchr n=0 must be NULL");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_memcmp(t_test *t)
 {
+#ifdef HAVE_FT_memcmp
 	EXPECT(ft_memcmp("abc", "abc", 3) == 0, "memcmp equal");
 	EXPECT(ft_memcmp("abc", "abd", 3) < 0, "memcmp must be <0 for abc < abd");
 	EXPECT(ft_memcmp("abd", "abc", 3) > 0, "memcmp must be >0 for abd > abc");
@@ -330,12 +404,16 @@ static void	test_memcmp(t_test *t)
 	char a[2] = { (char)0xff, 0 }, b[2] = { (char)0x01, 0 };
 	EXPECT(ft_memcmp(a, b, 1) > 0,
 		"memcmp must compare bytes as unsigned char (0xff > 0x01)");
+#else
+	t->skipped = 1;
+#endif
 }
 
 /* ───────────────────────── strlcpy / strlcat ───────────────────────── */
 
 static void	test_strlcpy(t_test *t)
 {
+#ifdef HAVE_FT_strlcpy
 	char dst[16];
 	size_t r;
 
@@ -358,10 +436,14 @@ static void	test_strlcpy(t_test *t)
 	r = ft_strlcpy(dst, "", 16);
 	EXPECT(r == 0, "strlcpy empty src returns 0");
 	EXPECT(dst[0] == 0, "strlcpy empty src must write NUL");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_strlcat(t_test *t)
 {
+#ifdef HAVE_FT_strlcat
 	char dst[16];
 	size_t r;
 
@@ -385,12 +467,16 @@ static void	test_strlcat(t_test *t)
 	r = ft_strlcat(dst, "", 16);
 	EXPECT(r == 3, "strlcat empty src must return dst len");
 	EXPECT(strcmp(dst, "abc") == 0, "strlcat empty src must not modify dst");
+#else
+	t->skipped = 1;
+#endif
 }
 
 /* ────────────────────────── conversions ────────────────────────── */
 
 static void	test_atoi(t_test *t)
 {
+#ifdef HAVE_FT_atoi
 	EXPECT(ft_atoi("0") == 0, "atoi(\"0\")");
 	EXPECT(ft_atoi("42") == 42, "atoi(\"42\")");
 	EXPECT(ft_atoi("-42") == -42, "atoi(\"-42\")");
@@ -404,10 +490,14 @@ static void	test_atoi(t_test *t)
 	EXPECT(ft_atoi("") == 0, "atoi empty string -> 0");
 	EXPECT(ft_atoi("--1") == 0, "atoi(\"--1\") -> 0");
 	EXPECT(ft_atoi("+-1") == 0, "atoi(\"+-1\") -> 0");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_calloc(t_test *t)
 {
+#ifdef HAVE_FT_calloc
 	char *p = ft_calloc(16, 1);
 	EXPECT(p != NULL, "calloc(16,1) must not be NULL");
 	if (p)
@@ -429,10 +519,14 @@ static void	test_calloc(t_test *t)
 	void *o = ft_calloc(SIZE_MAX, SIZE_MAX);
 	EXPECT(o == NULL, "calloc(SIZE_MAX,SIZE_MAX) must detect overflow and return NULL");
 	free(o);
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_itoa(t_test *t)
 {
+#ifdef HAVE_FT_itoa
 	int cases[] = { 0, 1, -1, 42, -42, INT_MAX, INT_MIN, 100, -100, 999999 };
 	for (size_t i = 0; i < sizeof(cases) / sizeof(cases[0]); i++)
 	{
@@ -444,12 +538,16 @@ static void	test_itoa(t_test *t)
 			cases[i], ref, r ? r : "(null)");
 		free(r);
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 /* ─────────────────────── 42-specific string utils ─────────────────────── */
 
 static void	test_substr(t_test *t)
 {
+#ifdef HAVE_FT_substr
 	char *r;
 	r = ft_substr("hello world", 6, 5);
 	EXPECT(r && strcmp(r, "world") == 0,
@@ -468,10 +566,14 @@ static void	test_substr(t_test *t)
 	r = ft_substr("", 0, 5);
 	EXPECT(r && strcmp(r, "") == 0, "substr empty source returns empty");
 	free(r);
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_strjoin(t_test *t)
 {
+#ifdef HAVE_FT_strjoin
 	char *r;
 	r = ft_strjoin("hello ", "world");
 	EXPECT(r && strcmp(r, "hello world") == 0, "strjoin basic");
@@ -485,10 +587,14 @@ static void	test_strjoin(t_test *t)
 	r = ft_strjoin("", "b");
 	EXPECT(r && strcmp(r, "b") == 0, "strjoin empty + b");
 	free(r);
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_strtrim(t_test *t)
 {
+#ifdef HAVE_FT_strtrim
 	char *r;
 	r = ft_strtrim("  hello  ", " ");
 	EXPECT(r && strcmp(r, "hello") == 0,
@@ -507,6 +613,9 @@ static void	test_strtrim(t_test *t)
 	r = ft_strtrim("", "x");
 	EXPECT(r && strcmp(r, "") == 0, "strtrim empty source");
 	free(r);
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	free_split(char **r)
@@ -518,6 +627,7 @@ static void	free_split(char **r)
 
 static void	test_split(t_test *t)
 {
+#ifdef HAVE_FT_split
 	char **r = ft_split("hello world foo", ' ');
 	EXPECT(r != NULL, "split must not return NULL");
 	if (r)
@@ -546,6 +656,9 @@ static void	test_split(t_test *t)
 	if (r)
 		EXPECT(r[2] == NULL, "split must skip trailing separators");
 	free_split(r);
+#else
+	t->skipped = 1;
+#endif
 }
 
 static char	map_upper(unsigned int i, char c)
@@ -561,6 +674,7 @@ static char	map_indexor(unsigned int i, char c)
 
 static void	test_strmapi(t_test *t)
 {
+#ifdef HAVE_FT_strmapi
 	char *r;
 	r = ft_strmapi("hello", map_upper);
 	EXPECT(r && strcmp(r, "HELLO") == 0, "strmapi upper-case");
@@ -572,6 +686,9 @@ static void	test_strmapi(t_test *t)
 	r = ft_strmapi("", map_upper);
 	EXPECT(r && strcmp(r, "") == 0, "strmapi empty");
 	free(r);
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	iter_upper(unsigned int i, char *c)
@@ -582,10 +699,14 @@ static void	iter_upper(unsigned int i, char *c)
 
 static void	test_striteri(t_test *t)
 {
+#ifdef HAVE_FT_striteri
 	char buf[] = "hello";
 	ft_striteri(buf, iter_upper);
 	EXPECT(strcmp(buf, "HELLO") == 0,
 		"striteri upper-cases in place: expected \"HELLO\", got \"%s\"", buf);
+#else
+	t->skipped = 1;
+#endif
 }
 
 /* ──────────────────────────── fd writers ──────────────────────────── */
@@ -604,26 +725,47 @@ static int	pipe_capture(void (*emit)(int), int fd_arg, char *buf, size_t cap)
 	return n;
 }
 
-static char	g_emit_char;
-static const char *g_emit_str;
-static int	g_emit_int;
+__attribute__((unused)) static char	g_emit_char;
+__attribute__((unused)) static const char *g_emit_str;
+__attribute__((unused)) static int	g_emit_int;
 
+#ifdef HAVE_FT_putchar_fd
 static void	emit_char(int fd) { ft_putchar_fd(g_emit_char, fd); }
+#else
+static void	emit_char(int fd) { (void)fd; }
+#endif
+#ifdef HAVE_FT_putstr_fd
 static void	emit_str(int fd)  { ft_putstr_fd((char *)g_emit_str, fd); }
+#else
+static void	emit_str(int fd)  { (void)fd; }
+#endif
+#ifdef HAVE_FT_putendl_fd
 static void	emit_endl(int fd) { ft_putendl_fd((char *)g_emit_str, fd); }
+#else
+static void	emit_endl(int fd) { (void)fd; }
+#endif
+#ifdef HAVE_FT_putnbr_fd
 static void	emit_nbr(int fd)  { ft_putnbr_fd(g_emit_int, fd); }
+#else
+static void	emit_nbr(int fd)  { (void)fd; }
+#endif
 
 static void	test_putchar_fd(t_test *t)
 {
+#ifdef HAVE_FT_putchar_fd
 	char buf[8];
 	g_emit_char = 'A';
 	int n = pipe_capture(emit_char, 0, buf, sizeof buf);
 	EXPECT(n == 1 && buf[0] == 'A',
 		"putchar_fd('A',fd) must write exactly 'A' (got %d bytes \"%s\")", n, buf);
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_putstr_fd(t_test *t)
 {
+#ifdef HAVE_FT_putstr_fd
 	char buf[64];
 	g_emit_str = "hello";
 	int n = pipe_capture(emit_str, 0, buf, sizeof buf);
@@ -632,19 +774,27 @@ static void	test_putstr_fd(t_test *t)
 	g_emit_str = "";
 	n = pipe_capture(emit_str, 0, buf, sizeof buf);
 	EXPECT(n == 0, "putstr_fd(\"\",fd) must write nothing");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_putendl_fd(t_test *t)
 {
+#ifdef HAVE_FT_putendl_fd
 	char buf[64];
 	g_emit_str = "hi";
 	int n = pipe_capture(emit_endl, 0, buf, sizeof buf);
 	EXPECT(n == 3 && strcmp(buf, "hi\n") == 0,
 		"putendl_fd(\"hi\",fd) expected \"hi\\n\", got \"%s\"", buf);
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_putnbr_fd(t_test *t)
 {
+#ifdef HAVE_FT_putnbr_fd
 	struct {
 		int n;
 		const char *s;
@@ -662,6 +812,9 @@ static void	test_putnbr_fd(t_test *t)
 			"putnbr_fd(%d): expected \"%s\", got \"%s\"",
 			cases[i].n, cases[i].s, buf);
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 /* ──────────────────────────── linked list ──────────────────────────── */
@@ -679,6 +832,7 @@ static void	*map_double(void *p)
 }
 static void	free_int(void *p) { free(p); }
 
+#ifdef HAVE_FT_lstnew
 static t_list	*build3(int *a, int *b, int *c)
 {
 	t_list *l = ft_lstnew(a);
@@ -687,9 +841,13 @@ static t_list	*build3(int *a, int *b, int *c)
 	if (l->next) l->next->next = ft_lstnew(c);
 	return l;
 }
+#else
+static t_list	*build3(int *a, int *b, int *c) { (void)a; (void)b; (void)c; return NULL; }
+#endif
 
 static void	test_lstnew(t_test *t)
 {
+#ifdef HAVE_FT_lstnew
 	int x = 42;
 	t_list *n = ft_lstnew(&x);
 	EXPECT(n != NULL, "lstnew must not return NULL");
@@ -706,10 +864,14 @@ static void	test_lstnew(t_test *t)
 		EXPECT(n->content == NULL, "lstnew(NULL)->content must be NULL");
 		free(n);
 	}
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_lstadd_front(t_test *t)
 {
+#ifdef HAVE_FT_lstadd_front
 	t_list *l = NULL;
 	int a = 1, b = 2;
 	ft_lstadd_front(&l, ft_lstnew(&a));
@@ -719,29 +881,41 @@ static void	test_lstadd_front(t_test *t)
 	EXPECT(l && l->next && l->next->content == &a,
 		"lstadd_front must keep old head as next");
 	if (l) { free(l->next); free(l); }
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_lstsize(t_test *t)
 {
+#ifdef HAVE_FT_lstsize
 	EXPECT(ft_lstsize(NULL) == 0, "lstsize(NULL) must be 0");
 	int a = 0, b = 0, c = 0;
 	t_list *l = build3(&a, &b, &c);
 	EXPECT(ft_lstsize(l) == 3, "lstsize 3-node list");
 	ft_lstclear(&l, NULL); /* NULL del — only frees nodes */
 	for (t_list *p = l; p;) { t_list *n = p->next; free(p); p = n; }
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_lstlast(t_test *t)
 {
+#ifdef HAVE_FT_lstlast
 	EXPECT(ft_lstlast(NULL) == NULL, "lstlast(NULL) must be NULL");
 	int a = 0, b = 0, c = 0;
 	t_list *l = build3(&a, &b, &c);
 	EXPECT(ft_lstlast(l) == l->next->next, "lstlast must return tail");
 	if (l) { free(l->next->next); free(l->next); free(l); }
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_lstadd_back(t_test *t)
 {
+#ifdef HAVE_FT_lstadd_back
 	t_list *l = NULL;
 	int a = 1, b = 2, c = 3;
 	ft_lstadd_back(&l, ft_lstnew(&a));
@@ -754,39 +928,55 @@ static void	test_lstadd_back(t_test *t)
 	EXPECT(l && l->next && l->next->next && l->next->next->next == NULL,
 		"lstadd_back must terminate list");
 	if (l) { free(l->next->next); free(l->next); free(l); }
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_lstdelone(t_test *t)
 {
+#ifdef HAVE_FT_lstdelone
 	int x = 42;
 	t_list *n = ft_lstnew(&x);
 	g_del_count = 0;
 	ft_lstdelone(n, track_del);
 	EXPECT(g_del_count == 1, "lstdelone must call del exactly once");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_lstclear(t_test *t)
 {
+#ifdef HAVE_FT_lstclear
 	int a = 1, b = 2, c = 3;
 	t_list *l = build3(&a, &b, &c);
 	g_del_count = 0;
 	ft_lstclear(&l, track_del);
 	EXPECT(g_del_count == 3, "lstclear must call del once per node (got %d)", g_del_count);
 	EXPECT(l == NULL, "lstclear must set the head pointer to NULL");
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_lstiter(t_test *t)
 {
+#ifdef HAVE_FT_lstiter
 	int a = 1, b = 2, c = 3;
 	t_list *l = build3(&a, &b, &c);
 	g_iter_sum = 0;
 	ft_lstiter(l, iter_add);
 	EXPECT(g_iter_sum == 6, "lstiter must visit every node (sum 1+2+3=6, got %d)", g_iter_sum);
 	if (l) { free(l->next->next); free(l->next); free(l); }
+#else
+	t->skipped = 1;
+#endif
 }
 
 static void	test_lstmap(t_test *t)
 {
+#ifdef HAVE_FT_lstmap
 	int a = 1, b = 2, c = 3;
 	t_list *l = build3(&a, &b, &c);
 	t_list *m = ft_lstmap(l, map_double, free_int);
@@ -800,6 +990,9 @@ static void	test_lstmap(t_test *t)
 	}
 	if (m) ft_lstclear(&m, free_int);
 	if (l) { free(l->next->next); free(l->next); free(l); }
+#else
+	t->skipped = 1;
+#endif
 }
 
 /* ──────────────────────────── dispatch ──────────────────────────── */
@@ -868,7 +1061,13 @@ static const char	*c_off(void)  { return g_color ? "\x1b[0m"  : ""; }
 
 static void	print_result(const t_test *t)
 {
-	if (t->crashed)
+	if (t->skipped)
+	{
+		printf("  %-*s %sSKIP%s   %s(not implemented yet)%s\n",
+			NAME_W, t->name, c_dim(), c_off(),
+			c_dim(), c_off());
+	}
+	else if (t->crashed)
 	{
 		printf("  %-*s %sCRASH%s  %s%s%s\n",
 			NAME_W, t->name, c_warn(), c_off(),
@@ -946,6 +1145,7 @@ int	main(int argc, char **argv)
 	}
 
 	int functions_passed = 0, functions_total = 0;
+	int functions_skipped = 0;
 	int cases_passed = 0, cases_total = 0;
 
 	for (size_t i = 0; i < N_TESTS; i++)
@@ -953,7 +1153,7 @@ int	main(int argc, char **argv)
 		if (n_wanted > 0 && !any_match(TESTS[i].name, wanted, n_wanted))
 			continue;
 
-		t_test t = { TESTS[i].name, 0, 0, "", 0 };
+		t_test t = { TESTS[i].name, 0, 0, "", 0, 0 };
 		g_signal = 0;
 		if (sigsetjmp(g_jmp, 1) == 0)
 			TESTS[i].fn(&t);
@@ -961,6 +1161,7 @@ int	main(int argc, char **argv)
 			t.crashed = g_signal;
 		print_result(&t);
 
+		if (t.skipped) { functions_skipped++; continue; }
 		functions_total++;
 		if (t.fails == 0 && !t.crashed) functions_passed++;
 		cases_total += t.cases;
@@ -972,6 +1173,10 @@ int	main(int argc, char **argv)
 		if (n_wanted > 0)
 			fprintf(stderr, "no tests matched: '%s'%s\n",
 				wanted[0], n_wanted > 1 ? " (and others)" : "");
+		else if (functions_skipped > 0)
+			fprintf(stderr,
+				"no functions ready to test — %d skipped (declare prototype in libft.h and add ft_*.c)\n",
+				functions_skipped);
 		else
 			fprintf(stderr, "no tests registered\n");
 		return 2;
@@ -999,6 +1204,11 @@ int	main(int argc, char **argv)
 	else
 		printf("  %sAssertions:%s  %s%d / %d passed%s\n",
 			c_bold(), c_off(), c_pass(), cases_passed, cases_total, c_off());
+	if (functions_skipped > 0)
+		printf("  %sSkipped:%s     %s%d%s %s(not implemented yet — declare prototype + add ft_*.c)%s\n",
+			c_bold(), c_off(),
+			c_warn(), functions_skipped, c_off(),
+			c_dim(), c_off());
 	printf("  %sResult:%s      %s%s%s\n",
 		c_bold(), c_off(),
 		ok ? c_pass() : c_fail(),
