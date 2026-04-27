@@ -1,0 +1,30 @@
+{
+  "name": "42-cli",
+  "version": "0.1.0",
+  "description": "Interactive tester CLI for the 42 Common Core",
+  "bin": {
+    "42": "bin/42.js"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node bin/42.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "src",
+    "resources"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brunogo25/42-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/brunogo25/42-cli/issues"
+  },
+  "homepage": "https://github.com/brunogo25/42-cli#readme",
+  "keywords": ["42", "libft", "norminette", "common-core", "cli"],
+  "license": "MIT"
+}
