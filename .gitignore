@@ -3,3 +3,8 @@ node_modules/
 .DS_Store
 .env
 .env.*
+
+# tester build artifacts — built on install per-platform
+resources/tester/42_tester
+resources/tester/*.dSYM/
+resources/tester/*.o
