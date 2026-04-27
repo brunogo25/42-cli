@@ -119,7 +119,8 @@ async function runTester(libftPath, targets) {
   }
 
   process.stdout.write('\n');
-  const args = Array.isArray(targets) ? targets : (targets ? [targets] : []);
+  const targetArgs = Array.isArray(targets) ? targets : (targets ? [targets] : []);
+  const args = ['--color', ...targetArgs];
   const run = await spawnAsync(TESTER_BIN, args, {
     stdio: ['inherit', 'pipe', 'pipe'],
     cwd: TESTER_DIR,

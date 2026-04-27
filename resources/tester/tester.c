@@ -1064,7 +1064,7 @@ static void	print_result(const t_test *t)
 	if (t->skipped)
 	{
 		printf("  %-*s %sSKIP%s   %s(not implemented yet)%s\n",
-			NAME_W, t->name, c_dim(), c_off(),
+			NAME_W, t->name, c_fail(), c_off(),
 			c_dim(), c_off());
 	}
 	else if (t->crashed)
@@ -1100,7 +1100,7 @@ static int	name_matches(const char *want, const char *full)
 static void	usage(const char *p)
 {
 	fprintf(stderr,
-		"usage: %s [--no-color] [--list] [<function>...]\n"
+		"usage: %s [--color|--no-color] [--list] [<function>...]\n"
 		"  <function> can be 'strlen' or 'ft_strlen'\n"
 		"  multiple names run only those tests, in the order listed below\n", p);
 }
@@ -1129,6 +1129,7 @@ int	main(int argc, char **argv)
 	for (int i = 1; i < argc; i++)
 	{
 		if (strcmp(argv[i], "--no-color") == 0) g_color = 0;
+		else if (strcmp(argv[i], "--color") == 0) g_color = 1;
 		else if (strcmp(argv[i], "--list") == 0) list_only = 1;
 		else if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0)
 		{ usage(argv[0]); return 0; }
@@ -1207,7 +1208,7 @@ int	main(int argc, char **argv)
 	if (functions_skipped > 0)
 		printf("  %sSkipped:%s     %s%d%s %s(not implemented yet — declare prototype + add ft_*.c)%s\n",
 			c_bold(), c_off(),
-			c_warn(), functions_skipped, c_off(),
+			c_fail(), functions_skipped, c_off(),
 			c_dim(), c_off());
 	printf("  %sResult:%s      %s%s%s\n",
 		c_bold(), c_off(),
