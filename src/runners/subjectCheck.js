@@ -182,6 +182,29 @@ function checkNoGarbageFiles(libftPath) {
   };
 }
 
+function checkNoBuildArtifacts(libftPath) {
+  let entries;
+  try {
+    entries = fs.readdirSync(libftPath);
+  } catch {
+    return {
+      name: 'No build artifacts at submission root (.o / .a)',
+      pass: false,
+      detail: 'libft directory unreadable',
+    };
+  }
+  const found = entries.filter((n) => /\.(o|a)$/.test(n));
+  const shown = found.slice(0, 5).join(', ');
+  const more = found.length > 5 ? ` (+${found.length - 5} more)` : '';
+  return {
+    name: 'No build artifacts at submission root (.o / .a)',
+    pass: found.length === 0,
+    detail: found.length === 0
+      ? 'no .o / .a files'
+      : `${found.length} build artifact(s): ${shown}${more} — run \`make fclean\` before submitting`,
+  };
+}
+
 function checkReadmeIntroItalic(libftPath) {
   const candidates = ['README.md', 'README'];
   const readme = candidates
@@ -253,6 +276,7 @@ async function runCompliance(libftPath) {
   const checks = [];
   checks.push(checkRequiredFiles(libftPath));
   checks.push(checkNoGarbageFiles(libftPath));
+  checks.push(checkNoBuildArtifacts(libftPath));
   checks.push(checkMakefileRules(libftPath));
   checks.push(checkLibftHeader(libftPath));
   checks.push(checkReadmeIntroItalic(libftPath));
