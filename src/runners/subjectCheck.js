@@ -182,6 +182,54 @@ function checkNoGarbageFiles(libftPath) {
   };
 }
 
+function checkReadmeIntroItalic(libftPath) {
+  const candidates = ['README.md', 'README'];
+  const readme = candidates
+    .map((n) => path.join(libftPath, n))
+    .find((p) => fs.existsSync(p));
+  if (!readme) {
+    return {
+      name: 'README presents the student in italic',
+      pass: false,
+      detail: 'README not found — the student presentation paragraph must be in italic',
+    };
+  }
+  const lines = fs.readFileSync(readme, 'utf8').split('\n');
+  let i = 0;
+  while (i < lines.length) {
+    const t = lines[i].trim();
+    if (t === '' || t.startsWith('#') || t.startsWith('![') || t.startsWith('<')) { i++; continue; }
+    break;
+  }
+  if (i >= lines.length) {
+    return {
+      name: 'README presents the student in italic',
+      pass: false,
+      detail: 'README has no body text — first paragraph must introduce the student in italic',
+    };
+  }
+  let para = '';
+  while (i < lines.length && lines[i].trim() !== '') {
+    para += (para ? ' ' : '') + lines[i].trim();
+    i++;
+  }
+  const ast = para.startsWith('*') && para.endsWith('*')
+    && !para.startsWith('**') && !para.endsWith('**')
+    && para.length >= 3;
+  const und = para.startsWith('_') && para.endsWith('_')
+    && !para.startsWith('__') && !para.endsWith('__')
+    && para.length >= 3;
+  const isItalic = ast || und;
+  const preview = para.length > 60 ? para.slice(0, 60) + '…' : para;
+  return {
+    name: 'README presents the student in italic',
+    pass: isItalic,
+    detail: isItalic
+      ? 'first paragraph is italicized'
+      : `first paragraph is not italic — wrap it in *…* or _…_  («${preview}»)`,
+  };
+}
+
 function checkNoMainInSources(libftPath) {
   const offenders = [];
   for (const fn of FUNCTIONS) {
@@ -207,6 +255,7 @@ async function runCompliance(libftPath) {
   checks.push(checkNoGarbageFiles(libftPath));
   checks.push(checkMakefileRules(libftPath));
   checks.push(checkLibftHeader(libftPath));
+  checks.push(checkReadmeIntroItalic(libftPath));
   checks.push(checkNoMainInSources(libftPath));
   checks.push(await checkNoRelink(libftPath));
   return checks;

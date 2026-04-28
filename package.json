@@ -1,6 +1,6 @@
 {
   "name": "42-cli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Interactive tester CLI for the 42 Common Core",
   "bin": {
     "42": "bin/42.js"
