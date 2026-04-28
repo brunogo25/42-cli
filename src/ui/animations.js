@@ -1,7 +1,7 @@
 'use strict';
 
 const c = require('./colors');
-const { t } = require('../i18n');
+const { t, getLanguage } = require('../i18n');
 
 const FRAME_MS = 180;
 
@@ -114,6 +114,90 @@ async function discoBanner() {
   console.log();
 }
 
+async function play042Animation() {
+  const tty = isAnimatable();
+
+  const star = (s) => c.yellow(s);
+  const wave = ['     ·     ', '    · ·    ', '   · ✦ ·   ', '  ·✦ ✦ ✦·  ', ' ✦ ° ✦ ° ✦ ', '✦ ° · ✦ · ° ✦'];
+  const banner = [
+    '╔═══════════════════════════════════╗',
+    '║                                   ║',
+    '║           0 . 4 2   %             ║',
+    '║                                   ║',
+    '║      THE  UNIVERSE  BLINKED       ║',
+    '║                                   ║',
+    '╚═══════════════════════════════════╝',
+  ];
+  const bannerFr = [
+    '╔═══════════════════════════════════╗',
+    '║                                   ║',
+    '║           0 , 4 2   %             ║',
+    '║                                   ║',
+    '║   L\'UNIVERS  A  CLIGNÉ  DE  L\'ŒIL ║',
+    '║                                   ║',
+    '╚═══════════════════════════════════╝',
+  ];
+
+  if (!tty) {
+    for (const line of banner) console.log(`  ${c.magenta(c.bold(line))}`);
+    console.log();
+    return;
+  }
+
+  // 1) Build-up: ripple of dots
+  let drawn = false;
+  for (const w of wave) {
+    if (drawn) clearLines(1);
+    process.stdout.write(`  ${star(w.padStart(36))}\n`);
+    drawn = true;
+    await sleep(140);
+  }
+  if (drawn) clearLines(1);
+
+  // 2) Triple flash of expanding starfield
+  const starFrames = [
+    [
+      '       .                  .       ',
+      '   .          .       .           ',
+      '         ✦         .              ',
+      '   .         ✦  ✦  ✦         .    ',
+      '          ✦   .   ✦               ',
+      '   .         ✦  ✦  ✦         .    ',
+      '         ✦         .              ',
+      '   .          .       .           ',
+      '       .                  .       ',
+    ],
+    [
+      '  .    ✦      .   ✦      .   ✦    ',
+      '     .    ✦       .       ✦   .   ',
+      '  ✦         ✦    .    ✦           ',
+      '     .   ✦   ✦   ✦   ✦   ✦    .   ',
+      '   ✦   ✦   .  ⋆  .   ✦   ✦        ',
+      '     .   ✦   ✦   ✦   ✦   ✦    .   ',
+      '  ✦         ✦    .    ✦           ',
+      '     .    ✦       .       ✦   .   ',
+      '  .    ✦      .   ✦      .   ✦    ',
+    ],
+  ];
+  for (const frame of starFrames) {
+    for (const line of frame) console.log(`  ${star(line)}`);
+    await sleep(180);
+    clearLines(frame.length);
+  }
+
+  // 3) Rainbow rolling banner — 3 color rotations
+  const rainbow = [c.red, c.yellow, c.green, c.cyan, c.blue, c.magenta];
+  for (let pass = 0; pass < 3; pass++) {
+    if (pass > 0) clearLines(banner.length);
+    for (let i = 0; i < banner.length; i++) {
+      const color = rainbow[(i + pass) % rainbow.length];
+      console.log(`  ${color(c.bold((getLanguage() === 'fr' ? bannerFr : banner)[i]))}`);
+    }
+    await sleep(260);
+  }
+  console.log();
+}
+
 const ANIMATIONS = [dancingCat, fireworks, discoBanner];
 
 async function playRandomAnimation() {
@@ -121,4 +205,4 @@ async function playRandomAnimation() {
   await fn();
 }
 
-module.exports = { playRandomAnimation, isAnimatable };
+module.exports = { playRandomAnimation, play042Animation, isAnimatable };

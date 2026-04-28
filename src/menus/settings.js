@@ -6,6 +6,8 @@ const { t, setLanguage, getLanguage } = require('../i18n');
 const updater = require('../utils/updater');
 const config = require('../utils/config');
 const c = require('../ui/colors');
+const stats = require('../utils/stats');
+const ach = require('../utils/achievements');
 
 function sanitizeName(raw) {
   return String(raw || '')
@@ -27,7 +29,12 @@ async function pickName({ firstRun = false } = {}) {
       console.log(`  ${c.yellow(t('firstRun.nameRequired'))}`);
       continue;
     }
+    const previous = config.read().name;
     config.write({ name });
+    if (previous && previous !== name) {
+      stats.bumpNameChange();
+      ach.announceNew(ach.evaluate({ event: 'name', now: new Date() }));
+    }
     console.log(`  ${c.green('✓')} ${c.dim(t('settings.nameSaved', { name }))}`);
     return name;
   }
@@ -44,7 +51,12 @@ async function pickLanguage() {
     ],
   });
   if (choice === 'back') return;
+  const previous = getLanguage();
   setLanguage(choice);
+  if (previous !== choice) {
+    stats.bumpLanguageSwitch();
+    ach.announceNew(ach.evaluate({ event: 'lang', now: new Date() }));
+  }
   console.log(`  ${c.green('✓')} ${c.dim(t('settings.languageSaved'))}`);
 }
 
@@ -74,6 +86,8 @@ async function manualUpdateCheck() {
 }
 
 async function settingsMenu() {
+  stats.bumpSettings();
+  ach.announceNew(ach.evaluate({ event: 'settings', now: new Date() }));
   while (true) {
     const choice = await select({
       message: t('settings.title'),

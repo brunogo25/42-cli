@@ -8,6 +8,44 @@ const tester = require('../runners/libftTester');
 const norm = require('../runners/norminette');
 const compliance = require('../runners/subjectCheck');
 const { t } = require('../i18n');
+const stats = require('../utils/stats');
+const ach = require('../utils/achievements');
+
+function presentImplementedTargets(libftPath) {
+  try {
+    return tester.detectImplemented
+      ? tester.detectImplemented(libftPath).present
+      : tester.FUNCTIONS;
+  } catch {
+    return tester.FUNCTIONS;
+  }
+}
+
+function recordTesterResult(libftPath, targets, result) {
+  const passed = result && result.exitCode === 0 && result.stage === 'run';
+  const effective = Array.isArray(targets) && targets.length
+    ? targets
+    : presentImplementedTargets(libftPath);
+  stats.recordTestRun({ targets: effective, passed });
+  const newly = ach.evaluate({
+    event: 'test',
+    targets: effective,
+    passed,
+    now: new Date(),
+  });
+  ach.announceNew(newly);
+}
+
+function recordNormResult(result) {
+  const clean = result && result.exitCode === 0;
+  stats.recordNorminetteRun({ clean });
+  ach.announceNew(ach.evaluate({ event: 'norminette', clean, now: new Date() }));
+}
+
+function recordComplianceResult() {
+  stats.recordComplianceRun();
+  ach.announceNew(ach.evaluate({ event: 'compliance', now: new Date() }));
+}
 
 async function promptForCustomPath() {
   while (true) {
@@ -123,6 +161,7 @@ async function run() {
         const r = await tester.runTester(libftPath);
         const s = tester.summarize(r);
         if (s) console.log(s);
+        recordTesterResult(libftPath, null, r);
       });
     } else if (action === 'pick') {
       const fns = await promptFunctions();
@@ -132,26 +171,31 @@ async function run() {
         const r = await tester.runTester(libftPath, fns);
         const s = tester.summarize(r);
         if (s) console.log(s);
+        recordTesterResult(libftPath, fns, r);
       });
     } else if (action === 'norm') {
       await section(t('sections.norminette'), async () => {
         const r = await norm.runNorminette(libftPath);
         console.log(norm.summarize(r));
+        recordNormResult(r);
       });
     } else if (action === 'both') {
       await section(t('sections.norminette'), async () => {
         const n = await norm.runNorminette(libftPath);
         console.log(norm.summarize(n));
+        recordNormResult(n);
       });
       await section(t('sections.testsAll'), async () => {
         const r = await tester.runTester(libftPath);
         const s = tester.summarize(r);
         if (s) console.log(s);
+        recordTesterResult(libftPath, null, r);
       });
     } else if (action === 'compliance') {
       await section(t('sections.compliance'), async () => {
         const checks = await compliance.runCompliance(libftPath);
         console.log(compliance.summarize(checks));
+        recordComplianceResult();
       });
     } else if (action === 'path') {
       return run();

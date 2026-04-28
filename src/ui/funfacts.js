@@ -341,7 +341,14 @@ function isPhraseIndex(lang, idx) {
 function pickMessage(lang, lastIndex) {
   const items = pool(lang);
   const i = pickIndex(items.length, lastIndex);
-  return { index: i, text: items[i], isPhrase: isPhraseIndex(lang, i) };
+  const facts = lang === 'fr' ? FR_FACTS : EN_FACTS;
+  const isPhrase = i >= facts.length;
+  return {
+    index: i,
+    text: items[i],
+    isPhrase,
+    relativeIndex: isPhrase ? i - facts.length : i,
+  };
 }
 
 module.exports = {

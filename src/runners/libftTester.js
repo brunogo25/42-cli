@@ -172,4 +172,4 @@ function summarize(result) {
   return '';
 }
 
-module.exports = { runTester, summarize, FUNCTIONS, TESTER_DIR };
+module.exports = { runTester, summarize, FUNCTIONS, TESTER_DIR, detectImplemented };
