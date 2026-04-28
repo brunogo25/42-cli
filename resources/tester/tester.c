@@ -893,7 +893,6 @@ static void	test_lstsize(t_test *t)
 	int a = 0, b = 0, c = 0;
 	t_list *l = build3(&a, &b, &c);
 	EXPECT(ft_lstsize(l) == 3, "lstsize 3-node list");
-	ft_lstclear(&l, NULL); /* NULL del — only frees nodes */
 	for (t_list *p = l; p;) { t_list *n = p->next; free(p); p = n; }
 #else
 	t->skipped = 1;
