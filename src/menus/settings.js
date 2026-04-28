@@ -80,13 +80,11 @@ async function settingsMenu() {
       choices: [
         { label: t('settings.name'), value: 'name' },
         { label: t('settings.language'), value: 'language' },
-        { label: t('settings.checkUpdates'), value: 'check' },
         { label: t('common.back'), value: 'back' },
       ],
     });
     if (choice === 'name') await pickName();
     else if (choice === 'language') await pickLanguage();
-    else if (choice === 'check') await manualUpdateCheck();
     else if (choice === 'back') return;
   }
 }

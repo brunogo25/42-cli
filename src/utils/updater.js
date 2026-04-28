@@ -9,7 +9,6 @@ const REPO = 'brunogo25/42-cli';
 const BRANCH = 'main';
 const REMOTE_PKG_URL = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/package.json`;
 const INSTALL_URL = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/install.sh`;
-const CHECK_INTERVAL_MS = 12 * 60 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 1500;
 
 function fetchJson(url, timeoutMs) {
@@ -48,14 +47,14 @@ function shape(remoteVersion) {
   };
 }
 
-async function checkForUpdate({ force = false } = {}) {
+async function checkForUpdate() {
   const cfg = config.read();
-  const fresh = !force && Date.now() - cfg.lastUpdateCheck < CHECK_INTERVAL_MS;
-  if (fresh) return shape(cfg.lastSeenVersion);
   const remote = await fetchJson(REMOTE_PKG_URL, FETCH_TIMEOUT_MS);
-  if (!remote || !remote.version) return shape(cfg.lastSeenVersion);
+  if (!remote || !remote.version) {
+    return { ...shape(cfg.lastSeenVersion), reachable: false };
+  }
   config.write({ lastUpdateCheck: Date.now(), lastSeenVersion: remote.version });
-  return shape(remote.version);
+  return { ...shape(remote.version), reachable: true };
 }
 
 function runUpdate() {

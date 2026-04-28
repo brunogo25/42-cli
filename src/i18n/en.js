@@ -17,6 +17,11 @@ module.exports = {
   'firstRun.askName': "What's your name?",
   'firstRun.nameRequired': 'please enter a name.',
 
+  'fun.didYouKnow': 'Did you know?',
+  'fun.vibe': 'vibe of the day:',
+  'fun.luckyDay': 'LUCKY DAY!',
+  'fun.wow': 'WOW!',
+
   'main.cursus': 'Which cursus are you working on?',
   'main.commonCore': 'Common Core',
   'main.advancedCore': 'Advanced Core',
@@ -31,6 +36,8 @@ module.exports = {
   'update.upToDate': 'You are already on the latest version ({local}).',
   'update.checking': 'checking for updates…',
   'update.unreachable': 'could not reach github.',
+  'update.offline': 'offline — could not check for updates.',
+  'update.onLatest': 'up to date (v{local}).',
   'update.confirm': 'Update now?',
 
   'cc.pick': 'Pick an exercise:',
@@ -60,7 +67,6 @@ module.exports = {
   'settings.namePrompt': 'Your name:',
   'settings.nameSaved': 'Name saved ({name}).',
   'settings.language': 'Language',
-  'settings.checkUpdates': 'Check for updates now',
   'settings.languageSaved': 'Language saved.',
 
   'sections.testsAll': 'tests · all 42 functions',

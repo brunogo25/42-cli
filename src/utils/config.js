@@ -15,6 +15,7 @@ const DEFAULTS = {
   name: null,
   lastUpdateCheck: 0,
   lastSeenVersion: null,
+  lastFunIndex: -1,
 };
 
 function read() {
