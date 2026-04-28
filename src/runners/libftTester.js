@@ -121,9 +121,25 @@ async function runTester(libftPath, targets) {
   process.stdout.write('\n');
   const targetArgs = Array.isArray(targets) ? targets : (targets ? [targets] : []);
   const args = ['--color', ...targetArgs];
+  // ASan defaults differ between Linux (_exit on error) and macOS (abort()).
+  // Pin them so the tester behaves the same everywhere, and silence leak
+  // detection (we don't always free in the tests and don't want false noise).
+  const asanOpts = [
+    'abort_on_error=0',
+    'halt_on_error=1',
+    'detect_leaks=0',
+    'print_stacktrace=1',
+    'symbolize=1',
+    'color=always',
+  ].join(':');
   const run = await spawnAsync(TESTER_BIN, args, {
     stdio: ['inherit', 'pipe', 'pipe'],
     cwd: TESTER_DIR,
+    env: {
+      ...process.env,
+      ASAN_OPTIONS: asanOpts,
+      UBSAN_OPTIONS: 'print_stacktrace=1',
+    },
   });
   return {
     exitCode: run.exitCode,
@@ -169,6 +185,30 @@ function summarize(result) {
   }
   // run stage — the C tester already printed its own pretty summary,
   // including informative messages on exit 2 (no match / nothing ready).
+  // If ASan / UBSan tripped, surface a clear banner so users don't wonder
+  // why the run stopped early — the diagnostic is already on stderr above.
+  const stderr = result.stderr || '';
+  const asanMatch = stderr.match(/AddressSanitizer:\s*([\w-]+)[\s\S]*?in\s+(\S+)\s+(\S+:\d+)/);
+  const ubsanMatch = stderr.match(/runtime error:\s*([^\n]+)/);
+  if (asanMatch) {
+    lines.push('');
+    lines.push(`${c.bold('Result:')} ${c.red('FAIL — memory error')}`);
+    lines.push(
+      `  ${c.yellow('AddressSanitizer:')} ${c.bold(asanMatch[1])} in ` +
+        `${c.bold(asanMatch[2])} (${asanMatch[3]})`
+    );
+    lines.push(
+      `  ${c.dim('full stack trace and shadow map are above. fix this first — ' +
+        'memory bugs can mask or fake later assertion results.')}`
+    );
+    return lines.join('\n');
+  }
+  if (ubsanMatch) {
+    lines.push('');
+    lines.push(`${c.bold('Result:')} ${c.red('FAIL — undefined behavior')}`);
+    lines.push(`  ${c.yellow('UBSan:')} ${ubsanMatch[1]}`);
+    return lines.join('\n');
+  }
   return '';
 }
 
