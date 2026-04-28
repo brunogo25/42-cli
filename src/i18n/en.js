@@ -8,10 +8,14 @@ module.exports = {
   'common.quit': 'Quit',
   'common.comingSoon': 'coming soon',
   'common.bye': 'bye!',
+  'common.byeName': 'bye, {name}!',
+  'common.hello': 'Hello, {name}!',
   'common.yes': 'Yes',
   'common.no': 'No',
 
   'firstRun.pickLanguage': 'Pick a language / Choisissez une langue:',
+  'firstRun.askName': "What's your name?",
+  'firstRun.nameRequired': 'please enter a name.',
 
   'main.cursus': 'Which cursus are you working on?',
   'main.commonCore': 'Common Core',
@@ -52,6 +56,9 @@ module.exports = {
   'libft.changePath': 'Change libft path',
 
   'settings.title': 'Settings',
+  'settings.name': 'Name',
+  'settings.namePrompt': 'Your name:',
+  'settings.nameSaved': 'Name saved ({name}).',
   'settings.language': 'Language',
   'settings.checkUpdates': 'Check for updates now',
   'settings.languageSaved': 'Language saved.',

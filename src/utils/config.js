@@ -12,6 +12,7 @@ const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
 const DEFAULTS = {
   language: null,
+  name: null,
   lastUpdateCheck: 0,
   lastSeenVersion: null,
 };

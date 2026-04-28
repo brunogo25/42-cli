@@ -1,9 +1,37 @@
 'use strict';
 
 const { select } = require('../ui/select');
+const { input } = require('../ui/input');
 const { t, setLanguage, getLanguage } = require('../i18n');
 const updater = require('../utils/updater');
+const config = require('../utils/config');
 const c = require('../ui/colors');
+
+function sanitizeName(raw) {
+  return String(raw || '')
+    .replace(/[\r\n\t]/g, ' ')
+    .trim()
+    .slice(0, 32);
+}
+
+async function pickName({ firstRun = false } = {}) {
+  const current = config.read().name;
+  while (true) {
+    const answer = await input({
+      message: firstRun ? t('firstRun.askName') : t('settings.namePrompt'),
+      defaultValue: firstRun ? '' : current || '',
+    });
+    const name = sanitizeName(answer);
+    if (!name) {
+      if (!firstRun) return;
+      console.log(`  ${c.yellow(t('firstRun.nameRequired'))}`);
+      continue;
+    }
+    config.write({ name });
+    console.log(`  ${c.green('✓')} ${c.dim(t('settings.nameSaved', { name }))}`);
+    return name;
+  }
+}
 
 async function pickLanguage() {
   const current = getLanguage();
@@ -50,15 +78,17 @@ async function settingsMenu() {
     const choice = await select({
       message: t('settings.title'),
       choices: [
+        { label: t('settings.name'), value: 'name' },
         { label: t('settings.language'), value: 'language' },
         { label: t('settings.checkUpdates'), value: 'check' },
         { label: t('common.back'), value: 'back' },
       ],
     });
-    if (choice === 'language') await pickLanguage();
+    if (choice === 'name') await pickName();
+    else if (choice === 'language') await pickLanguage();
     else if (choice === 'check') await manualUpdateCheck();
     else if (choice === 'back') return;
   }
 }
 
-module.exports = { settingsMenu, pickLanguage, manualUpdateCheck };
+module.exports = { settingsMenu, pickLanguage, pickName, manualUpdateCheck };
