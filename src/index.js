@@ -21,8 +21,11 @@ async function showFunMessage() {
     return;
   }
   const { index, text, isPhrase } = pickMessage(getLanguage(), cfg.lastFunIndex);
-  const label = isPhrase ? t('fun.vibe') : t('fun.didYouKnow');
-  console.log(`  ${c.magenta(label)} ${text}\n`);
+  if (isPhrase) {
+    console.log(`  ${c.dim('—')} ${text}\n`);
+  } else {
+    console.log(`  ${c.magenta(t('fun.didYouKnow'))} ${text}\n`);
+  }
   config.write({ lastFunIndex: index });
 }
 

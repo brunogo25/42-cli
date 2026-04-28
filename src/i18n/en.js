@@ -18,7 +18,6 @@ module.exports = {
   'firstRun.nameRequired': 'please enter a name.',
 
   'fun.didYouKnow': 'Did you know?',
-  'fun.vibe': 'vibe of the day:',
   'fun.luckyDay': 'LUCKY DAY!',
   'fun.wow': 'WOW!',
 
