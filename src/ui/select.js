@@ -3,7 +3,7 @@
 const readline = require('readline');
 const c = require('./colors');
 
-function select({ message, choices, hint }) {
+function select({ message, choices, hint, shortcuts }) {
   return new Promise((resolve) => {
     const stdin = process.stdin;
     const stdout = process.stdout;
@@ -56,7 +56,18 @@ function select({ message, choices, hint }) {
       stdin.pause();
     }
 
-    function onKey(_str, key) {
+    function submitAt(i) {
+      cleanup();
+      stdout.write(`\x1b[${totalLines}A`);
+      stdout.write(
+        `${c.green('✓')} ${c.bold(message)} ${c.cyan(choices[i].label)}\x1b[K\n`
+      );
+      for (let k = 1; k < totalLines; k++) stdout.write('\x1b[K\n');
+      stdout.write(`\x1b[${totalLines - 1}A`);
+      resolve(choices[i].value);
+    }
+
+    function onKey(str, key) {
       if (!key) return;
       if (key.ctrl && key.name === 'c') {
         cleanup();
@@ -71,15 +82,11 @@ function select({ message, choices, hint }) {
         render();
       } else if (key.name === 'return') {
         if (choices[index].disabled) return;
-        cleanup();
-        // Collapse menu down to a single confirmation line.
-        stdout.write(`\x1b[${totalLines}A`);
-        stdout.write(
-          `${c.green('✓')} ${c.bold(message)} ${c.cyan(choices[index].label)}\x1b[K\n`
-        );
-        for (let i = 1; i < totalLines; i++) stdout.write('\x1b[K\n');
-        stdout.write(`\x1b[${totalLines - 1}A`);
-        resolve(choices[index].value);
+        submitAt(index);
+      } else if (shortcuts && str && Object.prototype.hasOwnProperty.call(shortcuts, str)) {
+        const target = shortcuts[str];
+        const idx = choices.findIndex((ch) => ch.value === target && !ch.disabled);
+        if (idx >= 0) submitAt(idx);
       }
     }
 

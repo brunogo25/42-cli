@@ -2,28 +2,30 @@
 
 const { select } = require('../ui/select');
 const libft = require('./libft');
+const { t } = require('../i18n');
 
 async function run() {
   while (true) {
+    const cs = t('common.comingSoon');
     const choice = await select({
-      message: 'Pick an exercise:',
+      message: t('cc.pick'),
       choices: [
         { label: 'Libft', value: 'libft' },
-        { label: 'ft_printf', value: 'printf', disabled: 'coming soon' },
-        { label: 'get_next_line', value: 'gnl', disabled: 'coming soon' },
-        { label: 'Born2BeRoot', value: 'b2br', disabled: 'coming soon' },
-        { label: 'so_long', value: 'solong', disabled: 'coming soon' },
-        { label: 'push_swap', value: 'push_swap', disabled: 'coming soon' },
-        { label: 'minishell', value: 'minishell', disabled: 'coming soon' },
-        { label: 'philosophers', value: 'philo', disabled: 'coming soon' },
-        { label: 'cub3d / miniRT', value: 'cubrt', disabled: 'coming soon' },
-        { label: 'NetPractice', value: 'netpractice', disabled: 'coming soon' },
-        { label: 'CPP modules', value: 'cpp', disabled: 'coming soon' },
-        { label: 'webserv', value: 'webserv', disabled: 'coming soon' },
-        { label: 'Inception', value: 'inception', disabled: 'coming soon' },
-        { label: 'ft_transcendence', value: 'transcendence', disabled: 'coming soon' },
-        { label: 'Back', value: 'back' },
-        { label: 'Quit', value: 'quit' },
+        { label: 'ft_printf', value: 'printf', disabled: cs },
+        { label: 'get_next_line', value: 'gnl', disabled: cs },
+        { label: 'Born2BeRoot', value: 'b2br', disabled: cs },
+        { label: 'so_long', value: 'solong', disabled: cs },
+        { label: 'push_swap', value: 'push_swap', disabled: cs },
+        { label: 'minishell', value: 'minishell', disabled: cs },
+        { label: 'philosophers', value: 'philo', disabled: cs },
+        { label: 'cub3d / miniRT', value: 'cubrt', disabled: cs },
+        { label: 'NetPractice', value: 'netpractice', disabled: cs },
+        { label: 'CPP modules', value: 'cpp', disabled: cs },
+        { label: 'webserv', value: 'webserv', disabled: cs },
+        { label: 'Inception', value: 'inception', disabled: cs },
+        { label: 'ft_transcendence', value: 'transcendence', disabled: cs },
+        { label: t('common.back'), value: 'back' },
+        { label: t('common.quit'), value: 'quit' },
       ],
     });
     if (choice === 'libft') {

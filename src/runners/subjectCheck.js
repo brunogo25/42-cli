@@ -113,6 +113,75 @@ function stripCComments(text) {
   return text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
 }
 
+const ALLOWED_DOTFILES = new Set([
+  '.git', '.gitignore', '.gitattributes', '.gitmodules', '.gitkeep',
+  '.norminette', '.norminette.toml', '.clang-format',
+]);
+
+const ALLOWED_PLAIN_NAMES = new Set([
+  'Makefile', 'Makefile.bonus', 'libft.h',
+  'author', 'auteur',
+  'LICENSE', 'LICENSE.md', 'README', 'README.md',
+]);
+
+function classifyEntry(name, isDir) {
+  if (isDir) {
+    if (ALLOWED_DOTFILES.has(name)) return { kind: 'allowed' };
+    if (/\.dSYM$/.test(name)) return { kind: 'garbage', tag: 'debug bundle' };
+    return { kind: 'garbage', tag: 'extra directory' };
+  }
+  if (ALLOWED_PLAIN_NAMES.has(name)) return { kind: 'allowed' };
+  if (ALLOWED_DOTFILES.has(name)) return { kind: 'allowed' };
+  const m = /^ft_(\w+)\.c$/.exec(name);
+  if (m) {
+    if (FUNCTIONS.includes(m[1])) return { kind: 'allowed' };
+    return { kind: 'garbage', tag: 'unexpected ft_*.c' };
+  }
+  if (/\.(o|a)$/.test(name)) return { kind: 'artifact' };
+  if (name === 'a.out' || /^a\.out\.\w+$/.test(name)) return { kind: 'garbage', tag: 'test binary' };
+  if (name === 'core' || /^core\.\d+$/.test(name) || /^vgcore\.\d+$/.test(name)) {
+    return { kind: 'garbage', tag: 'core dump' };
+  }
+  if (name === '.DS_Store' || name === 'Thumbs.db' || name === 'desktop.ini') {
+    return { kind: 'garbage', tag: 'OS metadata' };
+  }
+  if (/\.(swp|swo)$/.test(name) || /~$/.test(name)) {
+    return { kind: 'garbage', tag: 'editor backup' };
+  }
+  if (/\.(c|h)$/.test(name)) return { kind: 'garbage', tag: 'stray source' };
+  if (/\.(cpp|hpp|cc|cxx)$/.test(name)) return { kind: 'garbage', tag: 'non-C source' };
+  return { kind: 'garbage', tag: 'unexpected file' };
+}
+
+function checkNoGarbageFiles(libftPath) {
+  let entries;
+  try {
+    entries = fs.readdirSync(libftPath, { withFileTypes: true });
+  } catch {
+    return {
+      name: 'No stray / garbage files at submission root',
+      pass: false,
+      detail: 'libft directory unreadable',
+    };
+  }
+  const garbage = [];
+  for (const e of entries) {
+    const verdict = classifyEntry(e.name, e.isDirectory());
+    if (verdict.kind === 'garbage') {
+      garbage.push(`${e.name}${e.isDirectory() ? '/' : ''} (${verdict.tag})`);
+    }
+  }
+  const shown = garbage.slice(0, 5).join(', ');
+  const more = garbage.length > 5 ? ` (+${garbage.length - 5} more)` : '';
+  return {
+    name: 'No stray / garbage files at submission root',
+    pass: garbage.length === 0,
+    detail: garbage.length === 0
+      ? 'submission root is clean'
+      : `${garbage.length} unwanted: ${shown}${more}`,
+  };
+}
+
 function checkNoMainInSources(libftPath) {
   const offenders = [];
   for (const fn of FUNCTIONS) {
@@ -135,6 +204,7 @@ function checkNoMainInSources(libftPath) {
 async function runCompliance(libftPath) {
   const checks = [];
   checks.push(checkRequiredFiles(libftPath));
+  checks.push(checkNoGarbageFiles(libftPath));
   checks.push(checkMakefileRules(libftPath));
   checks.push(checkLibftHeader(libftPath));
   checks.push(checkNoMainInSources(libftPath));

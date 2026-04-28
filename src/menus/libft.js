@@ -7,17 +7,16 @@ const { isLibftDir, resolveLibftPath } = require('../utils/projectDetect');
 const tester = require('../runners/libftTester');
 const norm = require('../runners/norminette');
 const compliance = require('../runners/subjectCheck');
+const { t } = require('../i18n');
 
 async function promptForCustomPath() {
   while (true) {
-    const raw = await input({ message: 'Path to libft directory:' });
+    const raw = await input({ message: t('libft.pathPrompt') });
     if (!raw) return null;
     const abs = resolveLibftPath(raw);
     if (!isLibftDir(abs)) {
       console.log(c.red(`  ✗ ${abs}`));
-      console.log(
-        c.yellow('     not a libft project — needs Makefile, libft.h, and ft_*.c at the root.')
-      );
+      console.log(c.yellow(`     ${t('libft.notLibft')}`));
       continue;
     }
     return abs;
@@ -27,21 +26,19 @@ async function promptForCustomPath() {
 async function pickLibftPath() {
   const cwd = process.cwd();
   const here = await select({
-    message: `Are you in your libft directory? ${c.dim(`(${cwd})`)}`,
+    message: t('libft.areYouHere', { cwd }),
     choices: [
-      { label: 'Yes — use this directory', value: 'yes' },
-      { label: 'No — enter a path', value: 'no' },
-      { label: 'Back', value: 'back' },
+      { label: t('libft.useThisDir'), value: 'yes' },
+      { label: t('libft.enterPath'), value: 'no' },
+      { label: t('common.back'), value: 'back' },
     ],
   });
   if (here === 'back') return null;
   if (here === 'yes') {
     if (isLibftDir(cwd)) return cwd;
     console.log(c.red(`  ✗ ${cwd}`));
-    console.log(
-      c.yellow('     not a libft project — needs Makefile, libft.h, and ft_*.c at the root.')
-    );
-    console.log(c.dim('     falling back to path entry.'));
+    console.log(c.yellow(`     ${t('libft.notLibft')}`));
+    console.log(c.dim(`     ${t('libft.fallbackToPathEntry')}`));
   }
   return promptForCustomPath();
 }
@@ -67,14 +64,10 @@ function validateFunctionList(names) {
 
 async function promptFunctions() {
   while (true) {
-    const raw = await input({
-      message:
-        'Functions to test (comma/space separated, ft_ prefix optional, blank to cancel):',
-    });
+    const raw = await input({ message: t('libft.functionsPrompt') });
     if (!raw) return null;
     if (raw.trim().toLowerCase() === 'list') {
-      // Print the catalog and re-prompt.
-      console.log(c.dim('  available functions:'));
+      console.log(c.dim(`  ${t('libft.catalogHeader')}`));
       const cols = 4;
       for (let i = 0; i < tester.FUNCTIONS.length; i += cols) {
         const row = tester.FUNCTIONS.slice(i, i + cols)
@@ -88,10 +81,8 @@ async function promptFunctions() {
     if (parsed.length === 0) return null;
     const { valid, unknown } = validateFunctionList(parsed);
     if (unknown.length > 0) {
-      console.log(c.red(`  ✗ unknown function(s): ${unknown.join(', ')}`));
-      console.log(
-        c.yellow(`     try: type "list" to see the catalog, or check the ft_ prefix.`)
-      );
+      console.log(c.red(`  ✗ ${t('libft.unknownFunctions', { names: unknown.join(', ') })}`));
+      console.log(c.yellow(`     ${t('libft.tryListHint')}`));
       continue;
     }
     return valid;
@@ -110,25 +101,25 @@ async function section(title, fn) {
 async function run() {
   const libftPath = await pickLibftPath();
   if (!libftPath) return 'back';
-  console.log(`  ${c.dim('libft path:')} ${libftPath}`);
+  console.log(`  ${c.dim(t('libft.pathLabel'))} ${libftPath}`);
 
   while (true) {
     const action = await select({
-      message: `Libft — what do you want to do?`,
+      message: t('libft.action'),
       choices: [
-        { label: 'Test all 42 functions', value: 'all' },
-        { label: 'Test specific functions… (type names)', value: 'pick' },
-        { label: 'Run Norminette', value: 'norm' },
-        { label: 'Run Norminette + all tests', value: 'both' },
-        { label: 'Subject compliance check (files / Makefile / header)', value: 'compliance' },
-        { label: 'Change libft path', value: 'path' },
-        { label: 'Back', value: 'back' },
-        { label: 'Quit', value: 'quit' },
+        { label: t('libft.testAll'), value: 'all' },
+        { label: t('libft.testPick'), value: 'pick' },
+        { label: t('libft.runNorm'), value: 'norm' },
+        { label: t('libft.runNormAndTests'), value: 'both' },
+        { label: t('libft.compliance'), value: 'compliance' },
+        { label: t('libft.changePath'), value: 'path' },
+        { label: t('common.back'), value: 'back' },
+        { label: t('common.quit'), value: 'quit' },
       ],
     });
 
     if (action === 'all') {
-      await section('tests · all 42 functions', async () => {
+      await section(t('sections.testsAll'), async () => {
         const r = await tester.runTester(libftPath);
         const s = tester.summarize(r);
         if (s) console.log(s);
@@ -143,22 +134,22 @@ async function run() {
         if (s) console.log(s);
       });
     } else if (action === 'norm') {
-      await section('norminette', async () => {
+      await section(t('sections.norminette'), async () => {
         const r = await norm.runNorminette(libftPath);
         console.log(norm.summarize(r));
       });
     } else if (action === 'both') {
-      await section('norminette', async () => {
+      await section(t('sections.norminette'), async () => {
         const n = await norm.runNorminette(libftPath);
         console.log(norm.summarize(n));
       });
-      await section('tests · all 42 functions', async () => {
+      await section(t('sections.testsAll'), async () => {
         const r = await tester.runTester(libftPath);
         const s = tester.summarize(r);
         if (s) console.log(s);
       });
     } else if (action === 'compliance') {
-      await section('subject compliance', async () => {
+      await section(t('sections.compliance'), async () => {
         const checks = await compliance.runCompliance(libftPath);
         console.log(compliance.summarize(checks));
       });
