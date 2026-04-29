@@ -7,7 +7,8 @@ set -euo pipefail
 REPO="brunogo25/42-cli"
 BRANCH="main"
 INSTALL_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/42-cli"
-BIN_NAME="42"
+# Both names point at the same script — use whichever you prefer.
+BIN_NAMES=("42" "42cli")
 
 red()    { printf '\033[31m%s\033[0m\n' "$*"; }
 green()  { printf '\033[32m%s\033[0m\n' "$*"; }
@@ -56,14 +57,16 @@ rm -rf "$INSTALL_DIR"
 mkdir -p "$INSTALL_DIR"
 tar -xzf "$TMP/src.tar.gz" -C "$INSTALL_DIR" --strip-components=1
 
-# 5. Symlink
+# 5. Symlinks — install both `42` and `42cli` so users can launch with either.
 ENTRY="$INSTALL_DIR/bin/42.js"
 chmod +x "$ENTRY"
-ln -sf "$ENTRY" "$BIN_DIR/$BIN_NAME"
+for name in "${BIN_NAMES[@]}"; do
+  ln -sf "$ENTRY" "$BIN_DIR/$name"
+done
 
 green "42-cli installed."
 dim   "  source:    $INSTALL_DIR"
-dim   "  symlink:   $BIN_DIR/$BIN_NAME"
+dim   "  symlinks:  $(printf '%s ' "${BIN_NAMES[@]/#/$BIN_DIR/}")"
 
 # 6. PATH hint if needed
 case ":$PATH:" in *":$BIN_DIR:"*) ;; *)
@@ -72,4 +75,4 @@ case ":$PATH:" in *":$BIN_DIR:"*) ;; *)
 ;; esac
 
 echo ""
-echo "Run:  $BIN_NAME"
+echo "Run:  ${BIN_NAMES[0]}   (or: ${BIN_NAMES[1]})"

@@ -86,6 +86,20 @@ module.exports = {
   'libft.compliance': 'Subject compliance check (files / Makefile / header)',
   'libft.changePath': 'Change libft path',
 
+  'printf.pathPrompt': 'Path to ft_printf project directory:',
+  'printf.notProject': 'not an ft_printf project — needs Makefile and ft_printf.h at the root.',
+  'printf.areYouHere': 'Are you in your ft_printf directory? ({cwd})',
+  'printf.useThisDir': 'Yes — use this directory',
+  'printf.enterPath': 'No — enter a path',
+  'printf.fallbackToPathEntry': 'falling back to path entry.',
+  'printf.pathLabel': 'ft_printf path:',
+  'printf.action': 'ft_printf — what do you want to do?',
+  'printf.runTests': 'Run all tests (cspdiuxX%)',
+  'printf.runNorm': 'Run Norminette',
+  'printf.runNormAndTests': 'Run Norminette + all tests',
+  'printf.compliance': 'Subject compliance check (files / Makefile / header / README)',
+  'printf.changePath': 'Change ft_printf path',
+
   'settings.title': 'Settings',
   'settings.name': 'Name',
   'settings.namePrompt': 'Your name:',
@@ -94,6 +108,7 @@ module.exports = {
   'settings.languageSaved': 'Language saved.',
 
   'sections.testsAll': 'tests · all 42 functions',
+  'sections.printfTests': 'tests · ft_printf',
   'sections.norminette': 'norminette',
   'sections.compliance': 'subject compliance',
 };

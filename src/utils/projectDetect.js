@@ -17,10 +17,23 @@ function isLibftDir(dir) {
   return entries.some((f) => /^ft_.*\.c$/.test(f));
 }
 
+function isFtPrintfDir(dir) {
+  try {
+    if (!fs.statSync(dir).isDirectory()) return false;
+  } catch {
+    return false;
+  }
+  // Subject is permissive about source layout (*.c, */*.c) so we don't insist
+  // on ft_printf.c specifically — just the Makefile and the header.
+  if (!fs.existsSync(path.join(dir, 'Makefile'))) return false;
+  if (!fs.existsSync(path.join(dir, 'ft_printf.h'))) return false;
+  return true;
+}
+
 function resolveLibftPath(input) {
   if (!input) return null;
   const abs = path.isAbsolute(input) ? input : path.resolve(process.cwd(), input);
   return abs;
 }
 
-module.exports = { isLibftDir, resolveLibftPath };
+module.exports = { isLibftDir, isFtPrintfDir, resolveLibftPath };

@@ -5,6 +5,26 @@
 // and falls back to `notes_en` if missing.
 module.exports = [
   {
+    version: '0.2.1',
+    date: '2026-04-29',
+    notes_en: [
+      'ft_printf is live — pick it from the Common Core menu to run the full tester, norminette, or subject-compliance check on your project. The "coming soon" tag on ft_printf is gone.',
+      'The ft_printf tester covers every conversion the subject mandates (`cspdiuxX%`) plus mixed formats and edge cases — NULL string, NULL pointer, INT_MIN/MAX, UINT_MAX, `%c` of `\\0`, empty format, and more. 11 groups, 82+ assertions.',
+      'Each test compares ft_printf byte-for-byte against the libc `printf` (via `snprintf`) AND verifies the return value equals the bytes actually written — output capture goes through a `pipe`+`dup2` so the assertion sees exactly what would have hit the terminal.',
+      'Compiled under AddressSanitizer like the libft tester, so memory bugs in your ft_printf surface as a clear file:line ASan diagnostic instead of slipping through as "wrong content". Crashes (SIGSEGV/SIGBUS/SIGABRT) are caught and reported as CRASH; the run continues to the next group.',
+      'New ft_printf subject-compliance check covers the README rules from page 7 of the subject — italicized first line containing "This activity has been created as part of the 42 curriculum by <login>", plus required Description / Instructions / Resources sections. Same `make -q`-based no-relink check and diagnostic hints as the libft check.',
+      'The CLI now responds to both `42` and `42cli` — same binary, just whichever name your fingers reach for. `npm install -g` registers both, and the curl installer creates both symlinks. On existing installations, run `42 update` once and the `42cli` alias appears alongside.',
+    ],
+    notes_fr: [
+      'ft_printf est disponible — choisissez-le dans le menu Common Core pour lancer le testeur complet, la norminette ou le contrôle de conformité au sujet sur votre projet. L\'étiquette « à venir » sur ft_printf disparaît.',
+      'Le testeur ft_printf couvre toutes les conversions exigées par le sujet (`cspdiuxX%`), plus les formats mixtes et les cas limites — chaîne NULL, pointeur NULL, INT_MIN/MAX, UINT_MAX, `%c` de `\\0`, format vide, et plus encore. 11 groupes, 82+ assertions.',
+      'Chaque test compare ft_printf octet par octet au `printf` de la libc (via `snprintf`) ET vérifie que la valeur de retour correspond aux octets réellement écrits — la sortie passe par un `pipe`+`dup2` pour que l\'assertion voie exactement ce qui aurait atteint le terminal.',
+      'Compilé sous AddressSanitizer comme le testeur libft, donc les erreurs mémoire dans votre ft_printf apparaissent avec un diagnostic ASan fichier:ligne précis au lieu de passer pour un « contenu incorrect ». Les crashs (SIGSEGV/SIGBUS/SIGABRT) sont attrapés et signalés CRASH ; le run continue avec le groupe suivant.',
+      'Nouveau contrôle de conformité ft_printf : règles README de la page 7 du sujet — première ligne en italique contenant « This activity has been created as part of the 42 curriculum by <login> », plus les sections obligatoires Description / Instructions / Resources. Mêmes contrôles `make -q` (anti-relink) et messages de diagnostic que pour libft.',
+      'Le CLI répond maintenant à `42` comme à `42cli` — même binaire, à vous de choisir. `npm install -g` enregistre les deux, et l\'installeur curl crée les deux symlinks. Sur une installation existante, lancez `42 update` une fois et l\'alias `42cli` apparaît à côté.',
+    ],
+  },
+  {
     version: '0.2.0',
     date: '2026-04-29',
     notes_en: [

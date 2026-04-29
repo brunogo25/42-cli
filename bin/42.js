@@ -12,7 +12,7 @@ if (cmd === 'update' || cmd === '--update' || cmd === '-u') {
   process.exit(0);
 } else if (cmd === '--help' || cmd === '-h' || cmd === 'help') {
   // eslint-disable-next-line no-console
-  console.log('Usage: 42 [command]\n\nCommands:\n  (no args)   open the interactive menu\n  update      install the latest version from GitHub\n  --version   print the installed version\n');
+  console.log('Usage: 42 [command]   (alias: 42cli)\n\nCommands:\n  (no args)   open the interactive menu\n  update      install the latest version from GitHub\n  --version   print the installed version\n');
   process.exit(0);
 } else {
   require('../src/index.js').main().catch((err) => {

@@ -2,6 +2,7 @@
 
 const { select } = require('../ui/select');
 const libft = require('./libft');
+const ftPrintf = require('./ftPrintf');
 const { t } = require('../i18n');
 
 async function run() {
@@ -11,7 +12,7 @@ async function run() {
       message: t('cc.pick'),
       choices: [
         { label: 'Libft', value: 'libft' },
-        { label: 'ft_printf', value: 'printf', disabled: cs },
+        { label: 'ft_printf', value: 'printf' },
         { label: 'get_next_line', value: 'gnl', disabled: cs },
         { label: 'Born2BeRoot', value: 'b2br', disabled: cs },
         { label: 'so_long', value: 'solong', disabled: cs },
@@ -30,6 +31,9 @@ async function run() {
     });
     if (choice === 'libft') {
       const back = await libft.run();
+      if (back === 'quit') return 'quit';
+    } else if (choice === 'printf') {
+      const back = await ftPrintf.run();
       if (back === 'quit') return 'quit';
     } else if (choice === 'back') {
       return 'back';
