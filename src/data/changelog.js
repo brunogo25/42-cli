@@ -5,6 +5,48 @@
 // and falls back to `notes_en` if missing.
 module.exports = [
   {
+    version: '0.1.8',
+    date: '2026-04-29',
+    notes_en: [
+      'Patch notes are caught up — the "What\'s new" screen now shows entries for 0.1.5, 0.1.6 and 0.1.7 (README italic check, AddressSanitizer instrumentation, and the `.o` / `.a` build-artifact check). They had shipped silently; scroll down to read what you missed.',
+    ],
+    notes_fr: [
+      'Notes de version à jour — l\'écran « Quoi de neuf » affiche maintenant les entrées 0.1.5, 0.1.6 et 0.1.7 (contrôle italique du README, instrumentation AddressSanitizer, contrôle des fichiers `.o` / `.a`). Elles avaient été livrées silencieusement ; faites défiler pour voir ce qui vous a échappé.',
+    ],
+  },
+  {
+    version: '0.1.7',
+    date: '2026-04-29',
+    notes_en: [
+      'Subject compliance now flags `.o` and `.a` build artifacts at the submission root with a clear "run `make fclean` before submitting" hint — previously these were silently ignored even though they shouldn\'t be pushed.',
+    ],
+    notes_fr: [
+      'La vérification de conformité signale maintenant les fichiers `.o` et `.a` à la racine du rendu avec un message clair : « lancez `make fclean` avant de rendre » — ils étaient silencieusement ignorés alors qu\'ils ne doivent pas être poussés.',
+    ],
+  },
+  {
+    version: '0.1.6',
+    date: '2026-04-29',
+    notes_en: [
+      'The libft tester now compiles your code under AddressSanitizer. Memory bugs (heap-buffer-overflow, use-after-free, off-by-one writes) surface as a clear file:line diagnostic instead of silently passing on macOS or producing misleading "wrong content" failures on Linux.',
+      'New "memory error" banner in the test summary pulls the violation type and source location out of the ASan report so you can jump straight to the bug.',
+    ],
+    notes_fr: [
+      'Le testeur libft compile désormais votre code sous AddressSanitizer. Les erreurs mémoire (heap-buffer-overflow, use-after-free, écritures off-by-one) apparaissent avec un fichier:ligne précis au lieu de passer silencieusement sur macOS ou de produire des échecs trompeurs « contenu incorrect » sur Linux.',
+      'Nouvelle bannière « erreur mémoire » dans le résumé : le type de violation et l\'emplacement source sont extraits du rapport ASan pour aller droit au bug.',
+    ],
+  },
+  {
+    version: '0.1.5',
+    date: '2026-04-28',
+    notes_en: [
+      'Subject compliance now checks that the first paragraph of your README (the student presentation) is in italic — wrap it in `*…*` or `_…_` to pass. Plain or bold intros are flagged.',
+    ],
+    notes_fr: [
+      'La vérification de conformité contrôle maintenant que le premier paragraphe du README (la présentation de l\'étudiant) est en italique — entourez-le de `*…*` ou `_…_` pour passer. Les introductions en texte brut ou en gras sont signalées.',
+    ],
+  },
+  {
     version: '0.1.4',
     date: '2026-04-28',
     notes_en: [
