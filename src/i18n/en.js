@@ -26,6 +26,7 @@ module.exports = {
   'main.advancedCore': 'Advanced Core',
   'main.achievements': 'Achievements',
   'main.patchNotes': "What's new",
+  'main.contributors': 'Contributors',
   'main.settings': 'Settings',
 
   'ach.title': 'Achievements',
@@ -39,6 +40,10 @@ module.exports = {
   'achievement.rarity.epic': 'epic',
   'achievement.rarity.legendary': 'legendary',
   'achievement.rarity.secret': 'secret',
+
+  'contrib.title': 'Contributors',
+  'contrib.intro': 'Folks who helped shape this CLI by reporting bugs, suggesting changes, or sharing ideas.',
+  'contrib.menuPrompt': 'Enter to go back.',
 
   'patch.title': 'Patch notes',
   'patch.menuPrompt': 'Enter to go back.',

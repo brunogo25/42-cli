@@ -74,6 +74,11 @@ async function build(libftPath) {
   };
   const { present } = detectImplemented(libftPath);
   const defines = present.map((fn) => `-DHAVE_FT_${fn}`).join(' ');
+  // Always fclean the student's libft before building. Stale .o files from a
+  // previous `make` (different CFLAGS, header has since changed, ASan flipped)
+  // can link silently and produce wrong test results — passes that should fail
+  // or fails that should pass. This guarantees we're testing the latest source.
+  await spawnAsync('make', ['-C', libftPath, 'fclean'], opts);
   await spawnAsync('make', ['-C', TESTER_DIR, 'clean'], opts);
   const args = ['-C', TESTER_DIR, `LIBFT_PATH=${libftPath}`];
   if (defines) args.push(`EXTRA_CFLAGS=${defines}`);

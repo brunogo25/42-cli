@@ -5,6 +5,24 @@
 // and falls back to `notes_en` if missing.
 module.exports = [
   {
+    version: '0.2.0',
+    date: '2026-04-29',
+    notes_en: [
+      'New `Contributors` section in the main menu — credits the folks (Yoann Pirot, Eliott Ruffin, Carole Vingert, Mikail Bennis, Paul Léon Camille Guermonprez) who helped shape this CLI by reporting bugs, suggesting changes, or sharing ideas. New names will be added as they help.',
+      '`ft_strnstr` now has a moulinette-grade segfault test: an mmap\'d guard page is placed right after the haystack so any implementation that scans past the NUL when `len > strlen(big)` crashes here exactly like it would in moulinette. Caught as a clear `CRASH SIGSEGV` instead of slipping through.',
+      'The `Makefile does not relink` check now uses `make -q` (the canonical "is anything out-of-date?" query) instead of grepping the second `make`\'s stdout for `cc`/`gcc`/`ar`. No more false positives when your Makefile prints helpful echo lines like `"Compiling … with cc"`.',
+      'When the relink check does fail, the message now shows the offending recipe line plus a likely cause — `$(NAME)` in `.PHONY`, missing `$(OBJS)` prerequisites, dependency on a phony target like `all`/`clean`, or the `FORCE` trick — so you know what to fix instead of guessing.',
+      'Every libft test run (and the relink check) now starts with `make fclean` so stale `.o` files from a previous build can\'t mask or fake errors. Different CFLAGS, a header that has since changed, ASan flipped on/off — none of that can sneak through a stale link anymore.',
+    ],
+    notes_fr: [
+      'Nouvelle section « Contributeurs » dans le menu principal — elle crédite celles et ceux (Yoann Pirot, Eliott Ruffin, Carole Vingert, Mikail Bennis, Paul Léon Camille Guermonprez) qui ont aidé ce CLI en signalant des bugs, suggérant des changements ou partageant des idées. De nouveaux noms s\'ajouteront au fil des contributions.',
+      '`ft_strnstr` a désormais un test de segfault niveau moulinette : une page de garde mmap\'ée est placée juste après le haystack, donc toute implémentation qui dépasse le NUL quand `len > strlen(big)` plante exactement comme à la moulinette. Détecté clairement comme `CRASH SIGSEGV` au lieu de passer entre les mailles.',
+      'Le contrôle « Makefile ne reliera pas » utilise maintenant `make -q` (la requête canonique « quelque chose est-il à recompiler ? ») au lieu de chercher `cc`/`gcc`/`ar` dans la sortie du deuxième `make`. Fini les faux positifs quand votre Makefile affiche des lignes utiles comme « Compilation … avec cc ».',
+      'Quand le contrôle de relink échoue vraiment, le message affiche désormais la ligne de recette fautive et une cause probable — `$(NAME)` dans `.PHONY`, prérequis `$(OBJS)` manquants, dépendance sur une cible phony comme `all`/`clean`, ou l\'astuce `FORCE` — pour savoir quoi corriger au lieu de deviner.',
+      'Chaque lancement du testeur libft (et le contrôle de relink) commence maintenant par `make fclean` pour qu\'aucun `.o` obsolète d\'un build précédent ne puisse masquer ou simuler des erreurs. Des CFLAGS différents, un header modifié depuis, ASan activé/désactivé — plus rien ne passe via un lien obsolète.',
+    ],
+  },
+  {
     version: '0.1.9',
     date: '2026-04-29',
     notes_en: [

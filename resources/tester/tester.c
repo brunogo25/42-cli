@@ -28,6 +28,13 @@
 #include <stdint.h>
 #include <limits.h>
 #include <stdbool.h>
+#include <sys/mman.h>
+
+#ifndef MAP_ANONYMOUS
+# ifdef MAP_ANON
+#  define MAP_ANONYMOUS MAP_ANON
+# endif
+#endif
 
 #define MSG_LEN 256
 #define NAME_W  18
@@ -279,6 +286,36 @@ static void	test_strnstr(t_test *t)
 	}
 	EXPECT(ft_strnstr("hello", "lo", 0) == NULL, "strnstr n=0 must be NULL");
 	EXPECT(ft_strnstr("aabaaabaa", "aaab", 9) != NULL, "strnstr backtracking");
+	/* Moulinette bounds check: when len is greater than strlen(big), the
+	 * implementation must still stop scanning at the NUL terminator. We pin
+	 * "hello\0" against a PROT_NONE guard page so any read past the NUL
+	 * faults — naive impls that only respect `len` (not `*big`) crash here
+	 * exactly like they would in moulinette. The dispatcher catches the
+	 * signal and reports CRASH. */
+#ifdef MAP_ANONYMOUS
+	{
+		long ps = sysconf(_SC_PAGESIZE);
+		if (ps <= 0)
+			ps = 4096;
+		void *region = mmap(NULL, (size_t)(ps * 2), PROT_READ | PROT_WRITE,
+			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+		if (region != MAP_FAILED)
+		{
+			char *guard = (char *)region + ps;
+			if (mprotect(guard, (size_t)ps, PROT_NONE) == 0)
+			{
+				char *big = guard - 6;
+				memcpy(big, "hello", 6);
+				char *r2 = ft_strnstr(big, "xx", 100);
+				EXPECT(r2 == NULL,
+					"strnstr must stop at NUL when len > strlen(big) "
+					"(reading past the NUL is the classic moulinette segfault)");
+				mprotect(guard, (size_t)ps, PROT_READ | PROT_WRITE);
+			}
+			munmap(region, (size_t)(ps * 2));
+		}
+	}
+#endif
 #else
 	t->skipped = 1;
 #endif

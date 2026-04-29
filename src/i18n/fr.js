@@ -26,6 +26,7 @@ module.exports = {
   'main.advancedCore': 'Tronc avancé',
   'main.achievements': 'Succès',
   'main.patchNotes': 'Quoi de neuf',
+  'main.contributors': 'Contributeurs',
   'main.settings': 'Réglages',
 
   'ach.title': 'Succès',
@@ -39,6 +40,10 @@ module.exports = {
   'achievement.rarity.epic': 'épique',
   'achievement.rarity.legendary': 'légendaire',
   'achievement.rarity.secret': 'secret',
+
+  'contrib.title': 'Contributeurs',
+  'contrib.intro': 'Celles et ceux qui ont aidé ce CLI en signalant des bugs, en suggérant des changements ou en partageant des idées.',
+  'contrib.menuPrompt': 'Entrée pour revenir.',
 
   'patch.title': 'Notes de version',
   'patch.menuPrompt': 'Entrée pour revenir.',

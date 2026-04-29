@@ -5,6 +5,7 @@ const commonCore = require('./commonCore');
 const { settingsMenu, manualUpdateCheck } = require('./settings');
 const { patchNotesMenu } = require('./patchNotes');
 const { achievementsMenu } = require('./achievements');
+const { contributorsMenu } = require('./contributors');
 const { t } = require('../i18n');
 
 async function mainMenu(ctx = {}) {
@@ -21,6 +22,7 @@ async function mainMenu(ctx = {}) {
     choices.push({ label: t('main.advancedCore'), value: 'advanced', disabled: t('common.comingSoon') });
     choices.push({ label: t('main.achievements'), value: 'achievements' });
     choices.push({ label: t('main.patchNotes'), value: 'patch' });
+    choices.push({ label: t('main.contributors'), value: 'contributors' });
     choices.push({ label: t('main.settings'), value: 'settings' });
     choices.push({ label: t('common.quit'), value: 'quit' });
 
@@ -39,6 +41,8 @@ async function mainMenu(ctx = {}) {
       await patchNotesMenu();
     } else if (choice === 'achievements') {
       await achievementsMenu();
+    } else if (choice === 'contributors') {
+      await contributorsMenu();
     } else if (choice === 'settings') {
       await settingsMenu();
     } else if (choice === 'quit') {

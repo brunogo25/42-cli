@@ -85,28 +85,85 @@ function spawnSilent(cmd, args, opts) {
   });
 }
 
+function diagnoseRelinkCauses(mkText) {
+  const hints = [];
+  // (a) $(NAME) / NAME / libft.a listed in .PHONY → forces rebuild every run.
+  for (const m of mkText.matchAll(/^[ \t]*\.PHONY[ \t]*:[ \t]*(.+)$/gm)) {
+    if (/\$\(NAME\)|\bNAME\b|libft\.a/i.test(m[1])) {
+      hints.push('$(NAME) (or libft.a) is in .PHONY — that forces a rebuild every run; remove it');
+      break;
+    }
+  }
+  // (b) $(NAME) rule prerequisites: must list real .o files, not phony targets.
+  const nameRule = mkText.match(/^[ \t]*\$\(NAME\)[ \t]*:[ \t]*(.*)$/m);
+  if (nameRule) {
+    const deps = nameRule[1];
+    if (!/\$\([A-Za-z_]*OBJ[A-Za-z_]*\)|\.o\b/.test(deps)) {
+      hints.push('$(NAME) rule lists no object files (e.g. $(OBJS)) as prerequisites — link retriggers each run');
+    }
+    if (/\b(all|clean|fclean|re)\b/.test(deps)) {
+      hints.push('$(NAME) depends on a phony target (all/clean/fclean/re) — those are always considered out-of-date');
+    }
+  } else {
+    hints.push('no `$(NAME):` rule found — Makefile structure is unusual');
+  }
+  // (c) classic FORCE trick.
+  if (/^\s*FORCE\s*:/m.test(mkText) && /:.*\bFORCE\b/m.test(mkText)) {
+    hints.push('a rule depends on `FORCE` — that is the canonical "always rebuild" pattern');
+  }
+  return hints;
+}
+
 async function checkNoRelink(libftPath) {
   if (!fs.existsSync(path.join(libftPath, 'Makefile'))) {
     return { name: 'Makefile does not relink', pass: false, detail: 'no Makefile' };
   }
+  // Start from a clean slate. Without this, a stale libft.a left over from a
+  // prior build would make the first `make` a no-op and `make -q` would
+  // wrongly report up-to-date — a false PASS that the moulinette would catch
+  // first. (Best-effort: ignore fclean exit code; if fclean is broken, the
+  // separate Makefile-rules check has already flagged it.)
+  await spawnSilent('make', ['-C', libftPath, 'fclean']);
   const first = await spawnSilent('make', ['-C', libftPath]);
   if (first.exitCode !== 0) {
     return {
       name: 'Makefile does not relink',
       pass: false,
-      detail: `initial build failed (exit ${first.exitCode})`,
+      detail: `initial \`make\` failed (exit ${first.exitCode}) — fix the Makefile so it builds, then re-run`,
     };
   }
+  // make -q is the canonical "is anything out-of-date?" query. It walks the
+  // exact same dependency graph make uses, without running any recipe — so
+  // unrelated stdout chatter (echo lines mentioning cc/gcc, etc.) cannot
+  // false-positive us the way the old recipe-line heuristic did.
+  // Exit codes: 0 = up-to-date, 1 = would rebuild, 2 = make error.
+  const q = await spawnSilent('make', ['-C', libftPath, '-q']);
+  if (q.exitCode === 0) {
+    return { name: 'Makefile does not relink', pass: true, detail: 'second `make` is a no-op' };
+  }
+  if (q.exitCode === 2) {
+    const err = ((q.stderr || '') + (q.stdout || '')).trim().split('\n').slice(-3).join(' | ');
+    return {
+      name: 'Makefile does not relink',
+      pass: false,
+      detail: `\`make -q\` errored (exit 2) — Makefile is malformed: ${err.slice(0, 160)}`,
+    };
+  }
+  // exit 1 → genuinely out-of-date. Capture the offending recipe line + introspect.
   const second = await spawnSilent('make', ['-C', libftPath]);
-  // BSD make and GNU make both print "Nothing to be done" or "is up to date"
-  // when there's nothing to rebuild. If the second run rebuilt anything, we
-  // catch it via the presence of cc/ar invocations in the output.
-  const rebuilt = /\b(cc|clang|gcc|ar)\b/.test(second.stdout);
-  return {
-    name: 'Makefile does not relink',
-    pass: !rebuilt,
-    detail: rebuilt ? 'second `make` rebuilt sources — Makefile relinks' : 'no relink on second invocation',
-  };
+  const out = (second.stdout || '') + '\n' + (second.stderr || '');
+  const recipeLine = out.split('\n').find((l) => /\b(cc|clang|gcc|ar)\b/i.test(l));
+  const mkText = fs.readFileSync(path.join(libftPath, 'Makefile'), 'utf8');
+  const hints = diagnoseRelinkCauses(mkText);
+
+  let detail = 'second `make` is not a no-op (`make -q` reports out-of-date) — moulinette will reject this.';
+  if (recipeLine) detail += ` Saw: «${recipeLine.trim().slice(0, 100)}».`;
+  if (hints.length > 0) {
+    detail += ' Likely cause: ' + hints.join(' / ') + '.';
+  } else {
+    detail += ' Common fixes: $(NAME) must depend on $(OBJS); never list $(NAME)/all in .PHONY; never depend on phony targets.';
+  }
+  return { name: 'Makefile does not relink', pass: false, detail };
 }
 
 function stripCComments(text) {
