@@ -2,6 +2,8 @@
 
 Interactive tester CLI for the 42 Common Core. Runs subject-compliance checks, the libft tester, and norminette from a single menu.
 
+THIS TESTER IS ON BETA, IF ANY BUG IS FOUND PLEASE SEND A MESSAGE TO gomez2680 ON DISCORD IN ORDER FOR THE BUG TO BE REMOVED!!! :))))
+
 ## Install
 
 ```sh
