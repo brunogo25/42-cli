@@ -42,6 +42,8 @@ function entriesNewerThan(version) {
 
 // Shown automatically right after the user upgrades to a new version.
 // Returns true if anything was printed.
+// Render oldest→newest so the latest version lands at the bottom, right
+// above whatever comes next — terminals scroll down, no need to scroll up.
 function showSinceLastRun(lastRunVersion) {
   const fresh = entriesNewerThan(lastRunVersion);
   if (!fresh.length) return false;
@@ -49,7 +51,7 @@ function showSinceLastRun(lastRunVersion) {
     ? t('patch.sinceLastSingle', { version: fresh[0].version })
     : t('patch.sinceLastMany', { count: fresh.length });
   console.log(`  ${c.yellow('✨')} ${c.bold(c.yellow(headline))}\n`);
-  for (const e of fresh) printEntry(e, { highlight: true });
+  for (const e of [...fresh].reverse()) printEntry(e, { highlight: true });
   return true;
 }
 
@@ -57,7 +59,8 @@ async function patchNotesMenu() {
   stats.bumpPatchNotes();
   ach.announceNew(ach.evaluate({ event: 'patch', now: new Date() }));
 
-  const visible = changelog.slice(0, 8);
+  // Same oldest→newest order so the freshest entry sits just above the prompt.
+  const visible = changelog.slice(0, 8).reverse();
   console.log();
   console.log(`  ${c.cyan(c.bold(t('patch.title')))}\n`);
   for (const e of visible) {

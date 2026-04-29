@@ -5,6 +5,18 @@
 // and falls back to `notes_en` if missing.
 module.exports = [
   {
+    version: '0.1.9',
+    date: '2026-04-29',
+    notes_en: [
+      'You can now pick any menu option by typing its hotkey — `1` to `9` for the first nine items, then `q w e r t y u i o p` for items 10 and beyond. `0` always goes back. Arrows + Enter still work; this is just a faster path for users who know the menu.',
+      '"What\'s new" now renders oldest→newest so the latest release sits at the bottom of the screen, right above the prompt — no more scrolling up to see what just changed.',
+    ],
+    notes_fr: [
+      'Vous pouvez maintenant choisir n\'importe quelle option en tapant son raccourci — `1` à `9` pour les neuf premiers items, puis `q w e r t y u i o p` au-delà. `0` revient toujours en arrière. Les flèches + Entrée fonctionnent toujours ; c\'est juste plus rapide pour qui connaît le menu.',
+      '« Quoi de neuf » s\'affiche désormais de l\'ancien au plus récent : la dernière version se retrouve en bas de l\'écran, juste au-dessus du prompt — plus besoin de remonter pour voir ce qui vient de changer.',
+    ],
+  },
+  {
     version: '0.1.8',
     date: '2026-04-29',
     notes_en: [
