@@ -94,11 +94,30 @@ module.exports = {
   'printf.fallbackToPathEntry': 'falling back to path entry.',
   'printf.pathLabel': 'ft_printf path:',
   'printf.action': 'ft_printf — what do you want to do?',
-  'printf.runTests': 'Run all tests (cspdiuxX%)',
+  'printf.runTests': 'Run all tests (libftprintf.a only — strict, eval-style)',
+  'printf.runTestsWithLibft': 'Run all tests (also link libft.a)',
   'printf.runNorm': 'Run Norminette',
   'printf.runNormAndTests': 'Run Norminette + all tests',
   'printf.compliance': 'Subject compliance check (files / Makefile / header / README)',
   'printf.changePath': 'Change ft_printf path',
+  'printf.libftPathPrompt': 'Path to libft directory (to link as -lft):',
+  'printf.libftDetected': 'Found a libft at {path}. Link it?',
+  'printf.useDetectedLibft': 'Yes — use this libft',
+  'printf.enterLibftPath': 'No — enter a different path',
+  'printf.libftLinkLabel': 'linking libft from:',
+  'printf.libftWarn.preHeading': 'Dev mode — NOT how the moulinette tests you',
+  'printf.libftWarn.postHeading': 'Reminder — passing here ≠ passing the eval',
+  'printf.libftWarn.line1':
+    'The 42 evaluator only links libftprintf.a. If your archive does not bundle libft\'s',
+  'printf.libftWarn.line2':
+    'objects, your submission will fail with the same "undefined reference to ft_*" errors.',
+  'printf.libftWarn.howToHeading': 'How to make your libftprintf.a self-contained (eval-ready):',
+  'printf.libftWarn.step1':
+    '1. Keep libft inside <project>/libft/ (sources + its own Makefile) — the subject requires this.',
+  'printf.libftWarn.step2':
+    '2. In your project Makefile, build libft first, then merge its objects into libftprintf.a:',
+  'printf.libftWarn.step3':
+    '3. Run "Run all tests (libftprintf.a only)" — if it passes, you are eval-ready.',
 
   'settings.title': 'Settings',
   'settings.name': 'Name',
@@ -109,6 +128,7 @@ module.exports = {
 
   'sections.testsAll': 'tests · all 42 functions',
   'sections.printfTests': 'tests · ft_printf',
+  'sections.printfTestsWithLibft': 'tests · ft_printf (with libft)',
   'sections.norminette': 'norminette',
   'sections.compliance': 'subject compliance',
 };

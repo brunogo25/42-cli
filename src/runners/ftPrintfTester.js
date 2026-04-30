@@ -72,7 +72,7 @@ function findMainOffenders(printfPath) {
   return out;
 }
 
-async function build(printfPath) {
+async function build(printfPath, libftPath) {
   const opts = {
     stdio: ['ignore', 'pipe', 'pipe'],
     streamStdout: false,
@@ -83,18 +83,22 @@ async function build(printfPath) {
   // an older header / without ASan can link silently and produce wrong
   // results).
   await spawnAsync('make', ['-C', printfPath, 'fclean'], opts);
+  if (libftPath) {
+    await spawnAsync('make', ['-C', libftPath, 'fclean'], opts);
+  }
   await spawnAsync('make', ['-C', TESTER_DIR, 'clean'], opts);
   const implemented = detectImplemented(printfPath);
   const args = [
     '-C', TESTER_DIR,
     `LIBFT_PATH=${printfPath}`,
     `EXTRA_CFLAGS=${implemented ? '-DHAVE_FT_printf' : ''}`,
-    'build',
   ];
+  if (libftPath) args.push(`LIBFT_LINK_PATH=${libftPath}`);
+  args.push('build');
   return spawnAsync('make', args, opts);
 }
 
-async function runTester(printfPath) {
+async function runTester(printfPath, options) {
   if (!fs.existsSync(path.join(TESTER_DIR, 'tester.c'))) {
     return {
       exitCode: 1,
@@ -103,8 +107,12 @@ async function runTester(printfPath) {
     };
   }
 
-  process.stdout.write(c.dim('  building libftprintf + tester…\n'));
-  const built = await build(printfPath);
+  const libftPath = options && options.libftPath;
+  const buildLabel = libftPath
+    ? '  building libftprintf + libft + tester…\n'
+    : '  building libftprintf + tester…\n';
+  process.stdout.write(c.dim(buildLabel));
+  const built = await build(printfPath, libftPath);
   if (built.exitCode !== 0) {
     const log = (built.stderr || '') + (built.stdout || '');
     const dupMain = /duplicate symbol .*_main|multiple definition of .*main/i.test(log);

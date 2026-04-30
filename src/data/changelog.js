@@ -5,6 +5,22 @@
 // and falls back to `notes_en` if missing.
 module.exports = [
   {
+    version: '0.2.2',
+    date: '2026-04-30',
+    notes_en: [
+      'New ft_printf test mode: "Run all tests (also link libft.a)". Useful when your `libftprintf.a` doesn\'t bundle libft yet — the tester now also links a separate `libft.a` so you can iterate on your printf logic without first fixing your Makefile. Auto-detects `<project>/libft/`, otherwise prompts for a path.',
+      'The existing "Run all tests" mode is now labeled "(libftprintf.a only — strict, eval-style)" and remains the eval simulation: it links only `libftprintf.a`, exactly like Deepthought/moulinette does. If your archive isn\'t self-contained, it fails here — and it would fail the moulinette too.',
+      'The "with libft" mode shows a yellow warning before AND after the run, explaining that linking libft separately is NOT how the moulinette tests you, and walking through the exact 3 steps to make your `libftprintf.a` self-contained: keep libft in `<project>/libft/`, add the `ar rcs` merge in your Makefile (full snippet shown), then re-run strict mode to confirm eval-readiness.',
+      'Tester Makefile gained a `LIBFT_LINK_PATH` knob that drives the new mode — when set it builds the companion libft with the same ASan CFLAGS and appends `-L<path> -lft` to LDFLAGS. When unset, behavior is unchanged: strict, libftprintf.a-only, eval-style.',
+    ],
+    notes_fr: [
+      'Nouveau mode de test ft_printf : « Lancer tous les tests (lier aussi libft.a) ». Pratique quand votre `libftprintf.a` ne contient pas encore libft — le testeur lie aussi un `libft.a` séparé pour itérer sur votre logique printf sans d\'abord corriger votre Makefile. Détection automatique de `<projet>/libft/`, sinon demande le chemin.',
+      'Le mode existant « Lancer tous les tests » est désormais étiqueté « (libftprintf.a seul — strict, façon éval) » et reste la simulation d\'éval : il ne lie que `libftprintf.a`, exactement comme Deepthought/la moulinette. Si votre archive n\'est pas autonome, ça échoue ici — et ça échouerait à la moulinette aussi.',
+      'Le mode « avec libft » affiche un avertissement jaune avant ET après le run, qui explique que lier libft séparément n\'est PAS la façon dont la moulinette vous teste, et qui détaille les 3 étapes pour rendre votre `libftprintf.a` autonome : gardez libft dans `<projet>/libft/`, ajoutez la fusion `ar rcs` dans votre Makefile (extrait complet affiché), puis relancez le mode strict pour confirmer que vous êtes prêt pour l\'éval.',
+      'Le Makefile du testeur gagne un paramètre `LIBFT_LINK_PATH` qui pilote le nouveau mode — quand il est défini, il compile la libft compagnon avec les mêmes CFLAGS ASan et ajoute `-L<chemin> -lft` aux LDFLAGS. Sans ce paramètre, le comportement est inchangé : strict, libftprintf.a seul, façon éval.',
+    ],
+  },
+  {
     version: '0.2.1',
     date: '2026-04-29',
     notes_en: [

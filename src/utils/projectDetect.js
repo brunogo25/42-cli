@@ -36,4 +36,13 @@ function resolveLibftPath(input) {
   return abs;
 }
 
-module.exports = { isLibftDir, isFtPrintfDir, resolveLibftPath };
+// Common convention: students keep their libft as a sibling subdirectory of
+// the ft_printf project (e.g. ft_printf/libft/). Returns the absolute path
+// when it looks like a libft, otherwise null.
+function findBundledLibft(printfPath) {
+  if (!printfPath) return null;
+  const candidate = path.join(printfPath, 'libft');
+  return isLibftDir(candidate) ? candidate : null;
+}
+
+module.exports = { isLibftDir, isFtPrintfDir, resolveLibftPath, findBundledLibft };

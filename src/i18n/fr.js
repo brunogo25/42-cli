@@ -96,11 +96,30 @@ module.exports = {
   'printf.fallbackToPathEntry': 'saisie de chemin manuelle.',
   'printf.pathLabel': 'chemin ft_printf :',
   'printf.action': 'ft_printf — que voulez-vous faire ?',
-  'printf.runTests': 'Lancer tous les tests (cspdiuxX%)',
+  'printf.runTests': 'Lancer tous les tests (libftprintf.a seul — strict, façon éval)',
+  'printf.runTestsWithLibft': 'Lancer tous les tests (lier aussi libft.a)',
   'printf.runNorm': 'Lancer Norminette',
   'printf.runNormAndTests': 'Lancer Norminette + tous les tests',
   'printf.compliance': 'Vérification de conformité au sujet (fichiers / Makefile / header / README)',
   'printf.changePath': 'Changer le chemin ft_printf',
+  'printf.libftPathPrompt': 'Chemin vers le dossier libft (à lier en -lft) :',
+  'printf.libftDetected': 'Une libft a été détectée à {path}. La lier ?',
+  'printf.useDetectedLibft': 'Oui — utiliser cette libft',
+  'printf.enterLibftPath': 'Non — saisir un autre chemin',
+  'printf.libftLinkLabel': 'libft liée depuis :',
+  'printf.libftWarn.preHeading': 'Mode dev — ce n\'est PAS ainsi que la moulinette vous teste',
+  'printf.libftWarn.postHeading': 'Rappel — réussir ici ≠ réussir l\'éval',
+  'printf.libftWarn.line1':
+    'L\'évaluateur 42 ne lie que libftprintf.a. Si votre archive ne contient pas les',
+  'printf.libftWarn.line2':
+    'objets de libft, votre rendu échouera avec les mêmes erreurs « undefined reference to ft_* ».',
+  'printf.libftWarn.howToHeading': 'Comment rendre votre libftprintf.a autonome (prête pour l\'éval) :',
+  'printf.libftWarn.step1':
+    '1. Gardez libft dans <projet>/libft/ (sources + son propre Makefile) — exigé par le sujet.',
+  'printf.libftWarn.step2':
+    '2. Dans votre Makefile, compilez libft, puis fusionnez ses objets dans libftprintf.a :',
+  'printf.libftWarn.step3':
+    '3. Lancez « Lancer tous les tests (libftprintf.a seul) » — si ça passe, vous êtes prêt pour l\'éval.',
 
   'settings.title': 'Réglages',
   'settings.name': 'Nom',
@@ -111,6 +130,7 @@ module.exports = {
 
   'sections.testsAll': 'tests · les 42 fonctions',
   'sections.printfTests': 'tests · ft_printf',
+  'sections.printfTestsWithLibft': 'tests · ft_printf (avec libft)',
   'sections.norminette': 'norminette',
   'sections.compliance': 'conformité au sujet',
 };
