@@ -5,6 +5,20 @@
 // and falls back to `notes_en` if missing.
 module.exports = [
   {
+    version: '0.2.3',
+    date: '2026-05-04',
+    notes_en: [
+      'No more guessing paths: the ft_printf "with libft" mode now requires libft at the canonical `<project>/libft/` (the location the subject mandates) and, when missing, prints the exact path it expected with a one-line fix — instead of asking the student to type a path they don\'t know.',
+      'Path prompts now tell you how to cancel: "Path to … (or press Enter to cancel)". Previously the only escape was Ctrl+C, which killed the CLI.',
+      'ft_printf tester: a crash mid-test (e.g. SIGSEGV from `ft_printf("%s", NULL)` when your `ft_putstr` doesn\'t guard NULL) used to silently swallow every later group — you\'d see the groups that ran before the crash, then nothing at all, no CRASH line, no summary. Cause: stdout stayed redirected to the internal capture pipe after `siglongjmp`. The signal handler now restores stdout first, so the CRASH line, the remaining groups, and the final summary all print normally.',
+    ],
+    notes_fr: [
+      'Plus besoin de deviner un chemin : le mode « avec libft » exige désormais libft au seul emplacement canonique `<projet>/libft/` (celui que le sujet impose) et, en cas d\'absence, affiche le chemin exact attendu avec la correction à appliquer — au lieu de demander à l\'étudiant de taper un chemin qu\'il ne connaît pas.',
+      'Les saisies de chemin indiquent maintenant comment annuler : « Chemin vers … (ou Entrée pour annuler) ». Avant, la seule issue était Ctrl+C, qui tuait le CLI.',
+      'Testeur ft_printf : un crash en plein test (par ex. SIGSEGV sur `ft_printf("%s", NULL)` quand votre `ft_putstr` ne protège pas NULL) avalait silencieusement tous les groupes suivants — vous voyiez ceux exécutés avant le crash, puis plus rien du tout, ni ligne CRASH, ni résumé. Cause : stdout restait redirigé vers le pipe de capture interne après `siglongjmp`. Le gestionnaire de signal restaure désormais stdout d\'abord, et la ligne CRASH, les groupes restants et le résumé final s\'affichent normalement.',
+    ],
+  },
+  {
     version: '0.2.2',
     date: '2026-04-30',
     notes_en: [

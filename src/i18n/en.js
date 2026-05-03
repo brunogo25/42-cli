@@ -66,7 +66,7 @@ module.exports = {
 
   'cc.pick': 'Pick an exercise:',
 
-  'libft.pathPrompt': 'Path to libft directory:',
+  'libft.pathPrompt': 'Path to libft directory (or press Enter to cancel):',
   'libft.notLibft': 'not a libft project — needs Makefile, libft.h, and ft_*.c at the root.',
   'libft.areYouHere': 'Are you in your libft directory? ({cwd})',
   'libft.useThisDir': 'Yes — use this directory',
@@ -86,7 +86,7 @@ module.exports = {
   'libft.compliance': 'Subject compliance check (files / Makefile / header)',
   'libft.changePath': 'Change libft path',
 
-  'printf.pathPrompt': 'Path to ft_printf project directory:',
+  'printf.pathPrompt': 'Path to ft_printf project directory (or press Enter to cancel):',
   'printf.notProject': 'not an ft_printf project — needs Makefile and ft_printf.h at the root.',
   'printf.areYouHere': 'Are you in your ft_printf directory? ({cwd})',
   'printf.useThisDir': 'Yes — use this directory',
@@ -100,11 +100,11 @@ module.exports = {
   'printf.runNormAndTests': 'Run Norminette + all tests',
   'printf.compliance': 'Subject compliance check (files / Makefile / header / README)',
   'printf.changePath': 'Change ft_printf path',
-  'printf.libftPathPrompt': 'Path to libft directory (to link as -lft):',
-  'printf.libftDetected': 'Found a libft at {path}. Link it?',
-  'printf.useDetectedLibft': 'Yes — use this libft',
-  'printf.enterLibftPath': 'No — enter a different path',
   'printf.libftLinkLabel': 'linking libft from:',
+  'printf.libftMissingHeading': 'libft not found at the required location',
+  'printf.libftMissingExpected': 'expected: {path}',
+  'printf.libftMissingHint':
+    'The subject requires libft at <project>/libft/ — sources + Makefile + libft.h. Put it there and run this option again.',
   'printf.libftWarn.preHeading': 'Dev mode — NOT how the moulinette tests you',
   'printf.libftWarn.postHeading': 'Reminder — passing here ≠ passing the eval',
   'printf.libftWarn.line1':
@@ -119,6 +119,23 @@ module.exports = {
   'printf.libftWarn.step3':
     '3. Run "Run all tests (libftprintf.a only)" — if it passes, you are eval-ready.',
 
+  'gnl.pathPrompt': 'Path to get_next_line project directory (or press Enter to cancel):',
+  'gnl.notProject':
+    'not a get_next_line project — needs get_next_line.c, get_next_line_utils.c and get_next_line.h at the root.',
+  'gnl.areYouHere': 'Are you in your get_next_line directory? ({cwd})',
+  'gnl.useThisDir': 'Yes — use this directory',
+  'gnl.enterPath': 'No — enter a path',
+  'gnl.fallbackToPathEntry': 'falling back to path entry.',
+  'gnl.pathLabel': 'get_next_line path:',
+  'gnl.action': 'get_next_line — what do you want to do?',
+  'gnl.runTests': 'Run all tests (BUFFER_SIZE = 1, 42, 9999)',
+  'gnl.runTestsCustomBuffer': 'Run all tests with a custom BUFFER_SIZE…',
+  'gnl.runNorm': 'Run Norminette',
+  'gnl.runNormAndTests': 'Run Norminette + all tests',
+  'gnl.changePath': 'Change get_next_line path',
+  'gnl.customBufferPrompt': 'BUFFER_SIZE value (positive integer):',
+  'gnl.customBufferInvalid': 'BUFFER_SIZE must be a positive integer.',
+
   'settings.title': 'Settings',
   'settings.name': 'Name',
   'settings.namePrompt': 'Your name:',
@@ -129,6 +146,8 @@ module.exports = {
   'sections.testsAll': 'tests · all 42 functions',
   'sections.printfTests': 'tests · ft_printf',
   'sections.printfTestsWithLibft': 'tests · ft_printf (with libft)',
+  'sections.gnlTests': 'tests · get_next_line',
+  'sections.gnlTestsCustom': 'tests · get_next_line (BUFFER_SIZE = {size})',
   'sections.norminette': 'norminette',
   'sections.compliance': 'subject compliance',
 };

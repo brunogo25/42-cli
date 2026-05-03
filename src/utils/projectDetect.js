@@ -30,6 +30,22 @@ function isFtPrintfDir(dir) {
   return true;
 }
 
+// The gnl subject mandates the three files at the project root. No Makefile
+// is required (the eval compiles the .c files directly), so we don't insist
+// on one — students often submit without one.
+function isGnlDir(dir) {
+  try {
+    if (!fs.statSync(dir).isDirectory()) return false;
+  } catch {
+    return false;
+  }
+  const required = ['get_next_line.c', 'get_next_line_utils.c', 'get_next_line.h'];
+  for (const f of required) {
+    if (!fs.existsSync(path.join(dir, f))) return false;
+  }
+  return true;
+}
+
 function resolveLibftPath(input) {
   if (!input) return null;
   const abs = path.isAbsolute(input) ? input : path.resolve(process.cwd(), input);
@@ -45,4 +61,4 @@ function findBundledLibft(printfPath) {
   return isLibftDir(candidate) ? candidate : null;
 }
 
-module.exports = { isLibftDir, isFtPrintfDir, resolveLibftPath, findBundledLibft };
+module.exports = { isLibftDir, isFtPrintfDir, isGnlDir, resolveLibftPath, findBundledLibft };

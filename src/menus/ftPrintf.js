@@ -1,11 +1,11 @@
 'use strict';
 
+const path = require('path');
 const { select } = require('../ui/select');
 const { input } = require('../ui/input');
 const c = require('../ui/colors');
 const {
   isFtPrintfDir,
-  isLibftDir,
   resolveLibftPath,
   findBundledLibft,
 } = require('../utils/projectDetect');
@@ -52,38 +52,22 @@ async function promptForCustomPath() {
   }
 }
 
-async function promptForLibftPath() {
-  while (true) {
-    const raw = await input({ message: t('printf.libftPathPrompt') });
-    if (!raw) return null;
-    const abs = resolveLibftPath(raw);
-    if (!isLibftDir(abs)) {
-      console.log(c.red(`  ✗ ${abs}`));
-      console.log(c.yellow(`     ${t('libft.notLibft')}`));
-      continue;
-    }
-    return abs;
-  }
-}
-
-// Resolve which libft.a to link before running the "with libft" mode. We try
-// the conventional <printf>/libft/ subdir first; if absent or rejected, we
-// fall back to a manual path prompt.
-async function pickLibftLinkPath(printfPath) {
+// Resolve the libft.a to link for "with libft" mode. We require it at the
+// canonical <project>/libft/ — that's where the subject mandates it ("you
+// must copy its sources and its associated Makefile into a libft folder").
+// No path prompt: students who tried this told us guessing a path is the
+// worst part. Either it's at the canonical spot, or we print exactly where
+// to put it and abort.
+function pickLibftLinkPath(printfPath) {
   const detected = findBundledLibft(printfPath);
-  if (detected) {
-    const choice = await select({
-      message: t('printf.libftDetected', { path: detected }),
-      choices: [
-        { label: t('printf.useDetectedLibft'), value: 'use' },
-        { label: t('printf.enterLibftPath'), value: 'enter' },
-        { label: t('common.back'), value: 'back' },
-      ],
-    });
-    if (choice === 'back') return null;
-    if (choice === 'use') return detected;
-  }
-  return promptForLibftPath();
+  if (detected) return detected;
+  const expected = path.join(printfPath, 'libft');
+  console.log('');
+  console.log(`  ${c.red('✗ ' + t('printf.libftMissingHeading'))}`);
+  console.log(`  ${c.yellow(t('printf.libftMissingExpected', { path: expected }))}`);
+  console.log(`  ${c.dim(t('printf.libftMissingHint'))}`);
+  console.log('');
+  return null;
 }
 
 async function pickPath() {
@@ -173,7 +157,7 @@ async function run() {
         recordTesterResult(r);
       });
     } else if (action === 'testsWithLibft') {
-      const libftPath = await pickLibftLinkPath(projPath);
+      const libftPath = pickLibftLinkPath(projPath);
       if (!libftPath) continue;
       await section(t('sections.printfTestsWithLibft'), async () => {
         console.log(`  ${c.dim(t('printf.libftLinkLabel'))} ${libftPath}`);

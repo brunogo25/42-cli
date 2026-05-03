@@ -3,6 +3,7 @@
 const { select } = require('../ui/select');
 const libft = require('./libft');
 const ftPrintf = require('./ftPrintf');
+const gnl = require('./gnl');
 const { t } = require('../i18n');
 
 async function run() {
@@ -13,7 +14,7 @@ async function run() {
       choices: [
         { label: 'Libft', value: 'libft' },
         { label: 'ft_printf', value: 'printf' },
-        { label: 'get_next_line', value: 'gnl', disabled: cs },
+        { label: 'get_next_line', value: 'gnl' },
         { label: 'Born2BeRoot', value: 'b2br', disabled: cs },
         { label: 'so_long', value: 'solong', disabled: cs },
         { label: 'push_swap', value: 'push_swap', disabled: cs },
@@ -34,6 +35,9 @@ async function run() {
       if (back === 'quit') return 'quit';
     } else if (choice === 'printf') {
       const back = await ftPrintf.run();
+      if (back === 'quit') return 'quit';
+    } else if (choice === 'gnl') {
+      const back = await gnl.run();
       if (back === 'quit') return 'quit';
     } else if (choice === 'back') {
       return 'back';

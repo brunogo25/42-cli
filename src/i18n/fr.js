@@ -66,7 +66,7 @@ module.exports = {
 
   'cc.pick': 'Choisissez un exercice :',
 
-  'libft.pathPrompt': 'Chemin vers le dossier libft :',
+  'libft.pathPrompt': 'Chemin vers le dossier libft (ou Entrée pour annuler) :',
   'libft.notLibft':
     "ce n'est pas un projet libft — il faut Makefile, libft.h et ft_*.c à la racine.",
   'libft.areYouHere': 'Êtes-vous dans votre dossier libft ? ({cwd})',
@@ -87,7 +87,7 @@ module.exports = {
   'libft.compliance': 'Vérification de conformité au sujet (fichiers / Makefile / header)',
   'libft.changePath': 'Changer le chemin libft',
 
-  'printf.pathPrompt': 'Chemin vers le dossier du projet ft_printf :',
+  'printf.pathPrompt': 'Chemin vers le dossier du projet ft_printf (ou Entrée pour annuler) :',
   'printf.notProject':
     "ce n'est pas un projet ft_printf — il faut Makefile et ft_printf.h à la racine.",
   'printf.areYouHere': 'Êtes-vous dans votre dossier ft_printf ? ({cwd})',
@@ -102,11 +102,11 @@ module.exports = {
   'printf.runNormAndTests': 'Lancer Norminette + tous les tests',
   'printf.compliance': 'Vérification de conformité au sujet (fichiers / Makefile / header / README)',
   'printf.changePath': 'Changer le chemin ft_printf',
-  'printf.libftPathPrompt': 'Chemin vers le dossier libft (à lier en -lft) :',
-  'printf.libftDetected': 'Une libft a été détectée à {path}. La lier ?',
-  'printf.useDetectedLibft': 'Oui — utiliser cette libft',
-  'printf.enterLibftPath': 'Non — saisir un autre chemin',
   'printf.libftLinkLabel': 'libft liée depuis :',
+  'printf.libftMissingHeading': 'libft introuvable à l\'emplacement requis',
+  'printf.libftMissingExpected': 'attendu : {path}',
+  'printf.libftMissingHint':
+    'Le sujet exige libft dans <projet>/libft/ — sources + Makefile + libft.h. Placez-la là et relancez cette option.',
   'printf.libftWarn.preHeading': 'Mode dev — ce n\'est PAS ainsi que la moulinette vous teste',
   'printf.libftWarn.postHeading': 'Rappel — réussir ici ≠ réussir l\'éval',
   'printf.libftWarn.line1':
@@ -121,6 +121,23 @@ module.exports = {
   'printf.libftWarn.step3':
     '3. Lancez « Lancer tous les tests (libftprintf.a seul) » — si ça passe, vous êtes prêt pour l\'éval.',
 
+  'gnl.pathPrompt': 'Chemin vers le dossier du projet get_next_line (ou Entrée pour annuler) :',
+  'gnl.notProject':
+    "ce n'est pas un projet get_next_line — il faut get_next_line.c, get_next_line_utils.c et get_next_line.h à la racine.",
+  'gnl.areYouHere': 'Êtes-vous dans votre dossier get_next_line ? ({cwd})',
+  'gnl.useThisDir': 'Oui — utiliser ce dossier',
+  'gnl.enterPath': 'Non — saisir un chemin',
+  'gnl.fallbackToPathEntry': 'saisie de chemin manuelle.',
+  'gnl.pathLabel': 'chemin get_next_line :',
+  'gnl.action': 'get_next_line — que voulez-vous faire ?',
+  'gnl.runTests': 'Lancer tous les tests (BUFFER_SIZE = 1, 42, 9999)',
+  'gnl.runTestsCustomBuffer': 'Lancer tous les tests avec un BUFFER_SIZE personnalisé…',
+  'gnl.runNorm': 'Lancer Norminette',
+  'gnl.runNormAndTests': 'Lancer Norminette + tous les tests',
+  'gnl.changePath': 'Changer le chemin get_next_line',
+  'gnl.customBufferPrompt': 'Valeur de BUFFER_SIZE (entier positif) :',
+  'gnl.customBufferInvalid': 'BUFFER_SIZE doit être un entier positif.',
+
   'settings.title': 'Réglages',
   'settings.name': 'Nom',
   'settings.namePrompt': 'Votre nom :',
@@ -131,6 +148,8 @@ module.exports = {
   'sections.testsAll': 'tests · les 42 fonctions',
   'sections.printfTests': 'tests · ft_printf',
   'sections.printfTestsWithLibft': 'tests · ft_printf (avec libft)',
+  'sections.gnlTests': 'tests · get_next_line',
+  'sections.gnlTestsCustom': 'tests · get_next_line (BUFFER_SIZE = {size})',
   'sections.norminette': 'norminette',
   'sections.compliance': 'conformité au sujet',
 };

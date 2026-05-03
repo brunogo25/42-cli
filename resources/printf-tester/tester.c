@@ -44,10 +44,20 @@ typedef struct s_test
 static sigjmp_buf		g_jmp;
 static volatile sig_atomic_t	g_signal;
 static int			g_color = 0;
+/* Saved real stdout fd. CMP redirects STDOUT_FILENO to a capture pipe, and
+ * normally restores it before returning. If ft_printf crashes mid-CMP, the
+ * signal handler longjmps out without running the restore — leaving stdout
+ * pointing at a dead pipe, so the CRASH report and every subsequent group's
+ * output disappears silently. We snapshot the real stdout once at startup
+ * and the handler dup2's it back before longjmp (dup2 is async-signal-safe
+ * per POSIX). */
+static int			g_real_stdout = -1;
 
 static void	on_signal(int sig)
 {
 	g_signal = sig;
+	if (g_real_stdout >= 0)
+		dup2(g_real_stdout, STDOUT_FILENO);
 	siglongjmp(g_jmp, 1);
 }
 
@@ -389,6 +399,7 @@ int	main(int argc, char **argv)
 	signal(SIGABRT, on_signal);
 	signal(SIGFPE,  on_signal);
 	signal(SIGPIPE, SIG_IGN);
+	g_real_stdout = dup(STDOUT_FILENO);
 
 	for (int i = 1; i < argc; i++)
 	{
