@@ -97,7 +97,7 @@ function writeSubject(folderDir, ex) {
 }
 
 // Build the exam workspace under the cwd; never clobber existing files.
-function createWorkspace(module, picked, bank) {
+function createWorkspace(module, picked) {
   const dir = path.join(process.cwd(), workspaceName());
   fs.mkdirSync(dir, { recursive: true });
 
@@ -110,7 +110,7 @@ function createWorkspace(module, picked, bank) {
     manifest.push({
       folder,
       specId: ex.id,
-      bank,
+      bank: ex.bank,
       title: ex.title,
       difficulty: ex.difficulty,
       lang: ex.lang,
@@ -200,7 +200,7 @@ async function pickConfig() {
   return { n, levels };
 }
 
-async function startExam(module, bankExercises, bank) {
+async function startExam(module, bankExercises) {
   const cfg = await pickConfig();
   if (!cfg) return null;
 
@@ -213,7 +213,7 @@ async function startExam(module, bankExercises, bank) {
     console.log(c.yellow(`  ${t('exam.fewerThanRequested', { got: picked.length, want: cfg.n })}`));
   }
 
-  const session = createWorkspace(module, picked, bank);
+  const session = createWorkspace(module, picked);
   console.log('');
   console.log(`  ${c.green('✓')} ${t('exam.created')}`);
   console.log(`  ${c.dim(session.dir)}`);
@@ -286,7 +286,8 @@ function showSubjects(session) {
 }
 
 async function run(module, examCfg) {
-  const { lang, bank } = examCfg || module.exam;
+  const cfg = examCfg || module.exam;
+  const { lang } = cfg;
 
   if (!detectPython()) {
     console.log('');
@@ -299,7 +300,7 @@ async function run(module, examCfg) {
     console.log(c.yellow(`     ${t('exam.noCCHint')}`));
   }
 
-  const bankExercises = grader.loadBank(bank);
+  const bankExercises = grader.loadExam(cfg);
   if (!bankExercises.length) {
     console.log('');
     console.log(c.yellow(`  ${t('exam.bankEmpty')}`));
@@ -329,7 +330,7 @@ async function run(module, examCfg) {
     const action = await select({ message: t('exam.action'), choices });
 
     if (action === 'start') {
-      const s = await startExam(module, bankExercises, bank);
+      const s = await startExam(module, bankExercises);
       if (s) session = s;
     } else if (action === 'gradeAll') {
       await gradeAll(session);

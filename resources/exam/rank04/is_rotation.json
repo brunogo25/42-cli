@@ -4,6 +4,7 @@
   "rank": "rank04",
   "level": 1,
   "difficulty": 2,
+  "tier": "easy",
   "lang": "python",
   "mode": "function",
   "function": "is_rotation",

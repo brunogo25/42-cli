@@ -23,7 +23,7 @@ const MODULES = [
     descKey: 'mod.fundamentals.desc',
     available: true,
     exams: [
-      { id: 'rank02', lang: 'c', bank: 'fundamentals', label: 'Rank 02 — C' },
+      { id: 'rank02', lang: 'c', banks: ['fundamentals'], label: 'Rank 02 — C' },
     ],
     submodules: [
       { id: 'libft', title: 'Libft' },
@@ -38,9 +38,18 @@ const MODULES = [
     title: 'Object Oriented Programming',
     descKey: 'mod.oop.desc',
     available: true,
+    // Two axes on the same 21 real subjects: the rank ladders reproduce an
+    // actual exam sitting, while the tier entries pool both ranks so you can
+    // drill just the easy / medium / hard band you are weak at.
     exams: [
-      { id: 'rank03', lang: 'python', bank: 'rank03', label: 'Rank 03 — Python' },
-      { id: 'rank04', lang: 'python', bank: 'rank04', label: 'Rank 04 — Python (advanced)' },
+      { id: 'rank03', lang: 'python', banks: ['rank03'], label: 'Rank 03 — Python' },
+      { id: 'rank04', lang: 'python', banks: ['rank04'], label: 'Rank 04 — Python' },
+      { id: 'easy', lang: 'python', banks: ['rank03', 'rank04'], tier: 'easy',
+        labelKey: 'exam.tierEasy', group: 'exam.byDifficulty' },
+      { id: 'medium', lang: 'python', banks: ['rank03', 'rank04'], tier: 'medium',
+        labelKey: 'exam.tierMedium', group: 'exam.byDifficulty' },
+      { id: 'advanced', lang: 'python', banks: ['rank03', 'rank04'], tier: 'hard',
+        labelKey: 'exam.tierAdvanced', group: 'exam.byDifficulty' },
     ],
     submodules: [
       ...PROJECTS.map((p) => ({

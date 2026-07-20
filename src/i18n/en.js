@@ -247,6 +247,11 @@ module.exports = {
   'exam.modeDrill': 'Drill — pick N exercises and grade them in a batch',
   'exam.pickExam': 'Which exam do you want to practise?',
   'exam.noneAvailable': 'no exam is available yet.',
+  'exam.byDifficulty': 'by difficulty (both ranks)',
+  'exam.tierEasy': 'Easy',
+  'exam.tierMedium': 'Medium',
+  'exam.tierAdvanced': 'Advanced',
+  'exam.exerciseCount': '({n} exercises)',
 
   'sim.title': 'Exam simulator',
   'sim.intro1': 'One exercise at a time. Solve it, type grademe, and the next one unlocks.',

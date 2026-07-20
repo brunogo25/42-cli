@@ -31,18 +31,29 @@ function shuffle(arr) {
   return a;
 }
 
-// The exam ladder: one exercise per level, easiest first — the real exam's
-// shape. Exercises without a level fall back to their 1-4 difficulty.
-function buildLadder(bank) {
+// The exam ladder, easiest first. Exercises without a level fall back to their
+// 1-4 difficulty.
+//
+// A rank ladder takes ONE exercise per level, which is the shape of a real
+// sitting. A difficulty drill (`all`) instead walks every exercise in the tier,
+// still level-ordered — the point there is to cover the band, not to reproduce
+// an exam, and one-per-level would leave most of the set unseen.
+function buildLadder(bank, { all = false } = {}) {
   const byLevel = new Map();
   for (const ex of bank) {
     const lvl = ex.level || ex.difficulty || 1;
     if (!byLevel.has(lvl)) byLevel.set(lvl, []);
     byLevel.get(lvl).push(ex);
   }
-  return [...byLevel.keys()]
-    .sort((a, b) => a - b)
-    .map((lvl) => ({ level: lvl, exercise: shuffle(byLevel.get(lvl))[0] }));
+  const levels = [...byLevel.keys()].sort((a, b) => a - b);
+  const out = [];
+  for (const lvl of levels) {
+    const picked = shuffle(byLevel.get(lvl));
+    for (const exercise of (all ? picked : picked.slice(0, 1))) {
+      out.push({ level: lvl, exercise });
+    }
+  }
+  return out;
 }
 
 function timestamp(now = new Date()) {
@@ -178,7 +189,6 @@ function summary(sessionDir, results, ladder) {
 
 async function run(module, examCfg) {
   const cfg = examCfg || module.exam;
-  const { bank } = cfg;
 
   if (!detectPython()) {
     console.log('');
@@ -188,7 +198,7 @@ async function run(module, examCfg) {
     return 'back';
   }
 
-  const bankExercises = grader.loadBank(bank);
+  const bankExercises = grader.loadExam(cfg);
   if (!bankExercises.length) {
     console.log('');
     console.log(c.yellow(`  ${t('exam.bankEmpty')}`));
@@ -196,13 +206,14 @@ async function run(module, examCfg) {
     return 'back';
   }
 
-  const ladder = buildLadder(bankExercises);
+  const ladder = buildLadder(bankExercises, { all: Boolean(cfg.tier) });
   const sessionDir = path.join(examRoot(), `42exam-${timestamp()}`);
   fs.mkdirSync(sessionDir, { recursive: true });
 
   console.log('');
   console.log(rule('═'));
-  console.log(`  ${c.bold(c.cyan(t('sim.title')))}  ${c.dim('· ' + (cfg.label || bank))}`);
+  const examName = cfg.labelKey ? t(cfg.labelKey) : (cfg.label || cfg.banks[0]);
+  console.log(`  ${c.bold(c.cyan(t('sim.title')))}  ${c.dim('· ' + examName)}`);
   console.log(rule('═'));
   console.log('');
   console.log(`  ${t('sim.intro1')}`);
@@ -233,7 +244,8 @@ async function run(module, examCfg) {
 
       if (cmd === 'grademe' || cmd === 'g') {
         attempts++;
-        const spec = grader.specPath(bank, step.exercise.id);
+        // pooled exams span banks, so the exercise carries its own
+        const spec = grader.specPath(step.exercise.bank, step.exercise.id);
         const r = await grader.gradeExercise(dir, spec);
         if (grader.passed(r)) {
           console.log(`  ${c.green(c.bold('✓ ' + t('sim.passed')))}`);

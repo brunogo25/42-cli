@@ -249,6 +249,11 @@ module.exports = {
   'exam.modeDrill': 'Entraînement — choisis N exercices et corrige-les en lot',
   'exam.pickExam': 'Quel examen veux-tu pratiquer ?',
   'exam.noneAvailable': 'aucun examen disponible pour le moment.',
+  'exam.byDifficulty': 'par difficulté (les deux ranks)',
+  'exam.tierEasy': 'Facile',
+  'exam.tierMedium': 'Moyen',
+  'exam.tierAdvanced': 'Avancé',
+  'exam.exerciseCount': '({n} exercices)',
 
   'sim.title': 'Simulateur d\'examen',
   'sim.intro1': 'Un exercice à la fois. Résous-le, tape grademe, et le suivant se débloque.',

@@ -4,6 +4,7 @@
   "rank": "rank04",
   "level": 2,
   "difficulty": 4,
+  "tier": "hard",
   "lang": "python",
   "mode": "function",
   "function": "palindrome_partitioner",

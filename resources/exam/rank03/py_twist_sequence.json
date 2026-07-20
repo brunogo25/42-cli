@@ -4,6 +4,7 @@
   "rank": "rank03",
   "level": 5,
   "difficulty": 4,
+  "tier": "hard",
   "lang": "python",
   "mode": "function",
   "function": "twist_sequence",

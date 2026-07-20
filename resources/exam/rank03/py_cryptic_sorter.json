@@ -4,6 +4,7 @@
   "rank": "rank03",
   "level": 1,
   "difficulty": 1,
+  "tier": "easy",
   "lang": "python",
   "mode": "function",
   "function": "cryptic_sorter",

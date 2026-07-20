@@ -5,6 +5,20 @@
 // and falls back to `notes_en` if missing.
 module.exports = [
   {
+    version: '0.5.1',
+    date: '2026-07-20',
+    notes_en: [
+      'Python exams can now be practised **by difficulty** — Easy (6), Medium (9) and Advanced (6) — not just by rank. Picking a band pools the matching exercises from both Rank 03 and Rank 04.',
+      'A difficulty drill walks **every** exercise in its band, while the Rank 03 / Rank 04 entries keep taking one exercise per level, which is the shape of a real exam sitting.',
+      'The exam picker now shows how many exercises each entry holds.',
+    ],
+    notes_fr: [
+      'Les examens Python se pratiquent désormais **par difficulté** — Facile (6), Moyen (9) et Avancé (6) — et plus seulement par rank. Choisir un niveau regroupe les exercices correspondants des Rank 03 et Rank 04.',
+      'Un entraînement par difficulté parcourt **tous** les exercices de son niveau, tandis que les entrées Rank 03 / Rank 04 gardent un exercice par palier, la forme d\'un vrai examen.',
+      'Le sélecteur d\'examen affiche maintenant le nombre d\'exercices de chaque entrée.',
+    ],
+  },
+  {
     version: '0.5.0',
     date: '2026-07-20',
     notes_en: [

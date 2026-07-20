@@ -12,8 +12,30 @@ const { select } = require('../ui/select');
 const { modulesWithExams, examsOf } = require('../data/modules');
 const examPractice = require('./examPractice');
 const examSim = require('./examSim');
+const grader = require('../runners/examGrader');
 const c = require('../ui/colors');
 const { t } = require('../i18n');
+
+function examLabel(exam) {
+  const base = exam.labelKey ? t(exam.labelKey) : (exam.label || exam.banks[0]);
+  const count = grader.loadExam(exam).length;
+  return `${base}  ${c.dim(t('exam.exerciseCount', { n: count }))}`;
+}
+
+// Turn a module's exams into choice rows, opening a sub-header whenever an
+// exam declares a new `group` (the difficulty band sits under its own title).
+function examChoices(module, choices, lookup) {
+  let openGroup = null;
+  for (const e of examsOf(module)) {
+    if (e.group && e.group !== openGroup) {
+      choices.push({ header: true, label: `  ${t(e.group)}`, indent: true });
+      openGroup = e.group;
+    }
+    const key = `${module.id}:${e.id}`;
+    lookup.set(key, { module, exam: e });
+    choices.push({ label: examLabel(e), value: key });
+  }
+}
 
 // Simulator (one exercise at a time, real-exam shape) vs drill (N exercises
 // graded as a batch). Returns 'back' / 'quit' / undefined like every submenu.
@@ -40,7 +62,9 @@ async function runForModule(module) {
   if (exams.length === 1) return pickMode(module, exams[0]);
 
   while (true) {
-    const choices = exams.map((e) => ({ label: e.label || e.bank, value: e.id }));
+    const choices = [];
+    const lookup = new Map();
+    examChoices(module, choices, lookup);
     choices.push({ label: t('common.back'), value: 'back' });
     choices.push({ label: t('common.quit'), value: 'quit' });
 
@@ -48,9 +72,9 @@ async function runForModule(module) {
     if (choice === 'back') return 'back';
     if (choice === 'quit') return 'quit';
 
-    const exam = exams.find((e) => e.id === choice);
-    if (!exam) continue;
-    const back = await pickMode(module, exam);
+    const hit = lookup.get(choice);
+    if (!hit) continue;
+    const back = await pickMode(module, hit.exam);
     if (back === 'quit') return 'quit';
   }
 }
@@ -70,11 +94,7 @@ async function run() {
     const lookup = new Map();
     for (const m of modules) {
       choices.push({ header: true, label: m.title });
-      for (const e of examsOf(m)) {
-        const key = `${m.id}:${e.id}`;
-        lookup.set(key, { module: m, exam: e });
-        choices.push({ label: e.label || e.bank, value: key });
-      }
+      examChoices(m, choices, lookup);
     }
     choices.push({ label: t('common.back'), value: 'back' });
     choices.push({ label: t('common.quit'), value: 'quit' });

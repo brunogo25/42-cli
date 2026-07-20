@@ -4,6 +4,7 @@
   "rank": "rank03",
   "level": 6,
   "difficulty": 4,
+  "tier": "hard",
   "lang": "python",
   "mode": "function",
   "function": "whisper_cipher",

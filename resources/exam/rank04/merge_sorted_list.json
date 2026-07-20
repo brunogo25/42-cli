@@ -4,6 +4,7 @@
   "rank": "rank04",
   "level": 2,
   "difficulty": 3,
+  "tier": "medium",
   "lang": "python",
   "mode": "function",
   "function": "merge_sorted_list",

@@ -4,6 +4,7 @@
   "rank": "rank04",
   "level": 1,
   "difficulty": 3,
+  "tier": "medium",
   "lang": "python",
   "mode": "function",
   "function": "constellation_mapper",

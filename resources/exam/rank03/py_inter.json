@@ -4,6 +4,7 @@
   "rank": "rank03",
   "level": 3,
   "difficulty": 2,
+  "tier": "medium",
   "lang": "python",
   "mode": "function",
   "function": "inter",

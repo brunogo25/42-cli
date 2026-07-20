@@ -54,6 +54,25 @@ function specPath(bank, id) {
   return path.join(bankDir(bank), `${id}.json`);
 }
 
+// Resolve an exam config into its exercise pool.
+//
+// An exam may span several banks (practising "medium Python" draws on both
+// Rank 03 and Rank 04) and may narrow them to one difficulty tier. Every
+// exercise is tagged with the bank it came from, so grading a pooled exam can
+// still find each spec without knowing which bank the exam was configured with.
+function loadExam(cfg) {
+  if (!cfg) return [];
+  const banks = cfg.banks || (cfg.bank ? [cfg.bank] : []);
+  const out = [];
+  for (const bank of banks) {
+    for (const ex of loadBank(bank)) {
+      if (cfg.tier && ex.tier !== cfg.tier) continue;
+      out.push({ ...ex, bank });
+    }
+  }
+  return out;
+}
+
 function spawnAsync(cmd, args, opts) {
   return new Promise((resolve) => {
     let stdout = '';
@@ -133,6 +152,7 @@ module.exports = {
   HARNESS,
   detectCC,
   loadBank,
+  loadExam,
   bankDir,
   specPath,
   gradeExercise,
