@@ -97,7 +97,7 @@ function writeSubject(folderDir, ex) {
 }
 
 // Build the exam workspace under the cwd; never clobber existing files.
-function createWorkspace(module, picked) {
+function createWorkspace(module, picked, bank) {
   const dir = path.join(process.cwd(), workspaceName());
   fs.mkdirSync(dir, { recursive: true });
 
@@ -110,7 +110,7 @@ function createWorkspace(module, picked) {
     manifest.push({
       folder,
       specId: ex.id,
-      bank: module.exam.bank,
+      bank,
       title: ex.title,
       difficulty: ex.difficulty,
       lang: ex.lang,
@@ -200,11 +200,11 @@ async function pickConfig() {
   return { n, levels };
 }
 
-async function startExam(module, bank) {
+async function startExam(module, bankExercises, bank) {
   const cfg = await pickConfig();
   if (!cfg) return null;
 
-  const picked = selectExercises(bank, cfg.levels);
+  const picked = selectExercises(bankExercises, cfg.levels);
   if (!picked.length) {
     console.log(c.red(`  ${t('exam.noExercises')}`));
     return null;
@@ -213,7 +213,7 @@ async function startExam(module, bank) {
     console.log(c.yellow(`  ${t('exam.fewerThanRequested', { got: picked.length, want: cfg.n })}`));
   }
 
-  const session = createWorkspace(module, picked);
+  const session = createWorkspace(module, picked, bank);
   console.log('');
   console.log(`  ${c.green('✓')} ${t('exam.created')}`);
   console.log(`  ${c.dim(session.dir)}`);
@@ -285,8 +285,8 @@ function showSubjects(session) {
   }
 }
 
-async function run(module) {
-  const { lang, bank } = module.exam;
+async function run(module, examCfg) {
+  const { lang, bank } = examCfg || module.exam;
 
   if (!detectPython()) {
     console.log('');
@@ -329,7 +329,7 @@ async function run(module) {
     const action = await select({ message: t('exam.action'), choices });
 
     if (action === 'start') {
-      const s = await startExam(module, bankExercises);
+      const s = await startExam(module, bankExercises, bank);
       if (s) session = s;
     } else if (action === 'gradeAll') {
       await gradeAll(session);

@@ -1,0 +1,58 @@
+{
+  "id": "py_mirror_matrix",
+  "title": "mirror_matrix",
+  "rank": "rank03",
+  "level": 2,
+  "difficulty": 2,
+  "lang": "python",
+  "mode": "function",
+  "function": "mirror_matrix",
+  "signature": "def mirror_matrix(matrix: list[list[int]]) -> list[list[int]]:",
+  "solution_file": "py_mirror_matrix.py",
+  "subject": "Assignment name  : py_mirror_matrix\nExpected files   : py_mirror_matrix.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nGiven a 2D matrix (list of lists), return a new matrix where each row\nis reversed.\n\nFunction signature:\n\n  def mirror_matrix(matrix: list[list[int]]) -> list[list[int]]:\n\nExamples:\n\n  mirror_matrix([[1,2,3],[4,5,6]])    ->  [[3,2,1],[6,5,4]]\n  mirror_matrix([[1,2],[3,4],[5,6]])  ->  [[2,1],[4,3],[6,5]]\n  mirror_matrix([[7]])                ->  [[7]]\n  mirror_matrix([[1,2,3,4]])          ->  [[4,3,2,1]]\n  mirror_matrix([[-1,-2],[-3,-4]])    ->  [[-2,-1],[-4,-3]]\n",
+  "tests": [
+    {
+      "name": "mirror_matrix([[1,2,3],[4,5,6]])",
+      "call": "mirror_matrix([[1,2,3],[4,5,6]])",
+      "expect": "[[3,2,1],[6,5,4]]"
+    },
+    {
+      "name": "mirror_matrix([[1,2],[3,4],[5,6]])",
+      "call": "mirror_matrix([[1,2],[3,4],[5,6]])",
+      "expect": "[[2,1],[4,3],[6,5]]"
+    },
+    {
+      "name": "mirror_matrix([[7]])",
+      "call": "mirror_matrix([[7]])",
+      "expect": "[[7]]"
+    },
+    {
+      "name": "mirror_matrix([[1,2,3,4]])",
+      "call": "mirror_matrix([[1,2,3,4]])",
+      "expect": "[[4,3,2,1]]"
+    },
+    {
+      "name": "mirror_matrix([[-1,-2],[-3,-4]])",
+      "call": "mirror_matrix([[-1,-2],[-3,-4]])",
+      "expect": "[[-2,-1],[-4,-3]]"
+    },
+    {
+      "name": "mirror_matrix([])",
+      "call": "mirror_matrix([])",
+      "expect": "[]",
+      "hidden": true
+    },
+    {
+      "name": "mirror_matrix([[1,2,3],[4,5,6],[7,8,9]])",
+      "call": "mirror_matrix([[1,2,3],[4,5,6],[7,8,9]])",
+      "expect": "[[3, 2, 1], [6, 5, 4], [9, 8, 7]]",
+      "hidden": true
+    },
+    {
+      "name": "mirror_matrix([[0,0],[0,1]])",
+      "call": "mirror_matrix([[0,0],[0,1]])",
+      "expect": "[[0, 0], [1, 0]]",
+      "hidden": true
+    }
+  ]
+}

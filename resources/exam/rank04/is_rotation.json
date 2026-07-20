@@ -1,0 +1,70 @@
+{
+  "id": "is_rotation",
+  "title": "is_rotation",
+  "rank": "rank04",
+  "level": 1,
+  "difficulty": 2,
+  "lang": "python",
+  "mode": "function",
+  "function": "is_rotation",
+  "signature": "def is_rotation(arr1: list, arr2: list) -> bool:",
+  "solution_file": "is_rotation.py",
+  "subject": "Assignment name  : is_rotation\nExpected files   : is_rotation.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a Python function that takes two lists (arrays) as parameters and determines if the second list is a rotation of the first list (left or right).\n\nA rotation means that the elements are shifted circularly. For example, shifting [1, 2, 3] to the right by one position results in [3, 1, 2].\n\nThe function must return True if arr2 is a rotation of arr1, and False otherwise.\nIf the arrays have different lengths, they cannot be rotations of each other.\nTwo empty arrays are considered rotations of each other.\n\nFunction signature:\n\n  def is_rotation(arr1: list, arr2: list) -> bool:\n\nExamples:\n\n  is_rotation([1, 2, 3, 4, 5], [4, 5, 1, 2, 3])  ->  True\n  is_rotation([1, 2, 3, 4, 5], [5, 1, 2, 3, 4])  ->  True\n  is_rotation([1, 2, 3], [3, 2, 1])              ->  False\n  is_rotation([1, 2], [1, 2, 3])                 ->  False\n  is_rotation([], [])                            ->  True\n",
+  "tests": [
+    {
+      "name": "is_rotation([1, 2, 3, 4, 5], [4, 5, 1, 2, 3])",
+      "call": "is_rotation([1, 2, 3, 4, 5], [4, 5, 1, 2, 3])",
+      "expect": "True"
+    },
+    {
+      "name": "is_rotation([1, 2, 3, 4, 5], [5, 1, 2, 3, 4])",
+      "call": "is_rotation([1, 2, 3, 4, 5], [5, 1, 2, 3, 4])",
+      "expect": "True"
+    },
+    {
+      "name": "is_rotation([1, 2, 3], [3, 2, 1])",
+      "call": "is_rotation([1, 2, 3], [3, 2, 1])",
+      "expect": "False"
+    },
+    {
+      "name": "is_rotation([1, 2], [1, 2, 3])",
+      "call": "is_rotation([1, 2], [1, 2, 3])",
+      "expect": "False"
+    },
+    {
+      "name": "is_rotation([], [])",
+      "call": "is_rotation([], [])",
+      "expect": "True"
+    },
+    {
+      "name": "is_rotation([1,2,3], [1,2,3])",
+      "call": "is_rotation([1,2,3], [1,2,3])",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "is_rotation([1,2,3,4], [3,4,1,2])",
+      "call": "is_rotation([1,2,3,4], [3,4,1,2])",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "is_rotation([1,1,2], [1,2,1])",
+      "call": "is_rotation([1,1,2], [1,2,1])",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "is_rotation([1], [1])",
+      "call": "is_rotation([1], [1])",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "is_rotation([1], [2])",
+      "call": "is_rotation([1], [2])",
+      "expect": "False",
+      "hidden": true
+    }
+  ]
+}

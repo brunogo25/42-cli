@@ -1,0 +1,40 @@
+{
+  "id": "py_string_sculptor",
+  "title": "string_sculptor",
+  "rank": "rank03",
+  "level": 5,
+  "difficulty": 4,
+  "lang": "python",
+  "mode": "function",
+  "function": "string_sculptor",
+  "signature": "def string_sculptor(text: str) -> str:",
+  "solution_file": "py_string_sculptor.py",
+  "subject": "Assignment name  : py_string_sculptor\nExpected files   : py_string_sculptor.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that transforms a string by alternating the case of\nalphabetic characters only.\nNon-alphabetic characters remain unchanged and are NOT counted in the\nalternation index.\nThe first alphabetic character should be lowercase, the second uppercase, etc.\nSpaces reset the alternation (next alpha after a space is lowercase again).\n\nFunction signature:\n\n  def string_sculptor(text: str) -> str:\n\nExamples:\n\n  string_sculptor(\"hello\")        ->  \"hElLo\"\n  string_sculptor(\"Hello World\")  ->  \"hElLo wOrLd\"\n  string_sculptor(\"abc123def\")    ->  \"aBc123DeF\"\n  string_sculptor(\"Python3.9!\")   ->  \"pYtHoN3.9!\"\n  string_sculptor(\"\")             ->  \"\"\n",
+  "tests": [
+    {
+      "name": "string_sculptor(\"hello\")",
+      "call": "string_sculptor(\"hello\")",
+      "expect": "\"hElLo\""
+    },
+    {
+      "name": "string_sculptor(\"Hello World\")",
+      "call": "string_sculptor(\"Hello World\")",
+      "expect": "\"hElLo wOrLd\""
+    },
+    {
+      "name": "string_sculptor(\"abc123def\")",
+      "call": "string_sculptor(\"abc123def\")",
+      "expect": "\"aBc123DeF\""
+    },
+    {
+      "name": "string_sculptor(\"Python3.9!\")",
+      "call": "string_sculptor(\"Python3.9!\")",
+      "expect": "\"pYtHoN3.9!\""
+    },
+    {
+      "name": "string_sculptor(\"\")",
+      "call": "string_sculptor(\"\")",
+      "expect": "\"\""
+    }
+  ]
+}

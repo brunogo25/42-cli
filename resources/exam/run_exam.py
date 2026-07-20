@@ -9,8 +9,11 @@ exam exercise, in either language:
                      -Werror into a throwaway binary, then run it per test.
   * lang == "python" run `python3 <solution_file>` per test.
 
-Each test feeds argv + stdin and checks exit code / stdout / stderr against the
-behaviour the subject pins down. Driven by one exercise JSON spec:
+There are two grading modes. The default ("program") feeds argv + stdin and
+checks exit code / stdout / stderr. `mode: "function"` — used by the Rank 03 /
+Rank 04 Python exams, where the subject pins down a function signature rather
+than a whole program — imports the student's module and calls the function,
+comparing return values. Driven by one exercise JSON spec:
 
   --spec  path to the exercise spec (resources/exam/<bank>/<id>.json)
   --dir   the folder the student solved the exercise in (holds solution_file)
@@ -26,6 +29,7 @@ import argparse
 import json
 import os
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -176,6 +180,213 @@ def run_one(cmd, cwd, test):
 
 
 # --------------------------------------------------------------------------
+# function mode (Rank 03 / Rank 04 Python exams)
+#
+# The subject fixes a signature, so we import the student's module and call the
+# function instead of running the file as a program. Both the call and the
+# expected value are stored as Python source in the spec and eval'd here, so a
+# spec entry reads exactly like the example line in the subject.
+# --------------------------------------------------------------------------
+
+class _Timeout(Exception):
+    pass
+
+
+def _on_alarm(signum, frame):  # noqa: ARG001
+    raise _Timeout()
+
+
+class _Guard:
+    """Run a block under a wall-clock timeout with stdout/stdin neutralised.
+
+    Student code that prints debug noise or blocks on input() must not corrupt
+    or hang the grader; whatever it printed is kept so a failing test can show
+    it as a hint.
+    """
+
+    def __init__(self, seconds):
+        self.seconds = seconds
+        self.output = ""
+
+    def __enter__(self):
+        import io
+        self._buf = io.StringIO()
+        self._stdout, self._stdin = sys.stdout, sys.stdin
+        sys.stdout = self._buf
+        sys.stdin = open(os.devnull)
+        self._prev = signal.signal(signal.SIGALRM, _on_alarm)
+        signal.setitimer(signal.ITIMER_REAL, self.seconds)
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, self._prev)
+        self.output = self._buf.getvalue()
+        try:
+            sys.stdin.close()
+        except Exception:  # noqa: BLE001
+            pass
+        sys.stdout, sys.stdin = self._stdout, self._stdin
+        return False
+
+
+def check_forbidden(spec, sol_path):
+    """Reject solutions that use functions the subject forbids."""
+    tokens = spec.get("forbidden") or []
+    if not tokens:
+        return None
+    try:
+        with open(sol_path, encoding="utf-8", errors="replace") as fh:
+            src = fh.read()
+    except OSError:
+        return None
+    # strip comments so a mention in a comment does not trip the check
+    code = "\n".join(line.split("#", 1)[0] for line in src.splitlines())
+    hits = [tok for tok in tokens if tok in code]
+    return hits or None
+
+
+def load_solution(sol_path, timeout=10):
+    """Import the student's file as a module. Returns (module, error)."""
+    import importlib.util
+    name = "student_solution"
+    spec_obj = importlib.util.spec_from_file_location(name, sol_path)
+    if spec_obj is None or spec_obj.loader is None:
+        return None, "could not load the file as a Python module"
+    module = importlib.util.module_from_spec(spec_obj)
+    sys.modules[name] = module
+    try:
+        with _Guard(timeout):
+            spec_obj.loader.exec_module(module)
+    except _Timeout:
+        return None, (f"importing the file took longer than {timeout}s — is "
+                      "there code running at import time (a loop, or input())?")
+    except BaseException as exc:  # noqa: BLE001
+        return None, f"the file raised {exc.__class__.__name__} while being imported: {exc}"
+    return module, None
+
+
+def _strict_equal(expected, actual):
+    """== plus a bool/int guard, since True == 1 in Python."""
+    if isinstance(expected, bool) != isinstance(actual, bool):
+        return False
+    if expected != actual:
+        return False
+    # tuple vs list must not pass just because their contents match
+    if isinstance(expected, (list, tuple)) and type(expected) is not type(actual):
+        return False
+    return True
+
+
+def run_function_test(module, fn_name, test, timeout=5):
+    """Eval the call expression against the student's module."""
+    env = {"__builtins__": __builtins__}
+    for attr in dir(module):
+        if not attr.startswith("__"):
+            env[attr] = getattr(module, attr)
+
+    call = test.get("call", "")
+    guard = _Guard(timeout)
+    try:
+        with guard:
+            actual = eval(call, env)  # noqa: S307 - spec-authored, not user input
+    except _Timeout:
+        return False, (f"timed out after {timeout}s — the function likely "
+                       "looped forever")
+    except BaseException as exc:  # noqa: BLE001
+        detail = f"raised {exc.__class__.__name__}: {exc}"
+        if guard.output.strip():
+            detail += "\nit printed: " + guard.output.strip().splitlines()[0]
+        return False, detail
+
+    try:
+        expected = eval(test["expect"], {"__builtins__": __builtins__})  # noqa: S307
+    except BaseException as exc:  # noqa: BLE001
+        return False, f"broken spec — cannot evaluate expected value: {exc}"
+
+    if _strict_equal(expected, actual):
+        return True, ""
+
+    detail = f"expected: {expected!r}\ngot:      {actual!r}"
+    if isinstance(expected, bool) and not isinstance(actual, bool):
+        detail += f"\nhint:     return a bool, not {type(actual).__name__}"
+    if guard.output.strip():
+        detail += "\nit printed: " + guard.output.strip().splitlines()[0]
+    return False, detail
+
+
+def grade_function_mode(spec, sol_path):
+    """Grade a signature-based exercise. Mirrors the program-mode reporting."""
+    fn_name = spec.get("function")
+    if not fn_name:
+        print(f"  {red('broken spec — no function name')}")
+        return 3
+
+    hits = check_forbidden(spec, sol_path)
+    if hits:
+        print(f"  {red('FORBIDDEN FUNCTION')}")
+        for h in hits:
+            print(dim(f"      you used {h!r} — the subject forbids it"))
+        print()
+        print(f"  {bold('Result:')} {red('FAIL')} {dim('(forbidden function)')}")
+        print()
+        return 1
+
+    module, err = load_solution(sol_path)
+    if err:
+        print(f"  {red('✗ ' + err)}")
+        print()
+        print(f"  {bold('Result:')} {red('FAIL')} {dim('(the file could not be imported)')}")
+        print()
+        return 1
+
+    fn = getattr(module, fn_name, None)
+    if fn is None:
+        print(f"  {red('✗ no function named ' + fn_name + ' in ' + os.path.basename(sol_path))}")
+        print(f"  {dim('expected: ' + spec.get('signature', 'def ' + fn_name + '(...)'))}")
+        print()
+        print(f"  {bold('Result:')} {red('FAIL')} {dim('(function not found)')}")
+        print()
+        return 1
+    if not callable(fn):
+        print(f"  {red('✗ ' + fn_name + ' exists but is not a function')}")
+        print()
+        return 1
+
+    n_pass = n_fail = 0
+    timeouts = 0
+    tests = spec.get("tests", [])
+    for i, test in enumerate(tests):
+        # a function that hangs hangs on everything — don't burn 5s per test
+        if timeouts >= 2:
+            remaining = len(tests) - i
+            print(dim(f"    … skipped {remaining} more test(s) — the function keeps hanging"))
+            n_fail += remaining
+            break
+        try:
+            ok, detail = run_function_test(module, fn_name, test)
+        except Exception as exc:  # noqa: BLE001
+            ok, detail = False, f"grader error: {exc.__class__.__name__}: {exc}"
+        if not ok and "timed out" in detail:
+            timeouts += 1
+        mark = green("  ✓") if ok else red("  ✗")
+        print(f"  {mark} {test.get('name', 'test')}")
+        if not ok and detail:
+            for line in detail.splitlines():
+                print(dim(f"        {line}"))
+        if ok:
+            n_pass += 1
+        else:
+            n_fail += 1
+
+    print()
+    head = green("PASS") if n_fail == 0 else red("FAIL")
+    print(f"  {bold('Result:')} {head} {dim(f'({n_pass}/{n_pass + n_fail} tests)')}")
+    print()
+    return 0 if n_fail == 0 else 1
+
+
+# --------------------------------------------------------------------------
 # compilation (C)
 # --------------------------------------------------------------------------
 
@@ -235,6 +446,9 @@ def main():
         print(f"  {dim('create ' + solution_file + ' in ' + project_dir + ' and grade again.')}")
         print()
         return 2
+
+    if spec.get("mode") == "function":
+        return grade_function_mode(spec, sol_path)
 
     tmp = None
     run_cmd = None

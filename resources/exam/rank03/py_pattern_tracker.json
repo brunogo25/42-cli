@@ -1,0 +1,86 @@
+{
+  "id": "py_pattern_tracker",
+  "title": "pattern_tracker",
+  "rank": "rank03",
+  "level": 3,
+  "difficulty": 2,
+  "lang": "python",
+  "mode": "function",
+  "function": "pattern_tracker",
+  "signature": "def pattern_tracker(text: str) -> int:",
+  "solution_file": "py_pattern_tracker.py",
+  "subject": "Assignment name  : py_pattern_tracker\nExpected files   : py_pattern_tracker.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that counts the number of valid consecutive digit pairs\nin a string. A valid pair consists of two adjacent digits where the second\ndigit is exactly one greater than the first.\nA 9 followed by a 0 is NOT a valid pair.\n\nFunction signature:\n\n  def pattern_tracker(text: str) -> int:\n\nExamples:\n\n  pattern_tracker(\"123\")        ->  2\n  pattern_tracker(\"12a34\")      ->  2\n  pattern_tracker(\"987654321\")  ->  0\n  pattern_tracker(\"01234567\")   ->  7\n  pattern_tracker(\"abc\")        ->  0\n  pattern_tracker(\"1a2b3c4\")    ->  0\n  pattern_tracker(\"112233\")     ->  2\n",
+  "tests": [
+    {
+      "name": "pattern_tracker(\"123\")",
+      "call": "pattern_tracker(\"123\")",
+      "expect": "2"
+    },
+    {
+      "name": "pattern_tracker(\"12a34\")",
+      "call": "pattern_tracker(\"12a34\")",
+      "expect": "2"
+    },
+    {
+      "name": "pattern_tracker(\"987654321\")",
+      "call": "pattern_tracker(\"987654321\")",
+      "expect": "0"
+    },
+    {
+      "name": "pattern_tracker(\"01234567\")",
+      "call": "pattern_tracker(\"01234567\")",
+      "expect": "7"
+    },
+    {
+      "name": "pattern_tracker(\"abc\")",
+      "call": "pattern_tracker(\"abc\")",
+      "expect": "0"
+    },
+    {
+      "name": "pattern_tracker(\"1a2b3c4\")",
+      "call": "pattern_tracker(\"1a2b3c4\")",
+      "expect": "0"
+    },
+    {
+      "name": "pattern_tracker(\"112233\")",
+      "call": "pattern_tracker(\"112233\")",
+      "expect": "2"
+    },
+    {
+      "name": "pattern_tracker(\"90\")",
+      "call": "pattern_tracker(\"90\")",
+      "expect": "0",
+      "hidden": true
+    },
+    {
+      "name": "pattern_tracker(\"890\")",
+      "call": "pattern_tracker(\"890\")",
+      "expect": "1",
+      "hidden": true
+    },
+    {
+      "name": "pattern_tracker(\"\")",
+      "call": "pattern_tracker(\"\")",
+      "expect": "0",
+      "hidden": true
+    },
+    {
+      "name": "pattern_tracker(\"5\")",
+      "call": "pattern_tracker(\"5\")",
+      "expect": "0",
+      "hidden": true
+    },
+    {
+      "name": "pattern_tracker(\"1234509876\")",
+      "call": "pattern_tracker(\"1234509876\")",
+      "expect": "4",
+      "hidden": true
+    },
+    {
+      "name": "pattern_tracker(\"12 34\")",
+      "call": "pattern_tracker(\"12 34\")",
+      "expect": "2",
+      "hidden": true
+    }
+  ]
+}

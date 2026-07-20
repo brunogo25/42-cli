@@ -1,0 +1,64 @@
+{
+  "id": "package_dependency_resolver",
+  "title": "package_dependency_resolver",
+  "rank": "rank04",
+  "level": 3,
+  "difficulty": 4,
+  "lang": "python",
+  "mode": "function",
+  "function": "package_dependency_resolver",
+  "signature": "def package_dependency_resolver(packages: dict[str, list[str]]) -> list[str]:",
+  "solution_file": "package_dependency_resolver.py",
+  "subject": "Assignment name  : package_dependency_resolver\nExpected files   : package_dependency_resolver.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that determines a valid package installation order by resolving dependencies. Use topological sorting to ensure dependencies are installed before the packages that require them.\n\nThe function should:\n- Take a dictionary where keys are package names and values are lists of dependencies.\n- Return packages in installation order (dependencies first).\n- Return an empty list ([]) if no valid order exists (e.g., circular dependencies or self-dependencies).\n- Handle empty inputs and isolated dependency chains gracefully.\n- Ignore references to packages that are not present as keys in the input dictionary.\n- Ensure a package cannot be installed until all its dependencies are installed.\n\nAlgorithm Details & Edge Cases:\n- Topological Sorting: Use a topological sort algorithm (e.g., Kahn's algorithm).\n- Dependency Priority: Process packages with no remaining dependencies first.\n- Deterministic Output: When multiple valid packages can be processed at the same time (choices exist), process them alphabetically to ensure deterministic output.\n- Empty Input: Return an empty list.\n- Multiple Independent Chains: Process all chains, respecting the alphabetical order rule.\n- Missing Dependencies: Ignore missing packages (treat them as if they don't exist in the requirements).\n\nFunction signature:\n\n  def package_dependency_resolver(packages: dict[str, list[str]]) -> list[str]:\n\nExamples:\n\n  package_dependency_resolver({\"app\": [\"database\"], \"database\": [\"driver\"], \"driver\": []})      ->  [\"driver\", \"database\", \"app\"]\n  package_dependency_resolver({\"A\": [], \"B\": [\"A\"], \"C\": [\"A\", \"B\"]})                           ->  [\"A\", \"B\", \"C\"]\n  package_dependency_resolver({})                                                               ->  []\n  package_dependency_resolver({\"X\": [\"Y\"], \"Y\": [\"X\"]})                                         ->  []\n  package_dependency_resolver({\"web\": [], \"api\": [], \"frontend\": [\"web\"], \"backend\": [\"api\"]})  ->  [\"api\", \"web\", \"backend\", \"frontend\"]\n",
+  "tests": [
+    {
+      "name": "package_dependency_resolver({\"app\": [\"database\"], \"database\": [\"driver\"], \"driver\": []})",
+      "call": "package_dependency_resolver({\"app\": [\"database\"], \"database\": [\"driver\"], \"driver\": []})",
+      "expect": "[\"driver\", \"database\", \"app\"]"
+    },
+    {
+      "name": "package_dependency_resolver({\"A\": [], \"B\": [\"A\"], \"C\": [\"A\", \"B\"]})",
+      "call": "package_dependency_resolver({\"A\": [], \"B\": [\"A\"], \"C\": [\"A\", \"B\"]})",
+      "expect": "[\"A\", \"B\", \"C\"]"
+    },
+    {
+      "name": "package_dependency_resolver({})",
+      "call": "package_dependency_resolver({})",
+      "expect": "[]"
+    },
+    {
+      "name": "package_dependency_resolver({\"X\": [\"Y\"], \"Y\": [\"X\"]})",
+      "call": "package_dependency_resolver({\"X\": [\"Y\"], \"Y\": [\"X\"]})",
+      "expect": "[]"
+    },
+    {
+      "name": "package_dependency_resolver({\"web\": [], \"api\": [], \"frontend\": [\"web\"], \"backend\": [\"api\"]})",
+      "call": "package_dependency_resolver({\"web\": [], \"api\": [], \"frontend\": [\"web\"], \"backend\": [\"api\"]})",
+      "expect": "[\"api\", \"web\", \"backend\", \"frontend\"]"
+    },
+    {
+      "name": "package_dependency_resolver({\"a\": [\"a\"]})",
+      "call": "package_dependency_resolver({\"a\": [\"a\"]})",
+      "expect": "[]",
+      "hidden": true
+    },
+    {
+      "name": "package_dependency_resolver({\"solo\": []})",
+      "call": "package_dependency_resolver({\"solo\": []})",
+      "expect": "['solo']",
+      "hidden": true
+    },
+    {
+      "name": "package_dependency_resolver({\"a\": [\"missing\"], \"b\": [\"a\"]})",
+      "call": "package_dependency_resolver({\"a\": [\"missing\"], \"b\": [\"a\"]})",
+      "expect": "['a', 'b']",
+      "hidden": true
+    },
+    {
+      "name": "package_dependency_resolver({\"a\": [\"b\"], \"b\": [\"c\"], \"c\": [\"a\"]})",
+      "call": "package_dependency_resolver({\"a\": [\"b\"], \"b\": [\"c\"], \"c\": [\"a\"]})",
+      "expect": "[]",
+      "hidden": true
+    }
+  ]
+}

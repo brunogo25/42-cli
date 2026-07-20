@@ -1,0 +1,75 @@
+{
+  "id": "py_whisper_cipher",
+  "title": "whisper_cipher",
+  "rank": "rank03",
+  "level": 6,
+  "difficulty": 4,
+  "lang": "python",
+  "mode": "function",
+  "function": "whisper_cipher",
+  "signature": "def whisper_cipher(text: str, shift: int) -> str:",
+  "solution_file": "py_whisper_cipher.py",
+  "subject": "Assignment name  : py_whisper_cipher\nExpected files   : py_whisper_cipher.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that creates a Caesar cipher by shifting letters in a\nstring by a given amount.\nNon-alphabetic characters should remain unchanged.\nThe shift can be negative (shift left).\n\nFunction signature:\n\n  def whisper_cipher(text: str, shift: int) -> str:\n\nExamples:\n\n  whisper_cipher(\"hello\", 3)         ->  \"khoor\"\n  whisper_cipher(\"Hello World!\", 1)  ->  \"Ifmmp Xpsme!\"\n  whisper_cipher(\"xyz\", 3)           ->  \"abc\"\n  whisper_cipher(\"ABC123def\", 5)     ->  \"FGH123ijk\"\n  whisper_cipher(\"\", 10)             ->  \"\"\n  whisper_cipher(\"abc\", -3)          ->  \"xyz\"\n",
+  "tests": [
+    {
+      "name": "whisper_cipher(\"hello\", 3)",
+      "call": "whisper_cipher(\"hello\", 3)",
+      "expect": "\"khoor\""
+    },
+    {
+      "name": "whisper_cipher(\"Hello World!\", 1)",
+      "call": "whisper_cipher(\"Hello World!\", 1)",
+      "expect": "\"Ifmmp Xpsme!\""
+    },
+    {
+      "name": "whisper_cipher(\"xyz\", 3)",
+      "call": "whisper_cipher(\"xyz\", 3)",
+      "expect": "\"abc\""
+    },
+    {
+      "name": "whisper_cipher(\"ABC123def\", 5)",
+      "call": "whisper_cipher(\"ABC123def\", 5)",
+      "expect": "\"FGH123ijk\""
+    },
+    {
+      "name": "whisper_cipher(\"\", 10)",
+      "call": "whisper_cipher(\"\", 10)",
+      "expect": "\"\""
+    },
+    {
+      "name": "whisper_cipher(\"abc\", -3)",
+      "call": "whisper_cipher(\"abc\", -3)",
+      "expect": "\"xyz\""
+    },
+    {
+      "name": "whisper_cipher(\"hello\", 0)",
+      "call": "whisper_cipher(\"hello\", 0)",
+      "expect": "'hello'",
+      "hidden": true
+    },
+    {
+      "name": "whisper_cipher(\"hello\", 26)",
+      "call": "whisper_cipher(\"hello\", 26)",
+      "expect": "'hello'",
+      "hidden": true
+    },
+    {
+      "name": "whisper_cipher(\"Zebra\", 1)",
+      "call": "whisper_cipher(\"Zebra\", 1)",
+      "expect": "'Afcsb'",
+      "hidden": true
+    },
+    {
+      "name": "whisper_cipher(\"a\", -1)",
+      "call": "whisper_cipher(\"a\", -1)",
+      "expect": "'z'",
+      "hidden": true
+    },
+    {
+      "name": "whisper_cipher(\"Hello, World!\", 13)",
+      "call": "whisper_cipher(\"Hello, World!\", 13)",
+      "expect": "'Uryyb, Jbeyq!'",
+      "hidden": true
+    }
+  ]
+}

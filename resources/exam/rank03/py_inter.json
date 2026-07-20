@@ -1,0 +1,64 @@
+{
+  "id": "py_inter",
+  "title": "inter",
+  "rank": "rank03",
+  "level": 3,
+  "difficulty": 2,
+  "lang": "python",
+  "mode": "function",
+  "function": "inter",
+  "signature": "def inter(s1: str, s2: str) -> str:",
+  "solution_file": "py_inter.py",
+  "subject": "Assignment name  : py_inter\nExpected files   : py_inter.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that returns a string with the characters that appear\nin both strings, without repetitions. Characters are added in the order\nthey appear in the first string.\n\nFunction signature:\n\n  def inter(s1: str, s2: str) -> str:\n\nExamples:\n\n  inter(\"hello\", \"world\")  ->  \"lo\"\n  inter(\"banana\", \"band\")  ->  \"ban\"\n  inter(\"abcabc\", \"bc\")    ->  \"bc\"\n  inter(\"abc\", \"xyz\")      ->  \"\"\n  inter(\"\", \"abc\")         ->  \"\"\n",
+  "tests": [
+    {
+      "name": "inter(\"hello\", \"world\")",
+      "call": "inter(\"hello\", \"world\")",
+      "expect": "\"lo\""
+    },
+    {
+      "name": "inter(\"banana\", \"band\")",
+      "call": "inter(\"banana\", \"band\")",
+      "expect": "\"ban\""
+    },
+    {
+      "name": "inter(\"abcabc\", \"bc\")",
+      "call": "inter(\"abcabc\", \"bc\")",
+      "expect": "\"bc\""
+    },
+    {
+      "name": "inter(\"abc\", \"xyz\")",
+      "call": "inter(\"abc\", \"xyz\")",
+      "expect": "\"\""
+    },
+    {
+      "name": "inter(\"\", \"abc\")",
+      "call": "inter(\"\", \"abc\")",
+      "expect": "\"\""
+    },
+    {
+      "name": "inter(\"aabbcc\", \"abc\")",
+      "call": "inter(\"aabbcc\", \"abc\")",
+      "expect": "'abc'",
+      "hidden": true
+    },
+    {
+      "name": "inter(\"hello\", \"\")",
+      "call": "inter(\"hello\", \"\")",
+      "expect": "''",
+      "hidden": true
+    },
+    {
+      "name": "inter(\"12345\", \"54321\")",
+      "call": "inter(\"12345\", \"54321\")",
+      "expect": "'12345'",
+      "hidden": true
+    },
+    {
+      "name": "inter(\"The quick\", \"quick brown\")",
+      "call": "inter(\"The quick\", \"quick brown\")",
+      "expect": "' quick'",
+      "hidden": true
+    }
+  ]
+}

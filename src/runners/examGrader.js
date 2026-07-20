@@ -90,7 +90,10 @@ async function gradeExercise(exerciseDir, spec) {
   }
 
   const args = [HARNESS, '--spec', spec, '--dir', exerciseDir, '--color'];
-  const run = await spawnAsync(python, args, { stdio: ['inherit', 'pipe', 'pipe'] });
+  // stdin is ignored, not inherited: the harness feeds each test its own stdin
+  // and never reads ours, so inheriting only lets it swallow keystrokes meant
+  // for the menu that is waiting behind it (the exam simulator's command loop).
+  const run = await spawnAsync(python, args, { stdio: ['ignore', 'pipe', 'pipe'] });
   return {
     exitCode: run.exitCode,
     stage: 'run',

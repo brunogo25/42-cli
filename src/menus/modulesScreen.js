@@ -8,13 +8,13 @@ const ftPrintf = require('./ftPrintf');
 const gnl = require('./gnl');
 const pushSwap = require('./pushSwap');
 const pythonPiscine = require('./pythonPiscine');
-const examPractice = require('./examPractice');
+const examSelect = require('./examSelect');
 
 // Launch the menu behind a chosen submodule. Returns the same 'back' / 'quit'
 // contract every submenu uses, so quit propagates up to the main loop.
 async function launch(module, submodule) {
   if (submodule.exam) {
-    return examPractice.run(module);
+    return examSelect.runForModule(module);
   }
   switch (submodule.id) {
     case 'libft':

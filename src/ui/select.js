@@ -7,11 +7,17 @@ const c = require('./colors');
 // '0' is reserved for the back action (assigned to any choice with value === 'back').
 const HOTKEY_SEQ = ['1','2','3','4','5','6','7','8','9','q','w','e','r','t','y','u','i','o','p'];
 
+// A choice is inert when it cannot be picked: `disabled` items are shown as
+// unavailable, `header` items are group titles that only label what follows.
+function inert(choice) {
+  return Boolean(choice.disabled || choice.header);
+}
+
 function buildHotkeyMap(choices) {
   const keyByIdx = new Array(choices.length).fill(null);
   let cursor = 0;
   choices.forEach((ch, i) => {
-    if (ch.disabled) return;
+    if (inert(ch)) return;
     if (ch.value === 'back') { keyByIdx[i] = '0'; return; }
     if (cursor < HOTKEY_SEQ.length) {
       keyByIdx[i] = HOTKEY_SEQ[cursor];
@@ -26,7 +32,7 @@ function select({ message, choices, hint, shortcuts }) {
     const stdin = process.stdin;
     const stdout = process.stdout;
 
-    let index = choices.findIndex((ch) => !ch.disabled);
+    let index = choices.findIndex((ch) => !inert(ch));
     if (index < 0) index = 0;
 
     const hotkeyByIdx = buildHotkeyMap(choices);
@@ -44,6 +50,11 @@ function select({ message, choices, hint, shortcuts }) {
 
       stdout.write(`${c.cyan('?')} ${c.bold(message)}\x1b[K\n`);
       choices.forEach((choice, i) => {
+        // group titles get no cursor column and no hotkey slot — just the name
+        if (choice.header) {
+          stdout.write(`  ${c.bold(c.gray(choice.label))}\x1b[K\n`);
+          return;
+        }
         const isSelected = i === index;
         const arrow = isSelected ? c.cyan('❯') : ' ';
         const hk = hotkeyByIdx[i];
@@ -64,7 +75,7 @@ function select({ message, choices, hint, shortcuts }) {
       let next = index;
       for (let i = 0; i < choices.length; i++) {
         next = (next + step + choices.length) % choices.length;
-        if (!choices[next].disabled) {
+        if (!inert(choices[next])) {
           index = next;
           return;
         }
@@ -103,16 +114,16 @@ function select({ message, choices, hint, shortcuts }) {
         moveSelection(1);
         render();
       } else if (key.name === 'return') {
-        if (choices[index].disabled) return;
+        if (inert(choices[index])) return;
         submitAt(index);
       } else if (shortcuts && str && Object.prototype.hasOwnProperty.call(shortcuts, str)) {
         const target = shortcuts[str];
-        const idx = choices.findIndex((ch) => ch.value === target && !ch.disabled);
+        const idx = choices.findIndex((ch) => ch.value === target && !inert(ch));
         if (idx >= 0) submitAt(idx);
       } else if (str) {
         const k = str.toLowerCase();
         const idx = hotkeyByIdx.indexOf(k);
-        if (idx >= 0 && !choices[idx].disabled) submitAt(idx);
+        if (idx >= 0 && !inert(choices[idx])) submitAt(idx);
       }
     }
 

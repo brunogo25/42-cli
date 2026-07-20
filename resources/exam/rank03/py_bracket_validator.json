@@ -1,0 +1,91 @@
+{
+  "id": "py_bracket_validator",
+  "title": "bracket_validator",
+  "rank": "rank03",
+  "level": 1,
+  "difficulty": 1,
+  "lang": "python",
+  "mode": "function",
+  "function": "bracket_validator",
+  "signature": "def bracket_validator(s: str) -> bool:",
+  "solution_file": "py_bracket_validator.py",
+  "subject": "Assignment name  : py_bracket_validator\nExpected files   : py_bracket_validator.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that checks if the brackets in a string are valid.\n\nA string is valid if every opening bracket has a matching closing bracket\nin the correct order.\n\nAllowed brackets: (), [], {}\n\nFunction signature:\n\n  def bracket_validator(s: str) -> bool:\n\nExamples:\n\n  bracket_validator(\"()\")            ->  True\n  bracket_validator(\"()[]{}\")        ->  True\n  bracket_validator(\"(]\")            ->  False\n  bracket_validator(\"([)]\")          ->  False\n  bracket_validator(\"{[]}\")          ->  True\n  bracket_validator(\"hello(world)\")  ->  True\n  bracket_validator(\"((())\")         ->  False\n  bracket_validator(\"\")              ->  True\n",
+  "tests": [
+    {
+      "name": "bracket_validator(\"()\")",
+      "call": "bracket_validator(\"()\")",
+      "expect": "True"
+    },
+    {
+      "name": "bracket_validator(\"()[]{}\")",
+      "call": "bracket_validator(\"()[]{}\")",
+      "expect": "True"
+    },
+    {
+      "name": "bracket_validator(\"(]\")",
+      "call": "bracket_validator(\"(]\")",
+      "expect": "False"
+    },
+    {
+      "name": "bracket_validator(\"([)]\")",
+      "call": "bracket_validator(\"([)]\")",
+      "expect": "False"
+    },
+    {
+      "name": "bracket_validator(\"{[]}\")",
+      "call": "bracket_validator(\"{[]}\")",
+      "expect": "True"
+    },
+    {
+      "name": "bracket_validator(\"hello(world)\")",
+      "call": "bracket_validator(\"hello(world)\")",
+      "expect": "True"
+    },
+    {
+      "name": "bracket_validator(\"((())\")",
+      "call": "bracket_validator(\"((())\")",
+      "expect": "False"
+    },
+    {
+      "name": "bracket_validator(\"\")",
+      "call": "bracket_validator(\"\")",
+      "expect": "True"
+    },
+    {
+      "name": "bracket_validator(\"{[()]}\")",
+      "call": "bracket_validator(\"{[()]}\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "bracket_validator(\"([{}])\")",
+      "call": "bracket_validator(\"([{}])\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "bracket_validator(\")(\")",
+      "call": "bracket_validator(\")(\")",
+      "expect": "False",
+      "hidden": true
+    },
+    {
+      "name": "bracket_validator(\"no brackets at all\")",
+      "call": "bracket_validator(\"no brackets at all\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "bracket_validator(\"a(b[c]d)e\")",
+      "call": "bracket_validator(\"a(b[c]d)e\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "bracket_validator(\"(()\")",
+      "call": "bracket_validator(\"(()\")",
+      "expect": "False",
+      "hidden": true
+    }
+  ]
+}

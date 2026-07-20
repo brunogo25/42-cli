@@ -1,0 +1,86 @@
+{
+  "id": "py_echo_validator",
+  "title": "echo_validator",
+  "rank": "rank03",
+  "level": 2,
+  "difficulty": 2,
+  "lang": "python",
+  "mode": "function",
+  "function": "echo_validator",
+  "signature": "def echo_validator(text: str) -> bool:",
+  "solution_file": "py_echo_validator.py",
+  "subject": "Assignment name  : py_echo_validator\nExpected files   : py_echo_validator.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that checks if a string is a palindrome,\nignoring spaces and case, only consider alphabetic characters\nfor the comparison.\n\nFunction signature:\n\n  def echo_validator(text: str) -> bool:\n\nExamples:\n\n  echo_validator(\"racecar\")                      ->  True\n  echo_validator(\"A man a plan a canal Panama\")  ->  True\n  echo_validator(\"race a car\")                   ->  False\n  echo_validator(\"Was it a car or a cat I saw\")  ->  True\n  echo_validator(\"hello\")                        ->  False\n  echo_validator(\"Madam Im Adam\")                ->  True\n  echo_validator(\"\")                             ->  False\n",
+  "tests": [
+    {
+      "name": "echo_validator(\"racecar\")",
+      "call": "echo_validator(\"racecar\")",
+      "expect": "True"
+    },
+    {
+      "name": "echo_validator(\"A man a plan a canal Panama\")",
+      "call": "echo_validator(\"A man a plan a canal Panama\")",
+      "expect": "True"
+    },
+    {
+      "name": "echo_validator(\"race a car\")",
+      "call": "echo_validator(\"race a car\")",
+      "expect": "False"
+    },
+    {
+      "name": "echo_validator(\"Was it a car or a cat I saw\")",
+      "call": "echo_validator(\"Was it a car or a cat I saw\")",
+      "expect": "True"
+    },
+    {
+      "name": "echo_validator(\"hello\")",
+      "call": "echo_validator(\"hello\")",
+      "expect": "False"
+    },
+    {
+      "name": "echo_validator(\"Madam Im Adam\")",
+      "call": "echo_validator(\"Madam Im Adam\")",
+      "expect": "True"
+    },
+    {
+      "name": "echo_validator(\"\")",
+      "call": "echo_validator(\"\")",
+      "expect": "False"
+    },
+    {
+      "name": "echo_validator(\"No lemon, no melon\")",
+      "call": "echo_validator(\"No lemon, no melon\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "echo_validator(\"Never odd or even\")",
+      "call": "echo_validator(\"Never odd or even\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "echo_validator(\"12321\")",
+      "call": "echo_validator(\"12321\")",
+      "expect": "False",
+      "hidden": true
+    },
+    {
+      "name": "echo_validator(\"a\")",
+      "call": "echo_validator(\"a\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "echo_validator(\"ab\")",
+      "call": "echo_validator(\"ab\")",
+      "expect": "False",
+      "hidden": true
+    },
+    {
+      "name": "echo_validator(\"Able was I ere I saw Elba\")",
+      "call": "echo_validator(\"Able was I ere I saw Elba\")",
+      "expect": "True",
+      "hidden": true
+    }
+  ]
+}

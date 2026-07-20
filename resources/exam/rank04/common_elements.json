@@ -1,0 +1,54 @@
+{
+  "id": "common_elements",
+  "title": "common_elements",
+  "rank": "rank04",
+  "level": 1,
+  "difficulty": 2,
+  "lang": "python",
+  "mode": "function",
+  "function": "common_elements",
+  "signature": "def common_elements(lists: list) -> list:",
+  "solution_file": "py_list_intersection_finder.py",
+  "subject": "Assignment name  : common_elements\nExpected files   : py_list_intersection_finder.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nReturns a list containing the elements present in every sublist, without duplicates, in ascending order. If the input list is empty, or if any sublist is empty, the result is an empty list. All sublists contain elements of the same comparable type.\n\nFunction signature:\n\n  def common_elements(lists: list) -> list:\n\nExamples:\n\n  common_elements([[1, 2, 3], [2, 3, 4], [3, 4, 5]])  ->  [3]\n  common_elements([[1, 2], [3, 4]])                   ->  []\n  common_elements([])                                 ->  []\n",
+  "tests": [
+    {
+      "name": "common_elements([[1, 2, 3], [2, 3, 4], [3, 4, 5]])",
+      "call": "common_elements([[1, 2, 3], [2, 3, 4], [3, 4, 5]])",
+      "expect": "[3]"
+    },
+    {
+      "name": "common_elements([[1, 2], [3, 4]])",
+      "call": "common_elements([[1, 2], [3, 4]])",
+      "expect": "[]"
+    },
+    {
+      "name": "common_elements([])",
+      "call": "common_elements([])",
+      "expect": "[]"
+    },
+    {
+      "name": "common_elements([[1,2,3]])",
+      "call": "common_elements([[1,2,3]])",
+      "expect": "[1, 2, 3]",
+      "hidden": true
+    },
+    {
+      "name": "common_elements([[3,1,2],[2,3,1]])",
+      "call": "common_elements([[3,1,2],[2,3,1]])",
+      "expect": "[1, 2, 3]",
+      "hidden": true
+    },
+    {
+      "name": "common_elements([[1,2],[2,3],[]])",
+      "call": "common_elements([[1,2],[2,3],[]])",
+      "expect": "[]",
+      "hidden": true
+    },
+    {
+      "name": "common_elements([[1,1,2],[2,2,1]])",
+      "call": "common_elements([[1,1,2],[2,2,1]])",
+      "expect": "[1, 2]",
+      "hidden": true
+    }
+  ]
+}

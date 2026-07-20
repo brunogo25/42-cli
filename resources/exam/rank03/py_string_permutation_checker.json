@@ -1,0 +1,79 @@
+{
+  "id": "py_string_permutation_checker",
+  "title": "string_permutation_checker",
+  "rank": "rank03",
+  "level": 4,
+  "difficulty": 3,
+  "lang": "python",
+  "mode": "function",
+  "function": "string_permutation_checker",
+  "signature": "def string_permutation_checker(s1: str, s2: str) -> bool:",
+  "solution_file": "py_string_permutation_checker.py",
+  "subject": "Assignment name  : py_string_permutation_checker\nExpected files   : py_string_permutation_checker.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that determines if two strings are permutations of each other.\nCase sensitive. Whitespace and punctuation count as regular characters.\nEmpty strings are permutations of each other.\n\nFunction signature:\n\n  def string_permutation_checker(s1: str, s2: str) -> bool:\n\nExamples:\n\n  string_permutation_checker(\"abc\", \"bca\")                 ->  True\n  string_permutation_checker(\"abc\", \"def\")                 ->  False\n  string_permutation_checker(\"listen\", \"silent\")           ->  True\n  string_permutation_checker(\"hello\", \"bello\")             ->  False\n  string_permutation_checker(\"\", \"\")                       ->  True\n  string_permutation_checker(\"a\", \"\")                      ->  False\n  string_permutation_checker(\"Abc\", \"abc\")                 ->  False\n  string_permutation_checker(\"a gentleman\",\"elegant man\")  ->  True\n",
+  "tests": [
+    {
+      "name": "string_permutation_checker(\"abc\", \"bca\")",
+      "call": "string_permutation_checker(\"abc\", \"bca\")",
+      "expect": "True"
+    },
+    {
+      "name": "string_permutation_checker(\"abc\", \"def\")",
+      "call": "string_permutation_checker(\"abc\", \"def\")",
+      "expect": "False"
+    },
+    {
+      "name": "string_permutation_checker(\"listen\", \"silent\")",
+      "call": "string_permutation_checker(\"listen\", \"silent\")",
+      "expect": "True"
+    },
+    {
+      "name": "string_permutation_checker(\"hello\", \"bello\")",
+      "call": "string_permutation_checker(\"hello\", \"bello\")",
+      "expect": "False"
+    },
+    {
+      "name": "string_permutation_checker(\"\", \"\")",
+      "call": "string_permutation_checker(\"\", \"\")",
+      "expect": "True"
+    },
+    {
+      "name": "string_permutation_checker(\"a\", \"\")",
+      "call": "string_permutation_checker(\"a\", \"\")",
+      "expect": "False"
+    },
+    {
+      "name": "string_permutation_checker(\"Abc\", \"abc\")",
+      "call": "string_permutation_checker(\"Abc\", \"abc\")",
+      "expect": "False"
+    },
+    {
+      "name": "string_permutation_checker(\"a gentleman\",\"elegant man\")",
+      "call": "string_permutation_checker(\"a gentleman\",\"elegant man\")",
+      "expect": "True"
+    },
+    {
+      "name": "string_permutation_checker(\"aab\", \"aba\")",
+      "call": "string_permutation_checker(\"aab\", \"aba\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "string_permutation_checker(\"aab\", \"abb\")",
+      "call": "string_permutation_checker(\"aab\", \"abb\")",
+      "expect": "False",
+      "hidden": true
+    },
+    {
+      "name": "string_permutation_checker(\"!@#\", \"#@!\")",
+      "call": "string_permutation_checker(\"!@#\", \"#@!\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "string_permutation_checker(\"ab \", \"a b\")",
+      "call": "string_permutation_checker(\"ab \", \"a b\")",
+      "expect": "True",
+      "hidden": true
+    }
+  ]
+}

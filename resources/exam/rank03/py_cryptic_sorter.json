@@ -1,0 +1,44 @@
+{
+  "id": "py_cryptic_sorter",
+  "title": "cryptic_sorter",
+  "rank": "rank03",
+  "level": 1,
+  "difficulty": 1,
+  "lang": "python",
+  "mode": "function",
+  "function": "cryptic_sorter",
+  "signature": "def cryptic_sorter(strings: list[str]) -> list[str]:",
+  "solution_file": "py_cryptic_sorter.py",
+  "subject": "Assignment name  : py_cryptic_sorter\nExpected files   : py_cryptic_sorter.py\nForbidden        : sorted(), list.sort()\n------------------------------------------------------------------------------\n\nWrite a function that sorts a list of strings according to multiple criteria:\n1. Primary sort: By string length (shortest first)\n2. Secondary sort: ASCII order, except letters are compared case-insensitively\n   (for strings of same length)\n3. Tertiary sort: By number of vowels (ascending, for same length and lexically equal)\n4. Equal strings will appear in the same order as in the input list.\n\nForbidden functions: sorted(), list.sort()\n\nFunction signature:\n\n  def cryptic_sorter(strings: list[str]) -> list[str]:\n\nExamples:\n\n  cryptic_sorter([\"apple\",\"cat\",\"banana\",\"dog\",\"elephant\"])  ->  [\"cat\",\"dog\",\"apple\",\"banana\",\"elephant\"]\n  cryptic_sorter([\"aaa\",\"bbb\",\"AAA\",\"BBB\"])                  ->  [\"aaa\", \"AAA\", \"bbb\", \"BBB\"]\n  cryptic_sorter([\"hello\",\"world\",\"hi\",\"test\"])              ->  [\"hi\",\"test\",\"hello\",\"world\"]\n  cryptic_sorter([])                                         ->  []\n  cryptic_sorter([\"\"])                                       ->  [\"\"]\n",
+  "tests": [
+    {
+      "name": "cryptic_sorter([\"apple\",\"cat\",\"banana\",\"dog\",\"elephant\"])",
+      "call": "cryptic_sorter([\"apple\",\"cat\",\"banana\",\"dog\",\"elephant\"])",
+      "expect": "[\"cat\",\"dog\",\"apple\",\"banana\",\"elephant\"]"
+    },
+    {
+      "name": "cryptic_sorter([\"aaa\",\"bbb\",\"AAA\",\"BBB\"])",
+      "call": "cryptic_sorter([\"aaa\",\"bbb\",\"AAA\",\"BBB\"])",
+      "expect": "[\"aaa\", \"AAA\", \"bbb\", \"BBB\"]"
+    },
+    {
+      "name": "cryptic_sorter([\"hello\",\"world\",\"hi\",\"test\"])",
+      "call": "cryptic_sorter([\"hello\",\"world\",\"hi\",\"test\"])",
+      "expect": "[\"hi\",\"test\",\"hello\",\"world\"]"
+    },
+    {
+      "name": "cryptic_sorter([])",
+      "call": "cryptic_sorter([])",
+      "expect": "[]"
+    },
+    {
+      "name": "cryptic_sorter([\"\"])",
+      "call": "cryptic_sorter([\"\"])",
+      "expect": "[\"\"]"
+    }
+  ],
+  "forbidden": [
+    "sorted(",
+    ".sort("
+  ]
+}

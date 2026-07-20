@@ -5,6 +5,32 @@
 // and falls back to `notes_en` if missing.
 module.exports = [
   {
+    version: '0.5.0',
+    date: '2026-07-20',
+    notes_en: [
+      '**Practice an exam** is now on the main menu — no more digging through Modules to find it. Exams are grouped under their module so you can tell at a glance which one each belongs to.',
+      'New **exam simulator**: one exercise at a time in a folder on your Desktop, type `grademe` to submit, and the next one unlocks only once you pass. A failed attempt shows you the exact case that broke — and unlike the real exam, there is no retry timer.',
+      'The Python exams now use the **real Rank 03 and Rank 04 subjects** (21 exercises), graded against the function signature the subject specifies, with hidden test cases beyond the printed examples.',
+      'Forbidden functions are enforced — using `sorted()` where the subject bans it now fails the exercise, like it would at 42.',
+    ],
+    notes_fr: [
+      '**Passer un examen** est désormais dans le menu principal — plus besoin de fouiller dans Modules. Les examens sont regroupés par module pour voir d\'un coup d\'œil à qui appartient chacun.',
+      'Nouveau **simulateur d\'examen** : un exercice à la fois dans un dossier sur ton Bureau, tape `grademe` pour rendre, et le suivant ne se débloque qu\'une fois réussi. Un échec te montre le cas exact qui a cassé — et contrairement au vrai examen, sans minuteur.',
+      'Les examens Python utilisent maintenant les **vrais sujets Rank 03 et Rank 04** (21 exercices), corrigés selon la signature de fonction du sujet, avec des tests cachés en plus des exemples.',
+      'Les fonctions interdites sont vérifiées — utiliser `sorted()` là où le sujet l\'interdit fait échouer l\'exercice, comme à 42.',
+    ],
+  },
+  {
+    version: '0.4.3',
+    date: '2026-06-25',
+    notes_en: [
+      'Contributors list now shows **Milan Rubinsztejn** in full, with his 42 login (`mirubins`).',
+    ],
+    notes_fr: [
+      'La liste des Contributeurs affiche désormais **Milan Rubinsztejn** au complet, avec son login 42 (`mirubins`).',
+    ],
+  },
+  {
     version: '0.4.2',
     date: '2026-06-25',
     notes_en: [

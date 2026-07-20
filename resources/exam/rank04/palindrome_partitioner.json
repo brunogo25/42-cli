@@ -1,0 +1,66 @@
+{
+  "id": "palindrome_partitioner",
+  "title": "palindrome_partitioner",
+  "rank": "rank04",
+  "level": 2,
+  "difficulty": 4,
+  "lang": "python",
+  "mode": "function",
+  "function": "palindrome_partitioner",
+  "signature": "def palindrome_partitioner(s: str) -> int:",
+  "solution_file": "py_palindrome_partitioner.py",
+  "subject": "Assignment name  : palindrome_partitioner\nExpected files   : py_palindrome_partitioner.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nGiven a string `s`, find the minimum number of cuts needed to partition it such that every resulting substring is a palindrome.\n\nA cut divides the string between two characters. With `c` cuts, the string is split into `c + 1` substrings. We want the minimum number of cuts `c` such that all parts are palindromes.\n\nReturn this minimum number of cuts (an integer).\n\nConstraints:\n- An empty string or a string of length 1 is already a palindrome -> 0 cuts.\n- If the entire string is already a palindrome -> 0 cuts.\n- In the worst case (all characters are distinct), the result is len(s) - 1 cuts.\n\nFunction signature:\n\n  def palindrome_partitioner(s: str) -> int:\n\nExamples:\n\n  palindrome_partitioner(\"aab\")  ->  1\n  palindrome_partitioner(\"aba\")  ->  0\n  palindrome_partitioner(\"abc\")  ->  2\n",
+  "tests": [
+    {
+      "name": "palindrome_partitioner(\"aab\")",
+      "call": "palindrome_partitioner(\"aab\")",
+      "expect": "1"
+    },
+    {
+      "name": "palindrome_partitioner(\"aba\")",
+      "call": "palindrome_partitioner(\"aba\")",
+      "expect": "0"
+    },
+    {
+      "name": "palindrome_partitioner(\"abc\")",
+      "call": "palindrome_partitioner(\"abc\")",
+      "expect": "2"
+    },
+    {
+      "name": "palindrome_partitioner(\"\")",
+      "call": "palindrome_partitioner(\"\")",
+      "expect": "0",
+      "hidden": true
+    },
+    {
+      "name": "palindrome_partitioner(\"a\")",
+      "call": "palindrome_partitioner(\"a\")",
+      "expect": "0",
+      "hidden": true
+    },
+    {
+      "name": "palindrome_partitioner(\"aa\")",
+      "call": "palindrome_partitioner(\"aa\")",
+      "expect": "0",
+      "hidden": true
+    },
+    {
+      "name": "palindrome_partitioner(\"abba\")",
+      "call": "palindrome_partitioner(\"abba\")",
+      "expect": "0",
+      "hidden": true
+    },
+    {
+      "name": "palindrome_partitioner(\"abcde\")",
+      "call": "palindrome_partitioner(\"abcde\")",
+      "expect": "4",
+      "hidden": true
+    },
+    {
+      "name": "palindrome_partitioner(\"aabaa\")",
+      "call": "palindrome_partitioner(\"aabaa\")",
+      "expect": "0",
+      "hidden": true
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "py_number_base_converter",
+  "title": "number_base_converter",
+  "rank": "rank03",
+  "level": 3,
+  "difficulty": 2,
+  "lang": "python",
+  "mode": "function",
+  "function": "number_base_converter",
+  "signature": "def number_base_converter(number: str, from_base: int, to_base: int) -> str:",
+  "solution_file": "py_number_base_converter.py",
+  "subject": "Assignment name  : py_number_base_converter\nExpected files   : py_number_base_converter.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that converts a number from one base to another.\nSupport bases from 2 to 36 inclusive.\nUse digits 0-9 and letters A-Z for values 10-35.\nReturn \"ERROR\" for invalid inputs.\n\nFunction signature:\n\n  def number_base_converter(number: str, from_base: int, to_base: int) -> str:\n\nExamples:\n\n  number_base_converter(\"1010\", 2, 10)  ->  \"10\"\n  number_base_converter(\"FF\", 16, 10)   ->  \"255\"\n  number_base_converter(\"255\", 10, 16)  ->  \"FF\"\n  number_base_converter(\"123\", 10, 2)   ->  \"1111011\"\n  number_base_converter(\"Z\", 36, 10)    ->  \"35\"\n  number_base_converter(\"35\", 10, 36)   ->  \"Z\"\n  number_base_converter(\"123\", 1, 10)   ->  \"ERROR\"\n  number_base_converter(\"G\", 16, 10)    ->  \"ERROR\"\n",
+  "tests": [
+    {
+      "name": "number_base_converter(\"1010\", 2, 10)",
+      "call": "number_base_converter(\"1010\", 2, 10)",
+      "expect": "\"10\""
+    },
+    {
+      "name": "number_base_converter(\"FF\", 16, 10)",
+      "call": "number_base_converter(\"FF\", 16, 10)",
+      "expect": "\"255\""
+    },
+    {
+      "name": "number_base_converter(\"255\", 10, 16)",
+      "call": "number_base_converter(\"255\", 10, 16)",
+      "expect": "\"FF\""
+    },
+    {
+      "name": "number_base_converter(\"123\", 10, 2)",
+      "call": "number_base_converter(\"123\", 10, 2)",
+      "expect": "\"1111011\""
+    },
+    {
+      "name": "number_base_converter(\"Z\", 36, 10)",
+      "call": "number_base_converter(\"Z\", 36, 10)",
+      "expect": "\"35\""
+    },
+    {
+      "name": "number_base_converter(\"35\", 10, 36)",
+      "call": "number_base_converter(\"35\", 10, 36)",
+      "expect": "\"Z\""
+    },
+    {
+      "name": "number_base_converter(\"123\", 1, 10)",
+      "call": "number_base_converter(\"123\", 1, 10)",
+      "expect": "\"ERROR\""
+    },
+    {
+      "name": "number_base_converter(\"G\", 16, 10)",
+      "call": "number_base_converter(\"G\", 16, 10)",
+      "expect": "\"ERROR\""
+    }
+  ]
+}

@@ -22,7 +22,7 @@ module.exports = [
   { name: 'diadjaff',                      login: 'diadjaff',
     reason_en: 'flagged the vowel_count / anagram case tests in Exam Practice — prompted a full re-verification of the exam grader and the libft fd-print tests after the Python release',
     reason_fr: 'a signalé les tests de casse de vowel_count / anagram dans l\'Exam Practice — a déclenché une re-vérification complète du correcteur d\'examen et des tests d\'affichage fd de la libft après la sortie Python' },
-  { name: 'Milan',                         login: null,
+  { name: 'Milan Rubinsztejn',             login: 'mirubins',
     reason_en: 'helping with many things',
     reason_fr: 'aide sur de nombreux aspects' },
 ];

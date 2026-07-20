@@ -1,0 +1,59 @@
+{
+  "id": "py_constellation_mapper",
+  "title": "constellation_mapper",
+  "rank": "rank04",
+  "level": 1,
+  "difficulty": 3,
+  "lang": "python",
+  "mode": "function",
+  "function": "constellation_mapper",
+  "signature": "def constellation_mapper(stars: list[tuple[int, int]], size: int) -> list[str]:",
+  "solution_file": "py_constellation_mapper.py",
+  "subject": "Assignment name  : py_constellation_mapper\nExpected files   : py_constellation_mapper.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nFor this exercise, you must implement the `constellation_mapper` function. The function must:\n- Take as a parameter a list of tuples, each consisting of an int(row) and an int(col).\n- Return a list[str] representing a grid of size `size` * `size`, composed of \".\" and \"*\" characters based on the coordinates provided in the `stars` variable.\n- Ignore coordinates that fall outside the grid boundaries.\n- Ignore duplicate coordinates.\n\nFunction signature:\n\n  def constellation_mapper(stars: list[tuple[int, int]], size: int) -> list[str]:\n\nExamples:\n\n  constellation_mapper([(0, 0), (1, 1), (2, 2)], 3)                  ->  [\"*..\", \".*.\", \"..*\"]\n  constellation_mapper([(0, 0), (0, 1), (0, 2), (1, 1), (2, 2)], 3)  ->  [\"***\", \".*.\", \"..*\"]\n  constellation_mapper([(0, 0), (5, 5), (2, 2)], 3)                  ->  [\"*..\", \"...\", \"..*\"]\n  constellation_mapper([(0, 0), (5, 5)], 2)                          ->  [\"*.\", \"..\"]\n",
+  "tests": [
+    {
+      "name": "constellation_mapper([(0, 0), (1, 1), (2, 2)], 3)",
+      "call": "constellation_mapper([(0, 0), (1, 1), (2, 2)], 3)",
+      "expect": "[\"*..\", \".*.\", \"..*\"]"
+    },
+    {
+      "name": "constellation_mapper([(0, 0), (0, 1), (0, 2), (1, 1), (2, 2)], 3)",
+      "call": "constellation_mapper([(0, 0), (0, 1), (0, 2), (1, 1), (2, 2)], 3)",
+      "expect": "[\"***\", \".*.\", \"..*\"]"
+    },
+    {
+      "name": "constellation_mapper([(0, 0), (5, 5), (2, 2)], 3)",
+      "call": "constellation_mapper([(0, 0), (5, 5), (2, 2)], 3)",
+      "expect": "[\"*..\", \"...\", \"..*\"]"
+    },
+    {
+      "name": "constellation_mapper([(0, 0), (5, 5)], 2)",
+      "call": "constellation_mapper([(0, 0), (5, 5)], 2)",
+      "expect": "[\"*.\", \"..\"]"
+    },
+    {
+      "name": "constellation_mapper([], 3)",
+      "call": "constellation_mapper([], 3)",
+      "expect": "['...', '...', '...']",
+      "hidden": true
+    },
+    {
+      "name": "constellation_mapper([(0,0),(0,0)], 2)",
+      "call": "constellation_mapper([(0,0),(0,0)], 2)",
+      "expect": "['*.', '..']",
+      "hidden": true
+    },
+    {
+      "name": "constellation_mapper([(-1,0),(0,-1)], 2)",
+      "call": "constellation_mapper([(-1,0),(0,-1)], 2)",
+      "expect": "['..', '..']",
+      "hidden": true
+    },
+    {
+      "name": "constellation_mapper([(1,0)], 2)",
+      "call": "constellation_mapper([(1,0)], 2)",
+      "expect": "['..', '*.']",
+      "hidden": true
+    }
+  ]
+}

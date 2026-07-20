@@ -1,0 +1,75 @@
+{
+  "id": "py_anagram",
+  "title": "anagram",
+  "rank": "rank03",
+  "level": 4,
+  "difficulty": 3,
+  "lang": "python",
+  "mode": "function",
+  "function": "anagram",
+  "signature": "def anagram(s1: str, s2: str) -> bool:",
+  "solution_file": "py_anagram.py",
+  "subject": "Assignment name  : py_anagram\nExpected files   : py_anagram.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that checks if two strings are anagrams.\nThey must contain exactly the same letters with the same quantity,\nignoring case and spaces.\n\nFunction signature:\n\n  def anagram(s1: str, s2: str) -> bool:\n\nExamples:\n\n  anagram(\"listen\", \"silent\")         ->  True\n  anagram(\"Triangle\", \"Integral\")     ->  True\n  anagram(\"Dormitory\", \"Dirty Room\")  ->  True\n  anagram(\"hello\", \"world\")           ->  False\n  anagram(\"\", \"\")                     ->  True\n  anagram(\"abc\", \"abcc\")              ->  False\n",
+  "tests": [
+    {
+      "name": "anagram(\"listen\", \"silent\")",
+      "call": "anagram(\"listen\", \"silent\")",
+      "expect": "True"
+    },
+    {
+      "name": "anagram(\"Triangle\", \"Integral\")",
+      "call": "anagram(\"Triangle\", \"Integral\")",
+      "expect": "True"
+    },
+    {
+      "name": "anagram(\"Dormitory\", \"Dirty Room\")",
+      "call": "anagram(\"Dormitory\", \"Dirty Room\")",
+      "expect": "True"
+    },
+    {
+      "name": "anagram(\"hello\", \"world\")",
+      "call": "anagram(\"hello\", \"world\")",
+      "expect": "False"
+    },
+    {
+      "name": "anagram(\"\", \"\")",
+      "call": "anagram(\"\", \"\")",
+      "expect": "True"
+    },
+    {
+      "name": "anagram(\"abc\", \"abcc\")",
+      "call": "anagram(\"abc\", \"abcc\")",
+      "expect": "False"
+    },
+    {
+      "name": "anagram(\"a\", \"A\")",
+      "call": "anagram(\"a\", \"A\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "anagram(\"School master\", \"The classroom\")",
+      "call": "anagram(\"School master\", \"The classroom\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "anagram(\"abc\", \"cba\")",
+      "call": "anagram(\"abc\", \"cba\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "anagram(\"a b c\", \"abc\")",
+      "call": "anagram(\"a b c\", \"abc\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "anagram(\"abc\", \"abd\")",
+      "call": "anagram(\"abc\", \"abd\")",
+      "expect": "False",
+      "hidden": true
+    }
+  ]
+}

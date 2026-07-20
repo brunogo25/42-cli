@@ -1,0 +1,80 @@
+{
+  "id": "py_hidenp",
+  "title": "hidenp",
+  "rank": "rank03",
+  "level": 3,
+  "difficulty": 2,
+  "lang": "python",
+  "mode": "function",
+  "function": "hidenp",
+  "signature": "def hidenp(small: str, big: str) -> bool:",
+  "solution_file": "py_hidenp.py",
+  "subject": "Assignment name  : py_hidenp\nExpected files   : py_hidenp.py\nForbidden        : n/a\n------------------------------------------------------------------------------\n\nWrite a function that checks if the string 'small' is a subsequence\nof 'big'. A subsequence means all characters of 'small' appear in 'big'\nin the same order, but not necessarily consecutively.\nFunction is case-sensitive.\n\nFunction signature:\n\n  def hidenp(small: str, big: str) -> bool:\n\nExamples:\n\n  hidenp(\"abc\", \"a1b2c3\")               ->  True\n  hidenp(\"ace\", \"abcde\")                ->  True\n  hidenp(\"aec\", \"abcde\")                ->  False\n  hidenp(\"\", \"abc\")                     ->  True\n  hidenp(\"abc\", \"ab\")                   ->  False\n  hidenp(\"aaaa\", \"aaa\")                 ->  False\n  hidenp(\"sing\",\"subsequence testing\")  ->  True\n",
+  "tests": [
+    {
+      "name": "hidenp(\"abc\", \"a1b2c3\")",
+      "call": "hidenp(\"abc\", \"a1b2c3\")",
+      "expect": "True"
+    },
+    {
+      "name": "hidenp(\"ace\", \"abcde\")",
+      "call": "hidenp(\"ace\", \"abcde\")",
+      "expect": "True"
+    },
+    {
+      "name": "hidenp(\"aec\", \"abcde\")",
+      "call": "hidenp(\"aec\", \"abcde\")",
+      "expect": "False"
+    },
+    {
+      "name": "hidenp(\"\", \"abc\")",
+      "call": "hidenp(\"\", \"abc\")",
+      "expect": "True"
+    },
+    {
+      "name": "hidenp(\"abc\", \"ab\")",
+      "call": "hidenp(\"abc\", \"ab\")",
+      "expect": "False"
+    },
+    {
+      "name": "hidenp(\"aaaa\", \"aaa\")",
+      "call": "hidenp(\"aaaa\", \"aaa\")",
+      "expect": "False"
+    },
+    {
+      "name": "hidenp(\"sing\",\"subsequence testing\")",
+      "call": "hidenp(\"sing\",\"subsequence testing\")",
+      "expect": "True"
+    },
+    {
+      "name": "hidenp(\"abc\", \"abc\")",
+      "call": "hidenp(\"abc\", \"abc\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "hidenp(\"\", \"\")",
+      "call": "hidenp(\"\", \"\")",
+      "expect": "True",
+      "hidden": true
+    },
+    {
+      "name": "hidenp(\"a\", \"\")",
+      "call": "hidenp(\"a\", \"\")",
+      "expect": "False",
+      "hidden": true
+    },
+    {
+      "name": "hidenp(\"ABC\", \"abc\")",
+      "call": "hidenp(\"ABC\", \"abc\")",
+      "expect": "False",
+      "hidden": true
+    },
+    {
+      "name": "hidenp(\"xyz\", \"xxyyzz\")",
+      "call": "hidenp(\"xyz\", \"xxyyzz\")",
+      "expect": "True",
+      "hidden": true
+    }
+  ]
+}

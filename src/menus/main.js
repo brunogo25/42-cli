@@ -2,6 +2,7 @@
 
 const { select } = require('../ui/select');
 const modulesScreen = require('./modulesScreen');
+const examSelect = require('./examSelect');
 const { settingsMenu, manualUpdateCheck } = require('./settings');
 const { patchNotesMenu } = require('./patchNotes');
 const { achievementsMenu } = require('./achievements');
@@ -20,6 +21,7 @@ async function mainMenu(ctx = {}) {
       });
     }
     choices.push({ label: t('main.modules'), value: 'modules' });
+    choices.push({ label: t('main.examPractice'), value: 'exam' });
     choices.push({ label: t('main.achievements'), value: 'achievements' });
     choices.push({ label: t('main.patchNotes'), value: 'patch' });
     choices.push({ label: t('main.contributors'), value: 'contributors' });
@@ -37,6 +39,9 @@ async function mainMenu(ctx = {}) {
       await manualUpdateCheck();
     } else if (choice === 'modules') {
       const back = await modulesScreen.run();
+      if (back === 'quit') return;
+    } else if (choice === 'exam') {
+      const back = await examSelect.run();
       if (back === 'quit') return;
     } else if (choice === 'patch') {
       await patchNotesMenu();

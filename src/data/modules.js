@@ -4,9 +4,11 @@
 // submodules (the individual projects/exercises). `available: false` marks a
 // module that is shown locked in the tab bar but cannot be entered yet.
 //
-// `exam` (when present) describes the per-module Exam Practice: `lang` is the
-// language the exam is graded in ('c' or 'python') and `bank` is the folder
-// under resources/exam/<bank>/ holding that module's exercise pool.
+// `exams` (when present) lists the exams a module can drill: `lang` is the
+// language the exam is graded in ('c' or 'python'), `bank` is the folder under
+// resources/exam/<bank>/ holding that exercise pool, and `label` names the rank
+// it mirrors. A module may expose several (OOP covers both Rank 03 and 04).
+// Use examsOf() rather than reading the field directly.
 //
 // Submodules are pure descriptors — the dispatch from a submodule id to the
 // menu that runs it lives in menus/modulesScreen.js, mirroring how
@@ -20,7 +22,9 @@ const MODULES = [
     title: 'Programming Fundamentals',
     descKey: 'mod.fundamentals.desc',
     available: true,
-    exam: { lang: 'c', bank: 'fundamentals' },
+    exams: [
+      { id: 'rank02', lang: 'c', bank: 'fundamentals', label: 'Rank 02 — C' },
+    ],
     submodules: [
       { id: 'libft', title: 'Libft' },
       { id: 'printf', title: 'ft_printf' },
@@ -34,7 +38,10 @@ const MODULES = [
     title: 'Object Oriented Programming',
     descKey: 'mod.oop.desc',
     available: true,
-    exam: { lang: 'python', bank: 'oop' },
+    exams: [
+      { id: 'rank03', lang: 'python', bank: 'rank03', label: 'Rank 03 — Python' },
+      { id: 'rank04', lang: 'python', bank: 'rank04', label: 'Rank 04 — Python (advanced)' },
+    ],
     submodules: [
       ...PROJECTS.map((p) => ({
         id: p.id,
@@ -81,4 +88,18 @@ function byId(id) {
   return MODULES.find((m) => m.id === id) || null;
 }
 
-module.exports = { MODULES, byId };
+// Normalised exam list for a module: [] when it has none. Tolerates the older
+// singular `exam` shape so a module can still declare just one.
+function examsOf(module) {
+  if (!module) return [];
+  if (Array.isArray(module.exams)) return module.exams;
+  if (module.exam) return [{ id: 'exam', ...module.exam }];
+  return [];
+}
+
+// Every module that offers at least one exam, in cursus order.
+function modulesWithExams() {
+  return MODULES.filter((m) => m.available && examsOf(m).length);
+}
+
+module.exports = { MODULES, byId, examsOf, modulesWithExams };
