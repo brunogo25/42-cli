@@ -1,9 +1,11 @@
 'use strict';
 
+const path = require('path');
 const { select } = require('../ui/select');
 const { input } = require('../ui/input');
 const c = require('../ui/colors');
 const { resolveLibftPath } = require('../utils/projectDetect');
+const garbage = require('../utils/garbage');
 const tester = require('../runners/pyTester');
 const lint = require('../runners/pyLint');
 const { PROJECTS } = require('../data/pythonProjects');
@@ -65,6 +67,27 @@ async function pickExercise(projectDir, spec) {
   return choice === 'back' ? null : choice;
 }
 
+// Lists the garbage (__pycache__, .mypy_cache, .pyc, .DS_Store…), asks, deletes.
+async function cleanGarbage(projectDir) {
+  const found = garbage.findGarbage(projectDir);
+  if (!found.length) {
+    console.log(c.green(`  ✓ ${t('py.cleanNothing')}`));
+    return;
+  }
+  for (const p of found) console.log(c.dim(`  ${path.relative(projectDir, p)}`));
+  console.log('');
+  const ok = await select({
+    message: t('py.cleanConfirm', { n: found.length }),
+    choices: [
+      { label: t('common.yes'), value: 'yes' },
+      { label: t('common.no'), value: 'no' },
+    ],
+  });
+  if (ok !== 'yes') return;
+  garbage.removeGarbage(found);
+  console.log(c.green(`  ✓ ${t('py.cleanDone', { n: found.length })}`));
+}
+
 async function projectMenu(project) {
   let spec;
   try {
@@ -95,6 +118,7 @@ async function projectMenu(project) {
     ];
     if (hasMypy) choices.push({ label: t('py.runMypy'), value: 'mypy' });
     choices.push({ label: t('py.runLintAndTests'), value: 'both' });
+    choices.push({ label: t('py.cleanGarbage'), value: 'clean' });
     choices.push({ label: t('py.changePath'), value: 'path' });
     choices.push({ label: t('common.back'), value: 'back' });
     choices.push({ label: t('common.quit'), value: 'quit' });
@@ -146,6 +170,8 @@ async function projectMenu(project) {
         const s = tester.summarize(r);
         if (s) console.log(s);
       });
+    } else if (action === 'clean') {
+      await section(t('py.cleanGarbage'), () => cleanGarbage(projectDir));
     } else if (action === 'path') {
       return projectMenu(project);
     } else if (action === 'back') {
