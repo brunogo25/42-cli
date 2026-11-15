@@ -1,6 +1,7 @@
 'use strict';
 
 const { spawn } = require('child_process');
+const os = require('os');
 const path = require('path');
 const c = require('../ui/colors');
 const { detectPython } = require('./pyTester');
@@ -62,7 +63,7 @@ async function runMypy(projectDir, targets) {
   if (!python) {
     return { tool: 'mypy', exitCode: 1, error: 'python3 not found on PATH' };
   }
-  const args = ['-m', 'mypy'];
+  const args = ['-m', 'mypy', '--cache-dir', path.join(os.tmpdir(), '42-mypy-cache')];
   if (Array.isArray(targets) && targets.length) {
     args.push(...targets.map((t) => path.join(projectDir, t)));
   } else {

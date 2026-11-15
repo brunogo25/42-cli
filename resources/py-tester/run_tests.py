@@ -239,7 +239,7 @@ def run_script(test, file_path, project_dir):
 
         try:
             proc = subprocess.run(
-                [sys.executable, invoke, *argv],
+                [sys.executable, "-B", invoke, *argv],
                 cwd=cwd,
                 input=stdin_data,
                 capture_output=True,
