@@ -1,12 +1,20 @@
 {
   "project": "data_quest",
   "title": "Data Quest",
-  "note": "argv/stdin-driven exercises are checked exactly; the random ones (achievements, stream, alchemist) are smoke-checked (runs cleanly + emits the expected structure).",
+  "note": "argv/stdin-driven exercises are compared to the subject line by line (blank lines included). The random ones (achievements, stream, alchemist) are checked for consistency: the printed sets / lists / dicts are parsed back and the union, intersection, removals, average... are recomputed. The source is checked for the authorized builtins (+ str/int/float, allowed for the whole module) and type hints.",
   "exercises": [
     {
       "id": "ex0",
       "title": "Command Quest",
       "file": "ex0/ft_command_quest.py",
+      "authorized": [
+        "len",
+        "print",
+        "str",
+        "int",
+        "float"
+      ],
+      "typed": true,
       "tests": [
         {
           "name": "no arguments",
@@ -14,16 +22,40 @@
           "argv": [],
           "match": {
             "exit_code": 0,
-            "stdout": { "type": "in_order", "items": ["=== Command Quest ===", "Program name: ft_command_quest.py", "No arguments provided!", "Total arguments: 1"] }
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Command Quest ===\nProgram name: ft_command_quest.py\nNo arguments provided!\nTotal arguments: 1"
+            }
           }
         },
         {
           "name": "three arguments",
           "mode": "script",
-          "argv": ["hello", "world", "42"],
+          "argv": [
+            "hello",
+            "world",
+            "42"
+          ],
           "match": {
             "exit_code": 0,
-            "stdout": { "type": "in_order", "items": ["Arguments received: 3", "Argument 1: hello", "Argument 2: world", "Argument 3: 42", "Total arguments: 4"] }
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Command Quest ===\nProgram name: ft_command_quest.py\nArguments received: 3\nArgument 1: hello\nArgument 2: world\nArgument 3: 42\nTotal arguments: 4"
+            }
+          }
+        },
+        {
+          "name": "one argument with a space",
+          "mode": "script",
+          "argv": [
+            "Data Quest"
+          ],
+          "match": {
+            "exit_code": 0,
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Command Quest ===\nProgram name: ft_command_quest.py\nArguments received: 1\nArgument 1: Data Quest\nTotal arguments: 2"
+            }
           }
         }
       ]
@@ -32,33 +64,93 @@
       "id": "ex1",
       "title": "Score Cruncher",
       "file": "ex1/ft_score_analytics.py",
+      "authorized": [
+        "len",
+        "sum",
+        "max",
+        "min",
+        "print",
+        "list",
+        "str",
+        "int",
+        "float"
+      ],
+      "typed": true,
       "tests": [
         {
           "name": "five scores -> full stats",
           "mode": "script",
-          "argv": ["1500", "2300", "1800", "2100", "1950"],
+          "argv": [
+            "1500",
+            "2300",
+            "1800",
+            "2100",
+            "1950"
+          ],
           "match": {
             "exit_code": 0,
-            "stdout": { "type": "contains_all", "items": ["[1500, 2300, 1800, 2100, 1950]", "Total players: 5", "Total score: 9650", "Average score: 1930.0", "High score: 2300", "Low score: 1500", "Score range: 800"] }
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Player Score Analytics ===\nScores processed: [1500, 2300, 1800, 2100, 1950]\nTotal players: 5\nTotal score: 9650\nAverage score: 1930.0\nHigh score: 2300\nLow score: 1500\nScore range: 800"
+            }
           }
         },
         {
           "name": "no scores -> usage",
           "mode": "script",
           "argv": [],
-          "match": { "exit_code": 0, "stdout": { "type": "contains_all", "items": ["No scores provided"] } }
+          "match": {
+            "exit_code": 0,
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Player Score Analytics ===\nNo scores provided. Usage: python3 ft_score_analytics.py <score1> <score2> ..."
+            }
+          }
         },
         {
           "name": "only invalid scores -> each flagged, then usage",
           "mode": "script",
-          "argv": ["ab", "ac"],
-          "match": { "exit_code": 0, "stdout": { "type": "contains_all", "items": ["Invalid parameter: 'ab'", "Invalid parameter: 'ac'", "No scores provided"] } }
+          "argv": [
+            "ab",
+            "ac"
+          ],
+          "match": {
+            "exit_code": 0,
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Player Score Analytics ===\nInvalid parameter: 'ab'\nInvalid parameter: 'ac'\nNo scores provided. Usage: python3 ft_score_analytics.py <score1> <score2> ..."
+            }
+          }
         },
         {
           "name": "mixed valid/invalid -> invalid discarded",
           "mode": "script",
-          "argv": ["10", "oops", "20"],
-          "match": { "exit_code": 0, "stdout": { "type": "contains_all", "items": ["Invalid parameter: 'oops'", "Total players: 2", "Total score: 30"] } }
+          "argv": [
+            "10",
+            "abc",
+            "25"
+          ],
+          "match": {
+            "exit_code": 0,
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Player Score Analytics ===\nInvalid parameter: 'abc'\nScores processed: [10, 25]\nTotal players: 2\nTotal score: 35\nAverage score: 17.5\nHigh score: 25\nLow score: 10\nScore range: 15"
+            }
+          }
+        },
+        {
+          "name": "single score",
+          "mode": "script",
+          "argv": [
+            "42"
+          ],
+          "match": {
+            "exit_code": 0,
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Player Score Analytics ===\nScores processed: [42]\nTotal players: 1\nTotal score: 42\nAverage score: 42.0\nHigh score: 42\nLow score: 42\nScore range: 0"
+            }
+          }
         }
       ]
     },
@@ -66,14 +158,52 @@
       "id": "ex2",
       "title": "Position Tracker",
       "file": "ex2/ft_coordinate_system.py",
+      "authorized": [
+        "input",
+        "round",
+        "print",
+        "tuple",
+        "str",
+        "int",
+        "float"
+      ],
+      "typed": true,
       "tests": [
         {
-          "name": "(1,2,3) then (4,5,6): tuple, components, distances",
+          "name": "subject example (bad syntax, bad float, retries)",
           "mode": "script",
-          "stdin": "1,2,3\n4,5,6\n",
+          "stdin": "hello world\n1.0, 2.5, 3.0\n4,abc,5\n4,5,6\n",
           "match": {
             "exit_code": 0,
-            "stdout": { "type": "contains_all", "items": ["(1.0, 2.0, 3.0)", "X=1.0", "Y=2.0", "Z=3.0", "3.7417", "5.1962"] }
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Game Coordinate System ===\n\nGet a first set of coordinates\nEnter new coordinates as floats in format 'x,y,z': Invalid syntax\nEnter new coordinates as floats in format 'x,y,z': Got a first tuple: (1.0, 2.5, 3.0)\nIt includes: X=1.0, Y=2.5, Z=3.0\nDistance to center: 4.0311\n\nGet a second set of coordinates\nEnter new coordinates as floats in format 'x,y,z': Error on parameter 'abc': could not convert string to float: 'abc'\nEnter new coordinates as floats in format 'x,y,z': Distance between the 2 sets of coordinates: 4.9244"
+            }
+          }
+        },
+        {
+          "name": "2 or 4 values -> invalid syntax, then retry",
+          "mode": "script",
+          "stdin": "1,2\n1,2,3,4\n0,0,0\n3,4,12\n",
+          "match": {
+            "exit_code": 0,
+            "stdout": {
+              "type": "equals",
+              "expected": "=== Game Coordinate System ===\n\nGet a first set of coordinates\nEnter new coordinates as floats in format 'x,y,z': Invalid syntax\nEnter new coordinates as floats in format 'x,y,z': Invalid syntax\nEnter new coordinates as floats in format 'x,y,z': Got a first tuple: (0.0, 0.0, 0.0)\nIt includes: X=0.0, Y=0.0, Z=0.0\nDistance to center: 0.0\n\nGet a second set of coordinates\nEnter new coordinates as floats in format 'x,y,z': Distance between the 2 sets of coordinates: 13.0"
+            }
+          }
+        },
+        {
+          "name": "stdin closed (Ctrl-D) -> no traceback",
+          "mode": "script",
+          "stdin": "",
+          "match": {
+            "stderr": {
+              "type": "python",
+              "code": [
+                "assert 'Traceback' not in out, 'crashed: ' + lines[-1]"
+              ]
+            }
           }
         }
       ]
@@ -82,14 +212,124 @@
       "id": "ex3",
       "title": "Achievement Hunter (random)",
       "file": "ex3/ft_achievement_tracker.py",
+      "authorized": [
+        "len",
+        "print",
+        "set",
+        "str",
+        "int",
+        "float"
+      ],
+      "typed": true,
       "tests": [
         {
-          "name": "runs cleanly and reports set operations",
+          "name": "sets are consistent (union, intersection, differences)",
           "mode": "script",
           "match": {
             "exit_code": 0,
-            "stdout": { "type": "contains_all", "items": ["Player", "distinct achievements", "Common achievements", "is missing"] }
+            "stdout": {
+              "type": "python",
+              "code": [
+                "assert lines[0] == '=== Achievement Tracker System ===', lines[0]",
+                "assert lines[1] == '', 'blank line expected after the title'",
+                "i = 2",
+                "players = {}",
+                "while lines[i].startswith('Player '):",
+                "    name, _, rest = lines[i][7:].partition(': ')",
+                "    players[name] = parse(rest)",
+                "    i += 1",
+                "assert len(players) >= 4, 'at least 4 players expected'",
+                "names = list(players)",
+                "def value(prefix):",
+                "    global i",
+                "    assert lines[i].startswith(prefix), 'line %d: expected %r..., got %r' % (i + 1, prefix, lines[i])",
+                "    v = parse(lines[i][len(prefix):])",
+                "    i += 1",
+                "    return v",
+                "def blank():",
+                "    global i",
+                "    assert lines[i] == '', 'line %d: blank line expected' % (i + 1)",
+                "    i += 1",
+                "blank()",
+                "union = set().union(*players.values())",
+                "inter = players[names[0]].intersection(*players.values())",
+                "assert value('All distinct achievements: ') == union, 'distinct != union of all sets'",
+                "blank()",
+                "assert value('Common achievements: ') == inter, 'common != intersection of all sets'",
+                "blank()",
+                "for n in names:",
+                "    others = set().union(*[players[o] for o in names if o != n])",
+                "    assert value('Only %s has: ' % n) == players[n] - others, 'wrong \"Only %s has\"' % n",
+                "blank()",
+                "full = None",
+                "for n in names:",
+                "    miss = value('%s is missing: ' % n)",
+                "    assert not miss & players[n], '%s: missing contains owned ones' % n",
+                "    full = full or (miss | players[n])",
+                "    assert miss | players[n] == full, '%s: owned + missing != the full list' % n",
+                "assert i == len(lines), 'extra output: %r' % lines[i]"
+              ]
+            }
           }
+        },
+        {
+          "name": "same check on another random draw",
+          "mode": "script",
+          "match": {
+            "exit_code": 0,
+            "stdout": {
+              "type": "python",
+              "code": [
+                "assert lines[0] == '=== Achievement Tracker System ===', lines[0]",
+                "assert lines[1] == '', 'blank line expected after the title'",
+                "i = 2",
+                "players = {}",
+                "while lines[i].startswith('Player '):",
+                "    name, _, rest = lines[i][7:].partition(': ')",
+                "    players[name] = parse(rest)",
+                "    i += 1",
+                "assert len(players) >= 4, 'at least 4 players expected'",
+                "names = list(players)",
+                "def value(prefix):",
+                "    global i",
+                "    assert lines[i].startswith(prefix), 'line %d: expected %r..., got %r' % (i + 1, prefix, lines[i])",
+                "    v = parse(lines[i][len(prefix):])",
+                "    i += 1",
+                "    return v",
+                "def blank():",
+                "    global i",
+                "    assert lines[i] == '', 'line %d: blank line expected' % (i + 1)",
+                "    i += 1",
+                "blank()",
+                "union = set().union(*players.values())",
+                "inter = players[names[0]].intersection(*players.values())",
+                "assert value('All distinct achievements: ') == union, 'distinct != union of all sets'",
+                "blank()",
+                "assert value('Common achievements: ') == inter, 'common != intersection of all sets'",
+                "blank()",
+                "for n in names:",
+                "    others = set().union(*[players[o] for o in names if o != n])",
+                "    assert value('Only %s has: ' % n) == players[n] - others, 'wrong \"Only %s has\"' % n",
+                "blank()",
+                "full = None",
+                "for n in names:",
+                "    miss = value('%s is missing: ' % n)",
+                "    assert not miss & players[n], '%s: missing contains owned ones' % n",
+                "    full = full or (miss | players[n])",
+                "    assert miss | players[n] == full, '%s: owned + missing != the full list' % n",
+                "assert i == len(lines), 'extra output: %r' % lines[i]"
+              ]
+            }
+          }
+        },
+        {
+          "name": "gen_player_achievements() returns a set",
+          "mode": "module",
+          "code": [
+            "s = m.gen_player_achievements()",
+            "assert type(s) is set, 'must return a set, got %r' % type(s)",
+            "assert s, 'the set should not be empty'"
+          ]
         }
       ]
     },
@@ -97,32 +337,73 @@
       "id": "ex4",
       "title": "Inventory Master",
       "file": "ex4/ft_inventory_system.py",
+      "authorized": [
+        "len",
+        "print",
+        "sum",
+        "list",
+        "round",
+        "dict",
+        "str",
+        "int",
+        "float"
+      ],
+      "typed": true,
       "tests": [
         {
-          "name": "parses items, discards bad/redundant, computes stats",
+          "name": "subject example",
           "mode": "script",
-          "argv": ["sword:1", "potion:5", "shield:2", "armor:3", "helmet:1", "sword:2", "hello", "key:value"],
+          "argv": [
+            "sword:1",
+            "potion:5",
+            "shield:2",
+            "armor:3",
+            "helmet:1",
+            "sword:2",
+            "hello",
+            "key:value"
+          ],
           "match": {
             "exit_code": 0,
             "stdout": {
-              "type": "contains_all",
-              "items": [
-                "Redundant item 'sword'",
-                "invalid parameter 'hello'",
-                "Quantity error for 'key'",
-                "{'sword': 1, 'potion': 5, 'shield': 2, 'armor': 3, 'helmet': 1}",
-                "['sword', 'potion', 'shield', 'armor', 'helmet']",
-                "Total quantity of the 5 items: 12",
-                "8.3%",
-                "41.7%",
-                "16.7%",
-                "25.0%",
-                "most abundant: potion",
-                "least abundant: sword",
-                "magic_item"
+              "type": "equals",
+              "expected": "=== Inventory System Analysis ===\nRedundant item 'sword' - discarding\nError - invalid parameter 'hello'\nQuantity error for 'key': invalid literal for int() with base 10: 'value'\nGot inventory: {'sword': 1, 'potion': 5, 'shield': 2, 'armor': 3, 'helmet': 1}\nItem list: ['sword', 'potion', 'shield', 'armor', 'helmet']\nTotal quantity of the 5 items: 12\nItem sword represents 8.3%\nItem potion represents 41.7%\nItem shield represents 16.7%\nItem armor represents 25.0%\nItem helmet represents 8.3%\nItem most abundant: potion with quantity 5\nItem least abundant: sword with quantity 1\nUpdated inventory: {'sword': 1, 'potion': 5, 'shield': 2, 'armor': 3, 'helmet': 1, 'magic_item': 1}"
+            }
+          }
+        },
+        {
+          "name": "tie -> the first one from the command line wins",
+          "mode": "script",
+          "argv": [
+            "a:1",
+            "b:3",
+            "c:3",
+            "d:1"
+          ],
+          "match": {
+            "exit_code": 0,
+            "stdout": {
+              "type": "python",
+              "code": [
+                "assert 'Item most abundant: b with quantity 3' in lines, 'most abundant should be b (first of b/c)'",
+                "assert 'Item least abundant: a with quantity 1' in lines, 'least abundant should be a (first of a/d)'"
               ]
             }
           }
+        },
+        {
+          "name": "no arguments (empty inventory) -> no traceback",
+          "mode": "script",
+          "stdin": "",
+          "match": {
+            "stderr": {
+              "type": "python",
+              "code": [
+                "assert 'Traceback' not in out, 'crashed: ' + lines[-1]"
+              ]
+            }
+          },
+          "argv": []
         }
       ]
     },
@@ -130,15 +411,77 @@
       "id": "ex5",
       "title": "Stream Wizard (random)",
       "file": "ex5/ft_data_stream.py",
+      "authorized": [
+        "next",
+        "range",
+        "len",
+        "print",
+        "str",
+        "int",
+        "float"
+      ],
+      "typed": true,
+      "require_nodes": {
+        "Yield": 2
+      },
       "tests": [
         {
-          "name": "emits 1000 events then drains the 10-event list",
+          "name": "1000 numbered events, then the list drains one by one",
           "mode": "script",
-          "timeout": 30,
           "match": {
             "exit_code": 0,
-            "stdout": { "type": "contains_all", "items": ["Event 0:", "Event 999:", "Built list of 10 events", "Got event from list", "Remains in list: []"] }
+            "stdout": {
+              "type": "python",
+              "code": [
+                "assert lines[0] == '=== Game Data Stream Processor ===', lines[0]",
+                "import re",
+                "for n in range(1000):",
+                "    line = lines[n + 1]",
+                "    assert re.fullmatch(r'Event %d: Player \\S+ did action \\S+' % n, line), 'line %d: %r' % (n + 2, line)",
+                "head = 'Built list of 10 events: '",
+                "assert lines[1001].startswith(head), 'line 1002: %r' % lines[1001]",
+                "events = parse(lines[1001][len(head):])",
+                "assert len(events) == 10, 'the list must hold 10 events'",
+                "for e in events:",
+                "    assert type(e) is tuple and len(e) == 2, 'not a (name, action): %r' % (e,)",
+                "i = 1002",
+                "while events:",
+                "    got = lines[i]",
+                "    assert got.startswith('Got event from list: '), 'line %d: %r' % (i + 1, got)",
+                "    e = parse(got[21:])",
+                "    assert e in events, '%r was not in the list' % (e,)",
+                "    rem = lines[i + 1]",
+                "    assert rem.startswith('Remains in list: '), 'line %d: %r' % (i + 2, rem)",
+                "    rem = parse(rem[17:])",
+                "    assert any(events[:k] + events[k + 1:] == rem",
+                "               for k in range(len(events)) if events[k] == e), 'line %d: remaining list != previous list minus %r' % (i + 2, e)",
+                "    events = rem",
+                "    i += 2",
+                "assert i == len(lines), 'extra output: %r' % lines[i]"
+              ]
+            }
           }
+        },
+        {
+          "name": "gen_event() is an endless generator of tuples",
+          "mode": "module",
+          "code": [
+            "g = m.gen_event()",
+            "for _ in range(5000):",
+            "    e = next(g)",
+            "    assert type(e) is tuple and len(e) == 2, 'not a (name, action): %r' % (e,)"
+          ]
+        },
+        {
+          "name": "consume_event() yields every element, empties the list",
+          "mode": "module",
+          "code": [
+            "events = [('a', 'x'), ('b', 'y'), ('c', 'z')]",
+            "copy = list(events)",
+            "got = list(m.consume_event(events))",
+            "assert sorted(got) == sorted(copy), 'must yield each event once'",
+            "assert events == [], 'the list must end up empty'"
+          ]
         }
       ]
     },
@@ -146,13 +489,81 @@
       "id": "ex6",
       "title": "Data Alchemist (random)",
       "file": "ex6/ft_data_alchemist.py",
+      "authorized": [
+        "print",
+        "len",
+        "sum",
+        "round",
+        "str",
+        "int",
+        "float"
+      ],
+      "typed": true,
+      "require_nodes": {
+        "ListComp": 2,
+        "DictComp": 2
+      },
       "tests": [
         {
-          "name": "builds comprehensions and a high-score dict",
+          "name": "comprehensions give the right lists / dicts / average",
           "mode": "script",
           "match": {
             "exit_code": 0,
-            "stdout": { "type": "contains_all", "items": ["Initial list of players", "capitalized", "Score dict", "Score average", "High scores"] }
+            "stdout": {
+              "type": "python",
+              "code": [
+                "assert lines[0] == '=== Game Data Alchemist ===', lines[0]",
+                "assert lines[1] == '', 'line 2: blank line expected'",
+                "def value(n, prefix):",
+                "    assert lines[n].startswith(prefix), 'line %d: expected %r..., got %r' % (n + 1, prefix, lines[n])",
+                "    return lines[n][len(prefix):]",
+                "players = parse(value(2, 'Initial list of players: '))",
+                "assert any(p != p.capitalize() for p in players), 'some names must not be capitalized'",
+                "caps = [p.capitalize() for p in players]",
+                "assert parse(value(3, 'New list with all names capitalized: ')) == caps",
+                "only = [p for p in players if p == p.capitalize()]",
+                "assert parse(value(4, 'New list of capitalized names only: ')) == only",
+                "assert lines[5] == '', 'line 6: blank line expected'",
+                "scores = parse(value(6, 'Score dict: '))",
+                "assert list(scores) == caps, 'score dict keys != capitalized names'",
+                "avg = sum(scores.values()) / len(scores)",
+                "assert float(value(7, 'Score average is ')) == round(avg, 2), 'average should be %s' % round(avg, 2)",
+                "high = {k: v for k, v in scores.items() if v > avg}",
+                "assert parse(value(8, 'High scores: ')) == high, 'high scores should be %s' % high",
+                "assert len(lines) == 9, 'extra output: %r' % lines[9:]"
+              ]
+            }
+          }
+        },
+        {
+          "name": "same check on another random draw",
+          "mode": "script",
+          "match": {
+            "exit_code": 0,
+            "stdout": {
+              "type": "python",
+              "code": [
+                "assert lines[0] == '=== Game Data Alchemist ===', lines[0]",
+                "assert lines[1] == '', 'line 2: blank line expected'",
+                "def value(n, prefix):",
+                "    assert lines[n].startswith(prefix), 'line %d: expected %r..., got %r' % (n + 1, prefix, lines[n])",
+                "    return lines[n][len(prefix):]",
+                "players = parse(value(2, 'Initial list of players: '))",
+                "assert any(p != p.capitalize() for p in players), 'some names must not be capitalized'",
+                "caps = [p.capitalize() for p in players]",
+                "assert parse(value(3, 'New list with all names capitalized: ')) == caps",
+                "only = [p for p in players if p == p.capitalize()]",
+                "assert parse(value(4, 'New list of capitalized names only: ')) == only",
+                "assert lines[5] == '', 'line 6: blank line expected'",
+                "scores = parse(value(6, 'Score dict: '))",
+                "assert list(scores) == caps, 'score dict keys != capitalized names'",
+                "avg = sum(scores.values()) / len(scores)",
+                "assert float(value(7, 'Score average is ')) == round(avg, 2), 'average should be %s' % round(avg, 2)",
+                "high = {k: v for k, v in scores.items() if v > avg}",
+                "assert parse(value(8, 'High scores: ')) == high, 'high scores should be %s' % high",
+                "assert len(lines) == 9, 'extra output: %r' % lines[9:]"
+              ]
+            }
           }
         }
       ]
