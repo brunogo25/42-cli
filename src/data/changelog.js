@@ -5,6 +5,22 @@
 // and falls back to `notes_en` if missing.
 module.exports = [
   {
+    version: '0.6.0',
+    date: '2026-11-21',
+    notes_en: [
+      '**Much stricter Python testers** for Growing Code, Garden Guardian, Data Quest and Code Cultivation, rewritten from the subjects. Output is now compared exactly, line by line — a missing blank line, a wrong prompt or an extra line fails, and the report points at the first line that differs. Each exercise also checks that you only call the **authorized functions**, that functions are type-hinted, that there is no top-level code where the subject asks for "only the function", that recursion is real, and — for Code Cultivation — the class structure (inheritance, `_protected` attributes, setters rejecting negative values, static/class methods). Expect some exercises that used to PASS to FAIL now: that is what the defense would have caught.',
+      'New **Delete garbage files** action in every Python project menu: it lists `__pycache__/`, `.mypy_cache/`, `.pytest_cache/`, `.ruff_cache/`, `*.pyc`, `*.pyo` and `.DS_Store`, asks for confirmation, and deletes only those. It never goes into `.git`, `node_modules` or a virtualenv, and never follows symlinks.',
+      'The Python tester and mypy **no longer leave `__pycache__` / `.mypy_cache`** in your project folder.',
+      'Thanks to **Maxence** (github.com/maxencelobry) for all three — PRs #2, #3 and #4.',
+    ],
+    notes_fr: [
+      '**Testeurs Python beaucoup plus stricts** pour Growing Code, Garden Guardian, Data Quest et Code Cultivation, réécrits à partir des sujets. La sortie est désormais comparée exactement, ligne par ligne — une ligne vide manquante, un mauvais prompt ou une ligne en trop fait échouer, et le rapport indique la première ligne qui diffère. Chaque exercice vérifie aussi que tu n\'appelles que les **fonctions autorisées**, que les fonctions sont annotées, qu\'il n\'y a pas de code au niveau du module quand le sujet demande « uniquement la fonction », que la récursion est réelle, et — pour Code Cultivation — la structure des classes (héritage, attributs `_protected`, setters qui refusent les valeurs négatives, méthodes statiques/de classe). Certains exercices qui passaient avant vont maintenant échouer : c\'est ce que la soutenance aurait repéré.',
+      'Nouvelle action **Supprimer les fichiers parasites** dans chaque menu de projet Python : elle liste `__pycache__/`, `.mypy_cache/`, `.pytest_cache/`, `.ruff_cache/`, `*.pyc`, `*.pyo` et `.DS_Store`, demande confirmation, et ne supprime que ceux-là. Elle n\'entre jamais dans `.git`, `node_modules` ou un virtualenv, et ne suit jamais les liens symboliques.',
+      'Le testeur Python et mypy **ne laissent plus de `__pycache__` / `.mypy_cache`** dans le dossier de ton projet.',
+      'Merci à **Maxence** (github.com/maxencelobry) pour les trois — PR #2, #3 et #4.',
+    ],
+  },
+  {
     version: '0.5.1',
     date: '2026-07-20',
     notes_en: [

@@ -1,6 +1,6 @@
 {
   "name": "42-cli",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "The all-in-one 42 tester — interactive CLI for the École 42 Common Core & Piscine: test libft, ft_printf, get_next_line, run norminette, grade Python projects with flake8/mypy, and sit randomized practice exams.",
   "bin": {
     "42": "bin/42.js",

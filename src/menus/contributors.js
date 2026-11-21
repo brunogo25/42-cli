@@ -25,7 +25,8 @@ async function contributorsMenu() {
   console.log(`  ${c.dim(t('contrib.intro'))}\n`);
   for (const ct of allContributors()) {
     const youTag = ct.local ? ` ${c.green(t('contrib.youTag'))}` : '';
-    console.log(`  ${c.cyan('·')} ${c.bold(ct.name)} ${c.dim(`(${ct.login || '—'})`)}${youTag}`);
+    const handles = [ct.login, ct.github && `github.com/${ct.github}`].filter(Boolean);
+    console.log(`  ${c.cyan('·')} ${c.bold(ct.name)} ${c.dim(`(${handles.join(' · ') || '—'})`)}${youTag}`);
     const reason = reasonOf(ct);
     if (reason) console.log(`      ${c.dim('— ' + reason)}`);
   }

@@ -3,7 +3,8 @@
 // Folks who helped shape this CLI — bug reports, suggestions, code feedback.
 // Order preserved as added; new contributors append to the end.
 // `reason_en` / `reason_fr` are optional one-liners describing what they
-// contributed; render only when present.
+// contributed; render only when present. `github` is the GitHub username of
+// code contributors (pull requests); shown as github.com/<github>.
 module.exports = [
   { name: 'Yoann Pirot',                  login: 'yopirot' },
   { name: 'Eliott Ruffin',                login: 'eruffin' },
@@ -25,4 +26,7 @@ module.exports = [
   { name: 'Milan Rubinsztejn',             login: 'mirubins',
     reason_en: 'helping with many things',
     reason_fr: 'aide sur de nombreux aspects' },
+  { name: 'Maxence',                       github: 'maxencelobry',
+    reason_en: 'PRs #2, #3, #4 — stricter Python testers (exact output, authorized functions, structure checks), the "Delete garbage files" action, and no more __pycache__ / .mypy_cache left in tested projects',
+    reason_fr: 'PR #2, #3, #4 — testeurs Python plus stricts (sortie exacte, fonctions autorisées, vérifs de structure), l\'action « Supprimer les fichiers parasites », et plus de __pycache__ / .mypy_cache laissés dans les projets testés' },
 ];
