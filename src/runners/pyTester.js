@@ -100,7 +100,7 @@ async function runTester(projectDir, specName, opts = {}) {
     return { exitCode: 1, stage: 'setup', error: `spec missing at ${specPath}` };
   }
 
-  const args = [HARNESS, '--spec', specPath, '--dir', projectDir, '--color'];
+  const args = ['-B', HARNESS, '--spec', specPath, '--dir', projectDir, '--color'];
   if (opts.exercise) args.push('--exercise', opts.exercise);
 
   const run = await spawnAsync(python, args, { stdio: ['inherit', 'pipe', 'pipe'] });
